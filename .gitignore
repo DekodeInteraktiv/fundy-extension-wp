@@ -1,0 +1,10 @@
+/**/.DS_STORE
+/**/.idea
+/**/node_modules
+/vendor
+/**/build
+/.cache
+.env
+
+# Allow local environment overrides.
+.wp-env.override.json

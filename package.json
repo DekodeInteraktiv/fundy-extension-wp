@@ -1,0 +1,29 @@
+{
+	"name": "donations-extension-wp",
+	"version": "1.0.0",
+	"private": true,
+	"engines": {
+		"node": "18",
+		"npm": ">=8",
+		"yarn": "Please use npm"
+	},
+	"devDependencies": {
+		"@wordpress/env": "~8.7.0",
+		"@wordpress/icons": "~9.32.0",
+		"@wordpress/scripts": "~26.12.0",
+		"@wordpress/stylelint-config": "~21.24.0",
+		"@wp-now/wp-now": "~0.1.63",
+		"dotenv": "~16.3.1",
+		"resolve-url-loader": "~5.0.0",
+		"webpack-remove-empty-scripts": "~1.0.4"
+	},
+	"scripts": {
+		"build": "wp-scripts build",
+		"start": "wp-scripts start",
+		"lint": "npm run lint-js && npm run lint-css",
+		"lint-js": "wp-scripts lint-js",
+		"lint-css": "wp-scripts lint-style",
+		"format": "prettier --write .",
+		"wp-now": "wp-now start"
+	}
+}
