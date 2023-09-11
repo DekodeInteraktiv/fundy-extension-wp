@@ -25,7 +25,7 @@ import api from '@wordpress/api';
 
 import Notices from './components/Notices';
 
-import './style.scss';
+import './style.css';
 
 function Settings() {
 	const [ state, setState ] = useReducer(
@@ -116,6 +116,7 @@ function Settings() {
 }
 
 document.addEventListener( 'DOMContentLoaded', () => {
+	console.log('WAZOO');
 	const elem = document.getElementById( 'donations-plugin-settings' );
 
 	if ( elem ) {
