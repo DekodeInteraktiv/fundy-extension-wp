@@ -84,6 +84,7 @@ if ( ! php_version_check() || ! wp_version_check() ) {
 	return;
 }
 
+require_once DONATIONS_PLUGIN_DIR . 'inc/assets.php';
 require_once DONATIONS_PLUGIN_DIR . 'inc/extensions.php';
 require_once DONATIONS_PLUGIN_DIR . 'inc/blocks.php';
 require_once DONATIONS_PLUGIN_DIR . 'inc/rest.php';

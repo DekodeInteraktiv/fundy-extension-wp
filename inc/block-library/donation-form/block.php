@@ -32,5 +32,7 @@ function register_block(): void {
  * Render the block.
  */
 function render_block(): string {
-	return '<div class="donations-form wp-block-donations-form"></div>';
+	\wp_enqueue_script( 'fundy-form-script' );
+
+	return '<div class="fundy-form donations-form wp-block-donations-form" data-form-id="2"></div>';
 }
