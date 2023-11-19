@@ -1,6 +1,6 @@
 {
 	"$schema": "https://schemas.wp.org/trunk/block.json",
-	"apiVersion": 2,
+	"apiVersion": 3,
 	"name": "donations/donation-form",
 	"title": "Donation Form",
 	"description": "Displays a donation form.",
@@ -10,7 +10,12 @@
 	"supports": {
 		"html": false
 	},
-	"attributes": {},
+	"attributes": {
+		"formId": {
+			"type": "number",
+			"default": 0
+		}
+	},
 	"editorScript": "file:../build/index.js",
 	"editorStyle": "file:../build/editor.css"
 }

@@ -16,11 +16,11 @@ import {
 
 import {
 	Fragment,
-	render,
+	createRoot,
 } from '@wordpress/element';
 
 import { dispatch } from '@wordpress/data';
-
+import domReady from '@wordpress/dom-ready';
 import api from '@wordpress/api';
 
 import Notices from './components/Notices';
@@ -31,57 +31,50 @@ function Settings() {
 	const [ state, setState ] = useReducer(
 		( s, a ) => ({ ...s, ...a }),
 		{
-			url: '',
-			key: '',
+			isLoaded: false,
+			apiToken: '',
 		}
 	);
 
 	const {
-		url,
-		key,
+		isLoaded,
+		apiToken,
 	} = state;
 
-	useEffect( () => {
-		api.loadPromise.then( () => {
+	useEffect(() => {
+		api.loadPromise.then(() => {
 			const settings = new api.models.Settings();
 
-			if ( isLoaded === false ) {
-				settings.fetch().then( ( response ) => {
-					setState( {
-						key: response[ 'donations_option_key' ] ?? '',
-						url: response[ 'donations_option_url' ] ?? '',
+			if (false === isLoaded) {
+				settings.fetch().then((response) => {
+					setState({
+						apiToken: response.donations_option_token ?? '',
 						isLoaded: true,
-					} );
-				} );
+					});
+				});
 			}
 		} );
-	}, [] );
+	}, []);
 
 	return (
 		<Fragment>
 			<div className="donations__header">
 				<div className="donations__container">
 					<div className="donations__title">
-						<h1>{ __( 'Donations Settings', 'donations' ) } <Icon icon="admin-plugins" /></h1>
+						<h1>{__('Donations Settings', 'donations')} <Icon icon="admin-plugins" /></h1>
 					</div>
 				</div>
 			</div>
 			<div className="donations__main">
 				<div className="components-panel">
 					<div className="components-panel__body is-opened">
-						<h2 className="components-panel__body-title">{ __( 'General', 'donations' ) }</h2>
-						<p>The plugin requires an external Fundy server to work, please provide the details below.</p>
+						<h2 className="components-panel__body-title">{__('General', 'donations')}</h2>
+						<p>The plugin must authenticate with the Fundy server to work, please provide the details below.</p>
 						<TextControl
-							help={ __( 'The URL to your Fundy server.', 'donations' ) }
-							label={ __( 'Fundy Backend URL', 'donations' ) }
-							onChange={ ( value ) => setState( { url: value } ) }
-							value={ url }
-						/>
-						<TextControl
-							help={ __( 'The API key for your Fundy server.', 'donations' ) }
-							label={ __( 'Fundy API Key', 'donations' ) }
-							onChange={ ( value ) => setState( { key: value } ) }
-							value={ key }
+							help={__('The API token for your Fundy organization.', 'donations')}
+							label={__('Fundy API Token', 'donations')}
+							onChange={(value) => setState({ apiToken: value })}
+							value={apiToken}
 						/>
 					</div>
 				</div>
@@ -90,23 +83,22 @@ function Settings() {
 				<Button
 					isPrimary
 					onClick={ () => {
-						const settings = new api.models.Settings( {
-							[ 'donations_option_key' ]: key,
-							[ 'donations_option_url' ]: url,
-						} );
+						const settings = new api.models.Settings({
+							donations_option_token: apiToken,
+						});
 
 						settings.save();
 
-						dispatch( 'core/notices' ).createNotice(
+						dispatch('core/notices').createNotice(
 							'success',
-							__( 'Settings Saved', 'donations' ),
+							__('Settings Saved', 'donations'),
 							{
 								type: 'snackbar',
 								isDismissible: true,
 							}
 						);
 					} }
-				>{ __( 'Save', 'donations' ) }</Button>
+				>{__('Save', 'donations')}</Button>
 			</div>
 			<div className="donations__notices">
 				<Notices />
@@ -115,14 +107,11 @@ function Settings() {
 	);
 }
 
-document.addEventListener( 'DOMContentLoaded', () => {
-	console.log('WAZOO');
-	const elem = document.getElementById( 'donations-plugin-settings' );
+domReady(function () {
+	const elem = document.getElementById('donations-plugin-settings');
 
-	if ( elem ) {
-		render(
-			<Settings />,
-			elem
-		);
+	if (elem) {
+		const root = createRoot(elem);
+		root.render(<Settings />);
 	}
-} );
+});

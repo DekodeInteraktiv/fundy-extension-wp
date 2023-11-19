@@ -12,7 +12,6 @@
 		"@wordpress/icons": "~9.32.0",
 		"@wordpress/scripts": "~26.12.0",
 		"@wordpress/stylelint-config": "~21.24.0",
-		"@wp-now/wp-now": "~0.1.63",
 		"dotenv": "~16.3.1",
 		"resolve-url-loader": "~5.0.0",
 		"webpack-remove-empty-scripts": "~1.0.4"
@@ -24,6 +23,6 @@
 		"lint-js": "wp-scripts lint-js",
 		"lint-css": "wp-scripts lint-style",
 		"format": "prettier --write .",
-		"wp-now": "wp-now start"
+		"wp-env": "wp-env"
 	}
 }

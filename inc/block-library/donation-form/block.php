@@ -26,6 +26,13 @@ function register_block(): void {
 			'render_callback' => __NAMESPACE__ . '\\render_block',
 		]
 	);
+	\wp_localize_script(
+		'donations-donation-form-editor-script',
+		'donationsSettings',
+		[
+			'baseURL' => get_fundy_url(),
+		]
+	);
 }
 
 /**
@@ -35,4 +42,18 @@ function render_block(): string {
 	\wp_enqueue_script( 'fundy-form-script' );
 
 	return '<div class="fundy-form donations-form wp-block-donations-form" data-form-id="2"></div>';
+}
+
+/**
+ * Return the Fundy URL based on environment.
+ */
+function get_fundy_url() {
+	switch (\wp_get_environment_type()) {
+		case 'staging':
+			return 'https://fundy-stage-be.do.dekodes.no';
+		case 'production':
+			return 'https://fundy-stage-be.do.dekodes.no';
+		default:
+		return 'http://localhost';
+	}
 }

@@ -9,23 +9,24 @@ declare( strict_types = 1 );
 
 namespace Donations\ExtensionLibrary\SettingsPage;
 
-// Check we are on the admin interface.
-if ( ! \is_blog_admin() ) {
-	return;
-}
-
 /**
  * Hooks
  */
-\add_action( 'admin_menu', __NAMESPACE__ . '\\register_page' );
-\add_action( 'plugin_action_links_' . \plugin_basename( __FILE__ ), __NAMESPACE__ . '\\settings_link' );
 \add_action( 'init', __NAMESPACE__ . '\\register_settings' );
-\add_action( 'admin_enqueue_scripts', __NAMESPACE__ . '\\register_assets' );
+
+/**
+ * Admin Hooks
+ */
+if (\is_blog_admin()) {
+	\add_action( 'admin_menu', __NAMESPACE__ . '\\register_page' );
+	\add_action( 'plugin_action_links_' . \plugin_basename( __FILE__ ), __NAMESPACE__ . '\\settings_link' );
+	\add_action( 'admin_enqueue_scripts', __NAMESPACE__ . '\\register_assets' );
+}
 
 /**
  * Registers Page
  */
-function register_page() {
+function register_page(): void {
 	\add_options_page(
 		\__( 'Donations Settings', 'donations' ),
 		\__( 'Donations', 'donations' ),
@@ -49,7 +50,7 @@ function render_page() {
  *
  * @param
  */
-function settings_link( $links ) : array {
+function settings_link( array $links ) : array {
 	$label = \esc_html__( 'Settings', 'donations' );
 	$slug  = 'options_donations';
 
@@ -61,20 +62,10 @@ function settings_link( $links ) : array {
 /**
  * Register Settings
  */
-function register_settings() {
+function register_settings(): void {
 	\register_setting(
 		'donations_settings',
-		'donations_option_key',
-		[ // phpcs:ignore Generic.Arrays.DisallowShortArraySyntax.Found
-			'type'         => 'string',
-			'show_in_rest' => true,
-			'default'      => '',
-		]
-	);
-
-	\register_setting(
-		'donations_settings',
-		'donations_option_url',
+		'donations_option_token',
 		[ // phpcs:ignore Generic.Arrays.DisallowShortArraySyntax.Found
 			'type'         => 'string',
 			'show_in_rest' => true,
@@ -86,7 +77,7 @@ function register_settings() {
 /**
  * Register Assets
  */
-function register_assets() {
+function register_assets(): void {
 	if ( \file_exists( plugin_dir_path( __FILE__ ) . 'build/index.asset.php' ) ) {
 		$asset_file = include plugin_dir_path( __FILE__ ) . 'build/index.asset.php';
 
