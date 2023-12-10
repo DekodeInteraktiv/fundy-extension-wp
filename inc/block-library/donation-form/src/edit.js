@@ -7,7 +7,7 @@ import {
 	useBlockProps,
 } from '@wordpress/block-editor';
 import { useReducer, useEffect } from '@wordpress/element';
-import { SelectControl, ComboboxControl } from '@wordpress/components';
+import { TextControl, TextareaControl, ComboboxControl } from '@wordpress/components';
 import { __ } from '@wordpress/i18n';
 
 /**
@@ -92,6 +92,12 @@ export default function Edit({
 	return (
 		<div {...useBlockProps()}>
 			<div className={className}>
+				{ !isLoaded &&
+					<>
+						<p>{__('Loading forms...', 'donations')}</p>
+					</>
+				}
+
 				{ forms &&
 					<ComboboxControl
 						label={__("Select a form", "donations")}

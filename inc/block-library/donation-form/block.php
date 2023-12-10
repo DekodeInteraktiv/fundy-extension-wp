@@ -26,6 +26,7 @@ function register_block(): void {
 			'render_callback' => __NAMESPACE__ . '\\render_block',
 		]
 	);
+
 	\wp_localize_script(
 		'donations-donation-form-editor-script',
 		'donationsSettings',
@@ -38,10 +39,17 @@ function register_block(): void {
 /**
  * Render the block.
  */
-function render_block(): string {
+function render_block(array $attributes): string {
 	\wp_enqueue_script( 'fundy-form-script' );
 
-	return '<div class="fundy-form donations-form wp-block-donations-form" data-form-id="1" data-env="local" data-lang="en"></div>';
+	return sprintf(
+		'<div class="donations-form wp-block-donations-form"><h3>%s</h3><p>%s</p><div class="fundy-form" data-form-id="%s" data-env="%s" data-lang="%s"></div></div>',
+		$attributes['title'],
+		$attributes['description'],
+		$attributes['formId'],
+		\wp_get_environment_type(),
+		\get_locale()
+	);
 }
 
 /**
@@ -54,6 +62,6 @@ function get_fundy_url() {
 		case 'production':
 			return 'https://fundy-stage-be.do.dekodes.no';
 		default:
-		return 'http://localhost';
+			return 'http://localhost';
 	}
 }
