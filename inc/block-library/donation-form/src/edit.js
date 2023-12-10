@@ -100,6 +100,18 @@ export default function Edit({
 						onChange={(value) => setState({ formId: value })}
 					/>
 				}
+
+				<TextControl
+					label={__("Title", "donations")}
+					value={title}
+					onChange={(title) => setAttributes({ title })}
+				/>
+
+				<TextareaControl
+					label={__("Description", "donations")}
+					value={description}
+					onChange={(description) => setAttributes({ description })}
+				/>
 			</div>
 		</div>
 	);

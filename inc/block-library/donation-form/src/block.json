@@ -14,8 +14,16 @@
 		"formId": {
 			"type": "number",
 			"default": 0
+		},
+		"title": {
+			"type": "string",
+			"default": ""
+		},
+		"description": {
+			"type": "string",
+			"default": ""
 		}
-	},
+	},	
 	"editorScript": "file:../build/index.js",
 	"editorStyle": "file:../build/editor.css"
 }

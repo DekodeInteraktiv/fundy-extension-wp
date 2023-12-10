@@ -41,7 +41,7 @@ function register_block(): void {
 function render_block(): string {
 	\wp_enqueue_script( 'fundy-form-script' );
 
-	return '<div class="fundy-form donations-form wp-block-donations-form" data-form-id="2"></div>';
+	return '<div class="fundy-form donations-form wp-block-donations-form" data-form-id="1" data-env="local" data-lang="en"></div>';
 }
 
 /**
