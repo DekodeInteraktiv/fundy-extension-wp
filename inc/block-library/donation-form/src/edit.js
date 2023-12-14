@@ -35,6 +35,11 @@ export default function Edit({
 		formId,
 	} = state;
 
+	const {
+		title,
+		description,
+	} = attributes;
+
 	useEffect(() => {
 		api.loadPromise.then( () => {
 			const settings = new api.models.Settings();
