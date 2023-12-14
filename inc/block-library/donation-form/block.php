@@ -42,14 +42,26 @@ function register_block(): void {
 function render_block(array $attributes): string {
 	\wp_enqueue_script( 'fundy-form-script' );
 
-	return sprintf(
-		'<div class="donations-form wp-block-donations-form"><h3>%s</h3><p>%s</p><div class="fundy-form" data-form-id="%s" data-env="%s" data-lang="%s"></div></div>',
-		$attributes['title'],
-		$attributes['description'],
-		$attributes['formId'],
-		\wp_get_environment_type(),
-		\get_locale()
-	);
+	// If no form ID is set, return empty string.
+	if ( empty( $attributes['formId'] ) ) {
+		return '';
+	}
+
+	\ob_start();
+	?>
+	<div class="donations-form wp-block-donations-form">
+		<?php if ( !empty($attributes['title'])) : ?>
+			<h3 className="donations-form__title"><?php echo \esc_html( $attributes['title'] ); ?></h3>
+		<?php endif; ?>
+
+		<?php if ( !empty($attributes['title'])) : ?>
+			<p className="donations-form__desc"><?php echo \esc_html( $attributes['description'] ); ?></p>
+		<?php endif; ?>
+
+		<div class="fundy-form" data-form-id="<?php echo esc_attr( $attributes['formId'] ); ?>" data-env="stage" data-lang="<?php echo \esc_attr( \get_locale() ); ?>"></div>
+	</div>
+	<?php
+	return ob_get_clean();
 }
 
 /**

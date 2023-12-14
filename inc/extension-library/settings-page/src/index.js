@@ -12,6 +12,7 @@ import {
 	Button,
 	Icon,
 	TextControl,
+	PanelBody,
 } from '@wordpress/components';
 
 import {
@@ -65,19 +66,16 @@ function Settings() {
 					</div>
 				</div>
 			</div>
-			<div className="donations__main">
-				<div className="components-panel">
-					<div className="components-panel__body is-opened">
-						<h2 className="components-panel__body-title">{__('General', 'donations')}</h2>
-						<p>The plugin must authenticate with the Fundy server to work, please provide the details below.</p>
-						<TextControl
-							help={__('The API token for your Fundy organization.', 'donations')}
-							label={__('Fundy API Token', 'donations')}
-							onChange={(value) => setState({ apiToken: value })}
-							value={apiToken}
-						/>
-					</div>
-				</div>
+			<div className="components-panel">
+				<PanelBody title="General">
+					<p>The plugin must authenticate with the Fundy server to work, please provide the details below.</p>
+					<TextControl
+						help={__('The API token for your Fundy organization.', 'donations')}
+						label={__('Fundy API Token', 'donations')}
+						onChange={(value) => setState({ apiToken: value })}
+						value={apiToken}
+					/>
+				</PanelBody>
 			</div>
 			<div className="donations__save">
 				<Button
