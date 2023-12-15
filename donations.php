@@ -40,7 +40,7 @@ function php_version_check() {
  * @return bool
  */
 function wp_version_check() {
-	if ( version_compare( $GLOBALS['wp_version'], DONATIONS_MIN_WP_VERSION, '<' ) ) {
+	if ( \version_compare( $GLOBALS['wp_version'], DONATIONS_MIN_WP_VERSION, '<' ) ) {
 		return false;
 	}
 	return true;
@@ -50,10 +50,9 @@ function wp_version_check() {
  * Admin notices if requirements aren't met.
  */
 function requirements_error_notice() {
-
 	$notices = [];
 
-	if ( ! php_version_check() ) {
+	if ( ! \php_version_check() ) {
 		$notices[] = \sprintf(
 			/* translators: placeholder 1 is minimum required PHP version, placeholder 2 is installed PHP version. */
 			\esc_html__( 'Donations plugin requires PHP %1$s or higher. You’re still on %2$s.', 'donations' ),
