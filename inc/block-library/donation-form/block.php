@@ -58,10 +58,10 @@ function render_block(array $attributes): string {
 			<p className="donations-form__desc"><?php echo \esc_html( $attributes['description'] ); ?></p>
 		<?php endif; ?>
 
-		<div class="fundy-form" data-form-id="<?php echo esc_attr( $attributes['formId'] ); ?>" data-env="stage" data-lang="<?php echo \esc_attr( \get_locale() ); ?>"></div>
+		<div class="fundy-form" data-form-id="<?php echo \esc_attr( $attributes['formId'] ); ?>" data-env="<?php echo \wp_get_environment_type(); ?>" data-lang="<?php echo \esc_attr( \get_locale() ); ?>"></div>
 	</div>
 	<?php
-	return ob_get_clean();
+	return \ob_get_clean();
 }
 
 /**
