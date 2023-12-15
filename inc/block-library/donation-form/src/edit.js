@@ -20,22 +20,25 @@ export default function Edit({
 	clientId,
 }) {
 	const [state, setState] = useReducer((s, a) => ({ ...s, ...a }), {
+		isInitialized: false,
 		isLoaded: false,
 		apiToken: false,
 		baseURL: false,
 		forms: false,
-		formId: false,
+		error: null,
 	});
 
 	const {
+		isInitialized,
 		isLoaded,
 		apiToken,
 		baseURL,
 		forms,
-		formId,
+		error,
 	} = state;
 
 	const {
+		formId,
 		title,
 		description,
 	} = attributes;
@@ -44,17 +47,17 @@ export default function Edit({
 		api.loadPromise.then( () => {
 			const settings = new api.models.Settings();
 
-			if (false === isLoaded) {
+			if (false === isInitialized) {
 				settings.fetch().then((response) => {
 					setState({
 						apiToken: response.donations_option_token ?? '',
 						baseURL: window.donationsSettings.baseURL ?? '',
-						isLoaded: true,
+						isInitialized: true,
 					});
 				});
 			}
 		} );
-	}, [isLoaded]);
+	}, [isInitialized]);
 
 	useEffect(() => {
 		if (baseURL && apiToken) {
@@ -71,24 +74,30 @@ export default function Edit({
 				throw new Error('Network response was not ok.');
 			}).then((data) => {
 				let options = [];
-				data.data.forEach((form) => {
+				data.forEach((form) => {
 					options.push({
 						label: form.name,
 						value: form.id,
 					});
 				});
-				setState({ forms: options });
+				setState({
+					isLoaded: true,
+					forms: options,
+					error: null,
+				});
 			}).catch((error) => {
-				console.error('There has been a problem with your fetch operation:', error);
+				setState({
+					error: 'There has been a problem with your fetch operation: ' + error,
+				});
 			});
 		}
 	}, [baseURL, apiToken])
 
-	if (!baseURL) {
+	if (!apiToken) {
 		return (
 			<div {...useBlockProps()}>
 				<div className={className}>
-					<h2>{__('Please set an API Token on the plugin settings page.', 'donations')}</h2>
+					<p>{__('Please set an API Token on the plugin settings page.', 'donations')}</p>
 				</div>
 			</div>
 		);
@@ -97,32 +106,35 @@ export default function Edit({
 	return (
 		<div {...useBlockProps()}>
 			<div className={className}>
-				{ !isLoaded &&
-					<>
-						<p>{__('Loading forms...', 'donations')}</p>
-					</>
-				}
-
-				{ forms &&
-					<ComboboxControl
-						label={__("Select a form", "donations")}
-						value={formId}
-						options={forms}
-						onChange={(value) => setState({ formId: value })}
-					/>
-				}
+				<ComboboxControl
+					label={__('Select a form', 'donations')}
+					value={formId}
+					options={forms ? forms : [{label: '', value: ''}]}
+					onChange={(formId) => setAttributes({ formId })}
+					disabled={!isLoaded}
+				/>
 
 				<TextControl
-					label={__("Title", "donations")}
+					label={__('Title', 'donations')}
 					value={title}
 					onChange={(title) => setAttributes({ title })}
+					disabled={!isLoaded}
 				/>
 
 				<TextareaControl
-					label={__("Description", "donations")}
+					label={__('Description', 'donations')}
 					value={description}
 					onChange={(description) => setAttributes({ description })}
+					disabled={!isLoaded}
 				/>
+
+				{ !isLoaded &&
+					<p>{__('Loading...', 'donations')}</p>
+				}
+
+				{ error &&
+					<p>{'Error: ' + error}</p>
+				}
 			</div>
 		</div>
 	);
