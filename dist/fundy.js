@@ -24524,15 +24524,18 @@ function _M(c) {
     defaultValue: w,
     visibilityConditions: g,
     helpText: I,
-    emailTag: N,
+    customClasses: N,
     storeAsDonorMeta: _,
     showInReceipt: z,
     nodeType: D,
     childNodes: L,
     disabled: A = !1,
     ...B
-  } = c;
-  return /* @__PURE__ */ Pe.jsx("div", { className: Ut(["html_wrapper"]), children: /* @__PURE__ */ Pe.jsx("div", { className: Ut(["html"]), dangerouslySetInnerHTML: { __html: p } }) });
+  } = c, $ = Ut([
+    "html",
+    ...Array.isArray(N) ? N : []
+  ]);
+  return /* @__PURE__ */ Pe.jsx("div", { className: Ut(["html_wrapper"]), children: /* @__PURE__ */ Pe.jsx("div", { className: $, dangerouslySetInnerHTML: { __html: p } }) });
 }
 function xM(c) {
   const {
