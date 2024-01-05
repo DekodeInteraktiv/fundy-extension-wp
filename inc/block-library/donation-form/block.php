@@ -51,11 +51,11 @@ function render_block(array $attributes): string {
 	?>
 	<div class="donations-form wp-block-donations-form">
 		<?php if ( !empty($attributes['title'])) : ?>
-			<h3 className="donations-form__title"><?php echo \esc_html( $attributes['title'] ); ?></h3>
+			<h3 class="donations-form__title"><?php echo \esc_html( $attributes['title'] ); ?></h3>
 		<?php endif; ?>
 
 		<?php if ( !empty($attributes['title'])) : ?>
-			<p className="donations-form__desc"><?php echo \esc_html( $attributes['description'] ); ?></p>
+			<p class="donations-form__desc"><?php echo \esc_html( $attributes['description'] ); ?></p>
 		<?php endif; ?>
 
 		<div class="fundy-form" data-form-id="<?php echo \esc_attr( $attributes['formId'] ); ?>" data-env="<?php echo \wp_get_environment_type(); ?>" data-lang="<?php echo \esc_attr( \get_locale() ); ?>"></div>
