@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Fundy (Fundraising)
  * Description: Integrates with Fundy, making it easy to add donation forms to your website.
- * Version: 0.1.4
+ * Version: 0.1.5
  * Update URI: false
  *
  * @package donations
@@ -16,7 +16,7 @@ if ( ! \defined( 'ABSPATH' ) ) {
 	die();
 }
 
-\define( 'DONATIONS_VERSION', '0.1.4' );
+\define( 'DONATIONS_VERSION', '0.1.5' );
 \define( 'DONATIONS_PLUGIN_URL', \plugin_dir_url( __FILE__ ) );
 \define( 'DONATIONS_PLUGIN_DIR', \plugin_dir_path( __FILE__ ) );
 \define( 'DONATIONS_MIN_PHP_VERSION', '8.0' );
