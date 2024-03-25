@@ -4,7 +4,7 @@ Provides a WordPress integration for displaying donation forms.
 
 ## Repositories
 
-The donations platform is has many components in different repositories:
+The fundraising platform has many components in different repositories:
 
 - [fundraising-core](https://github.com/DekodeInteraktiv/fundraising-core)
 - [fundraising-analytics](https://github.com/DekodeInteraktiv/fundraising-analytics)
