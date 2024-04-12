@@ -2,12 +2,12 @@
 /**
  * Donation Form.
  *
- * @package donations
+ * @package fundraising
  */
 
 declare( strict_types = 1 );
 
-namespace Donations\BlockLibrary\ContentGenerationBlock;
+namespace Dekokde\Fundraising\BlockLibrary\ContentGenerationBlock;
 
 /**
  * Hooks.
@@ -28,8 +28,8 @@ function register_block(): void {
 	);
 
 	\wp_localize_script(
-		'donations-donation-form-editor-script',
-		'donationsSettings',
+		'fundraising-donation-form-editor-script',
+		'fundraisingSettings',
 		[
 			'baseURL' => get_fundy_url(),
 		]
@@ -49,16 +49,21 @@ function render_block(array $attributes): string {
 
 	\ob_start();
 	?>
-	<div class="donations-form wp-block-donations-form">
+	<div class="fundraising-form wp-block-fundraising-form">
 		<?php if ( !empty($attributes['title'])) : ?>
-			<h3 class="donations-form__title"><?php echo \esc_html( $attributes['title'] ); ?></h3>
+			<h3 class="fundraising-form__title"><?php echo \esc_html( $attributes['title'] ); ?></h3>
 		<?php endif; ?>
 
 		<?php if ( !empty($attributes['title'])) : ?>
-			<p class="donations-form__desc"><?php echo \esc_html( $attributes['description'] ); ?></p>
+			<p class="fundraising-form__desc"><?php echo \esc_html( $attributes['description'] ); ?></p>
 		<?php endif; ?>
 
-		<div class="fundy-form" data-form-id="<?php echo \esc_attr( $attributes['formId'] ); ?>" data-env="<?php echo \wp_get_environment_type(); ?>" data-lang="<?php echo \esc_attr( \get_locale() ); ?>"></div>
+		<div
+			class="fundy-form"
+			data-form-id="<?php echo \esc_attr( $attributes['formId'] ); ?>"
+			data-env="<?php echo \wp_get_environment_type(); ?>"
+			data-lang="<?php echo \esc_attr( \get_locale() ); ?>"
+		></div>
 	</div>
 	<?php
 	return \ob_get_clean();
@@ -70,7 +75,7 @@ function render_block(array $attributes): string {
 function get_fundy_url() {
 	switch (\wp_get_environment_type()) {
 		case 'production':
-			return 'https://fundy-stage-be.do.dekodes.no';
+			return 'https://fundy-prod.do.dekodes.no/core';
 		case 'staging':
 		case 'stage':
 		case 'development':

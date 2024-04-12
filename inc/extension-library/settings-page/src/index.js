@@ -49,7 +49,7 @@ function Settings() {
 			if (false === isLoaded) {
 				settings.fetch().then((response) => {
 					setState({
-						apiToken: response.donations_option_token ?? '',
+						apiToken: response.fundraising_option_token ?? '',
 						isLoaded: true,
 					});
 				});
@@ -59,10 +59,10 @@ function Settings() {
 
 	return (
 		<Fragment>
-			<div className="donations__header">
-				<div className="donations__container">
-					<div className="donations__title">
-						<h1>{__('Donations Settings', 'donations')} <Icon icon="admin-plugins" /></h1>
+			<div className="fundraising__header">
+				<div className="fundraising__container">
+					<div className="fundraising__title">
+						<h1>{__('Fundraising Settings', 'fundraising')} <Icon icon="admin-plugins" /></h1>
 					</div>
 				</div>
 			</div>
@@ -70,35 +70,35 @@ function Settings() {
 				<PanelBody title="General">
 					<p>The plugin must authenticate with the Fundy server to work, please provide the details below.</p>
 					<TextControl
-						help={__('The API token for your Fundy organization.', 'donations')}
-						label={__('Fundy API Token', 'donations')}
+						help={__('The API token for your Fundy organization.', 'fundraising')}
+						label={__('Fundy API Token', 'fundraising')}
 						onChange={(value) => setState({ apiToken: value })}
 						value={apiToken}
 					/>
 				</PanelBody>
 			</div>
-			<div className="donations__save">
+			<div className="fundraising__save">
 				<Button
 					isPrimary
 					onClick={ () => {
 						const settings = new api.models.Settings({
-							donations_option_token: apiToken,
+							fundraising_option_token: apiToken,
 						});
 
 						settings.save();
 
 						dispatch('core/notices').createNotice(
 							'success',
-							__('Settings Saved', 'donations'),
+							__('Settings Saved', 'fundraising'),
 							{
 								type: 'snackbar',
 								isDismissible: true,
 							}
 						);
 					} }
-				>{__('Save', 'donations')}</Button>
+				>{__('Save', 'fundraising')}</Button>
 			</div>
-			<div className="donations__notices">
+			<div className="fundraising__notices">
 				<Notices />
 			</div>
 		</Fragment>
@@ -106,7 +106,7 @@ function Settings() {
 }
 
 domReady(function () {
-	const elem = document.getElementById('donations-plugin-settings');
+	const elem = document.getElementById('fundraising-plugin-settings');
 
 	if (elem) {
 		const root = createRoot(elem);

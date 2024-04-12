@@ -2,12 +2,12 @@
 /**
  * REST Endpoints.
  *
- * @package donations
+ * @package fundraising
  */
 
 declare( strict_types = 1 );
 
-namespace Donations;
+namespace Dekokde\Fundraising;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	die();
@@ -23,7 +23,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  */
 function register_rest_routes(): void {
 	\register_rest_route(
-		'donations/v1',
+		'fundraising/v1',
 		'/forms',
 		[
 			'methods'             => \WP_REST_Server::READABLE,

@@ -1,1 +1,13 @@
-.settings_page_options_donations{background-color:#000}
+/*!*******************************************************************************************************************************************************************************************************!*\
+  !*** css ./node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[2].use[1]!./node_modules/postcss-loader/dist/cjs.js??ruleSet[1].rules[2].use[2]!./inc/extension-library/settings-page/src/style.css ***!
+  \*******************************************************************************************************************************************************************************************************/
+/**
+ * Settings Page.
+ */
+
+.settings_page_options_fundraising {
+	background-color: #000;
+}
+
+
+/*# sourceMappingURL=index.css.map*/

@@ -1,7 +1,7 @@
 {
-	"name": "dekode/fundy",
+	"name": "dekode/fundraising-extension-wp",
 	"type": "wordpress-plugin",
-	"description": "description",
+	"description": "WordPress plugin for the Dekode Fundraising Engine.",
 	"minimum-stability": "dev",
 	"config": {
 		"sort-packages": true,
@@ -22,6 +22,6 @@
 	},
 	"scripts": {
 		"lint": "./vendor/bin/phpcs .",
-		"make-pot": "./vendor/bin/wp i18n make-pot . languages/donations.pot --exclude=\".github,.cache,node_modules,vendor,tests\" --slug=donations"
+		"make-pot": "./vendor/bin/wp i18n make-pot . languages/fundraising.pot --exclude=\".github,.cache,node_modules,vendor,tests\" --slug=fundraising"
 	}
 }

@@ -2,12 +2,12 @@
 /**
  * Settings page.
  *
- * @package donations
+ * @package fundraising
  */
 
 declare( strict_types = 1 );
 
-namespace Donations\ExtensionLibrary\SettingsPage;
+namespace Dekokde\Fundraising\ExtensionLibrary\SettingsPage;
 
 /**
  * Hooks
@@ -28,10 +28,10 @@ if (\is_blog_admin()) {
  */
 function register_page(): void {
 	\add_options_page(
-		\__( 'Donations Settings', 'donations' ),
-		\__( 'Donations', 'donations' ),
+		\__( 'Fundraising Settings', 'fundraising' ),
+		\__( 'Fundraising', 'fundraising' ),
 		'manage_options',
-		'options_donations',
+		'options_fundraising',
 		__NAMESPACE__ . '\\render_page',
 	);
 }
@@ -41,7 +41,7 @@ function register_page(): void {
  */
 function render_page() {
 	?>
-	<div id="donations-plugin-settings"></div>
+	<div id="fundraising-plugin-settings"></div>
 	<?php
 }
 
@@ -51,8 +51,8 @@ function render_page() {
  * @param
  */
 function settings_link( array $links ) : array {
-	$label = \esc_html__( 'Settings', 'donations' );
-	$slug  = 'options_donations';
+	$label = \esc_html__( 'Settings', 'fundraising' );
+	$slug  = 'options_fundraising';
 
 	\array_unshift( $links, "<a href='options-general.php?page=$slug'>$label</a>" );
 
@@ -64,8 +64,8 @@ function settings_link( array $links ) : array {
  */
 function register_settings(): void {
 	\register_setting(
-		'donations_settings',
-		'donations_option_token',
+		'fundraising_settings',
+		'fundraising_option_token',
 		[ // phpcs:ignore Generic.Arrays.DisallowShortArraySyntax.Found
 			'type'         => 'string',
 			'show_in_rest' => true,
@@ -82,20 +82,20 @@ function register_assets(): void {
 		$asset_file = include plugin_dir_path( __FILE__ ) . 'build/index.asset.php';
 
 		\wp_register_script(
-			'donations-settings',
+			'fundraising-settings',
 			plugins_url( 'settings-page/build/index.js', dirname( __FILE__ ) ),
 			$asset_file['dependencies'],
 			$asset_file['version'],
 			false
 		);
-		\wp_enqueue_script( 'donations-settings' );
+		\wp_enqueue_script( 'fundraising-settings' );
 	}
 
 	\wp_register_style(
-		'donations-settings-style',
+		'fundraising-settings-style',
 		plugins_url( 'build/index.css', dirname(__FILE__) ),
 		['wp-components'],
 		\filemtime( __DIR__ . '/build/index.css' ),
 	);
-	\wp_enqueue_style( 'donations-settings-style' );
+	\wp_enqueue_style( 'fundraising-settings-style' );
 }

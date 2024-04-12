@@ -50,8 +50,8 @@ export default function Edit({
 			if (false === isInitialized) {
 				settings.fetch().then((response) => {
 					setState({
-						apiToken: response.donations_option_token ?? '',
-						baseURL: window.donationsSettings.baseURL ?? '',
+						apiToken: response.fundraising_option_token ?? '',
+						baseURL: window.fundraisingSettings.baseURL ?? '',
 						isInitialized: true,
 					});
 				});
@@ -97,7 +97,7 @@ export default function Edit({
 		return (
 			<div {...useBlockProps()}>
 				<div className={className}>
-					<p>{__('Please set an API Token on the plugin settings page.', 'donations')}</p>
+					<p>{__('Please set an API Token on the plugin settings page.', 'fundraising')}</p>
 				</div>
 			</div>
 		);
@@ -107,7 +107,7 @@ export default function Edit({
 		<div {...useBlockProps()}>
 			<div className={className}>
 				<ComboboxControl
-					label={__('Select a form', 'donations')}
+					label={__('Select a form', 'fundraising')}
 					value={formId}
 					options={forms ? forms : [{label: '', value: ''}]}
 					onChange={(formId) => setAttributes({ formId })}
@@ -115,21 +115,21 @@ export default function Edit({
 				/>
 
 				<TextControl
-					label={__('Title', 'donations')}
+					label={__('Title', 'fundraising')}
 					value={title}
 					onChange={(title) => setAttributes({ title })}
 					disabled={!isLoaded}
 				/>
 
 				<TextareaControl
-					label={__('Description', 'donations')}
+					label={__('Description', 'fundraising')}
 					value={description}
 					onChange={(description) => setAttributes({ description })}
 					disabled={!isLoaded}
 				/>
 
 				{ !isLoaded &&
-					<p>{__('Loading...', 'donations')}</p>
+					<p>{__('Loading...', 'fundraising')}</p>
 				}
 
 				{ error &&

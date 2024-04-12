@@ -1,11 +1,11 @@
 {
 	"$schema": "https://schemas.wp.org/trunk/block.json",
 	"apiVersion": 3,
-	"name": "donations/donation-form",
+	"name": "fundraising/donation-form",
 	"title": "Donation Form",
 	"description": "Displays a donation form.",
 	"category": "widgets",
-	"textdomain": "donations",
+	"textdomain": "fundraising",
 	"icon": "menu",
 	"supports": {
 		"html": false

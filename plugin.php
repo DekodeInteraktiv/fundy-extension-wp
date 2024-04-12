@@ -1,26 +1,26 @@
 <?php
 /**
- * Plugin Name: Fundy (Fundraising)
- * Description: Integrates with Fundy, making it easy to add donation forms to your website.
- * Version: 0.1.5
+ * Plugin Name: Fundraising by Dekode
+ * Description: Integrates with the Fundraising Engine, making it easy to add donation forms to your website.
+ * Version: 0.2.0
  * Update URI: false
  *
- * @package donations
+ * @package fundraising
  */
 
 declare( strict_types = 1 );
 
-namespace Donations;
+namespace Dekokde\Fundraising;
 
 if ( ! \defined( 'ABSPATH' ) ) {
 	die();
 }
 
-\define( 'DONATIONS_VERSION', '0.1.5' );
-\define( 'DONATIONS_PLUGIN_URL', \plugin_dir_url( __FILE__ ) );
-\define( 'DONATIONS_PLUGIN_DIR', \plugin_dir_path( __FILE__ ) );
-\define( 'DONATIONS_MIN_PHP_VERSION', '8.0' );
-\define( 'DONATIONS_MIN_WP_VERSION', '6.0' );
+\define( 'FUNDRAISING_VERSION', '0.1.5' );
+\define( 'FUNDRAISING_PLUGIN_URL', \plugin_dir_url( __FILE__ ) );
+\define( 'FUNDRAISING_PLUGIN_DIR', \plugin_dir_path( __FILE__ ) );
+\define( 'FUNDRAISING_MIN_PHP_VERSION', '8.0' );
+\define( 'FUNDRAISING_MIN_WP_VERSION', '6.0' );
 
 /**
  * Check for required PHP version.
@@ -28,7 +28,7 @@ if ( ! \defined( 'ABSPATH' ) ) {
  * @return bool
  */
 function php_version_check() {
-	if ( \version_compare( PHP_VERSION, DONATIONS_MIN_PHP_VERSION, '<' ) ) {
+	if ( \version_compare( PHP_VERSION, FUNDRAISING_MIN_PHP_VERSION, '<' ) ) {
 		return false;
 	}
 	return true;
@@ -40,7 +40,7 @@ function php_version_check() {
  * @return bool
  */
 function wp_version_check() {
-	if ( \version_compare( $GLOBALS['wp_version'], DONATIONS_MIN_WP_VERSION, '<' ) ) {
+	if ( \version_compare( $GLOBALS['wp_version'], FUNDRAISING_MIN_WP_VERSION, '<' ) ) {
 		return false;
 	}
 	return true;
@@ -55,8 +55,8 @@ function requirements_error_notice() {
 	if ( ! \php_version_check() ) {
 		$notices[] = \sprintf(
 			/* translators: placeholder 1 is minimum required PHP version, placeholder 2 is installed PHP version. */
-			\esc_html__( 'Donations plugin requires PHP %1$s or higher. You’re still on %2$s.', 'donations' ),
-			\esc_html( DONATIONS_MIN_PHP_VERSION ),
+			\esc_html__( 'Fundraising plugin requires PHP %1$s or higher. You’re still on %2$s.', 'fundraising' ),
+			\esc_html( FUNDRAISING_MIN_PHP_VERSION ),
 			\esc_html( PHP_VERSION )
 		);
 	}
@@ -64,8 +64,8 @@ function requirements_error_notice() {
 	if ( ! wp_version_check() ) {
 		$notices[] = \sprintf(
 			/* translators: placeholder 1 is minimum required WordPress version, placeholder 2 is installed WordPress version. */
-			\esc_html__( 'Donations plugin requires at least WordPress in version %1$s, You are on %2$s.', 'donations' ),
-			\esc_html( DONATIONS_MIN_WP_VERSION ),
+			\esc_html__( 'Fundraising plugin requires at least WordPress in version %1$s, You are on %2$s.', 'fundraising' ),
+			\esc_html( FUNDRAISING_MIN_WP_VERSION ),
 			\esc_html( $GLOBALS['wp_version'] )
 		);
 	}
@@ -83,7 +83,7 @@ if ( ! php_version_check() || ! wp_version_check() ) {
 	return;
 }
 
-require_once DONATIONS_PLUGIN_DIR . 'inc/assets.php';
-require_once DONATIONS_PLUGIN_DIR . 'inc/extensions.php';
-require_once DONATIONS_PLUGIN_DIR . 'inc/blocks.php';
-require_once DONATIONS_PLUGIN_DIR . 'inc/rest.php';
+require_once FUNDRAISING_PLUGIN_DIR . 'inc/assets.php';
+require_once FUNDRAISING_PLUGIN_DIR . 'inc/extensions.php';
+require_once FUNDRAISING_PLUGIN_DIR . 'inc/blocks.php';
+require_once FUNDRAISING_PLUGIN_DIR . 'inc/rest.php';
