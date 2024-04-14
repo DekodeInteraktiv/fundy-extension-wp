@@ -74,14 +74,15 @@ function render_block(array $attributes): string {
  */
 function get_fundy_url() {
 	switch (\wp_get_environment_type()) {
-		case 'production':
-			return 'https://fundy-prod.do.dekodes.no/core';
+		case 'local':
+			return 'http://localhost';
 		case 'staging':
 		case 'stage':
 		case 'development':
 		case 'develop':
 			return 'https://fundy-stage-be.do.dekodes.no';
+		case 'production':
 		default:
-			return 'http://localhost';
+			return 'https://fundy-prod.do.dekodes.no/core';
 	}
 }
