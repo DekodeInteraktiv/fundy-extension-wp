@@ -3340,6 +3340,7 @@ const Ds = he(function(t, n) {
         htmlFor: o,
         children: i
       }), w("input", {
+        type: "email",
         id: o,
         className: z,
         disabled: m,
