@@ -7,7 +7,7 @@
 
 declare( strict_types = 1 );
 
-namespace Dekokde\Fundraising;
+namespace Dekode\Fundraising;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	die();

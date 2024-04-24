@@ -7,7 +7,7 @@
 
 declare( strict_types = 1 );
 
-namespace Dekokde\Fundraising\ExtensionLibrary\SettingsPage;
+namespace Dekode\Fundraising\ExtensionLibrary\SettingsPage;
 
 /**
  * Hooks

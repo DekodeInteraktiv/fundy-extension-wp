@@ -7,7 +7,7 @@
 
 declare( strict_types = 1 );
 
-namespace Dekokde\Fundraising\BlockLibrary\ContentGenerationBlock;
+namespace Dekode\Fundraising\BlockLibrary\ContentGenerationBlock;
 
 /**
  * Hooks.

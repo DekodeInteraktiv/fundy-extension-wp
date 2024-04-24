@@ -7,7 +7,7 @@
 
 declare( strict_types = 1 );
 
-namespace Dekokde\Fundraising\BlockLibrary;
+namespace Dekode\Fundraising\BlockLibrary;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	die();
