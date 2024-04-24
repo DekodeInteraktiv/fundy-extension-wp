@@ -57,19 +57,23 @@ function render_block(array $attributes): string {
 		],
 	];
 
+	$headingLevel = 'h' . $attributes['headingLevel'];
+
 	\ob_start();
 	?>
-	<div class="fundraising-form wp-block-fundraising-form">
+	<div class="fundraising-form-wrapper wp-block-fundraising-form">
 		<?php if ( !empty($attributes['title'])) : ?>
-			<h3 class="fundraising-form__title"><?php echo \wp_kses( $attributes['title'], $allowed_html ); ?></h3>
+			<?php echo "<$headingLevel class='fundraising-form-wrapper__title'>"; ?>
+				<?php echo \wp_kses( $attributes['title'], $allowed_html ); ?>
+			<?php echo "</$headingLevel>"; ?>
 		<?php endif; ?>
 
 		<?php if ( !empty($attributes['title'])) : ?>
-			<p class="fundraising-form__desc"><?php echo \wp_kses( $attributes['description'], $allowed_html ); ?></p>
+			<p class="fundraising-form-wrapper__desc"><?php echo \wp_kses( $attributes['description'], $allowed_html ); ?></p>
 		<?php endif; ?>
 
 		<div
-			class="fundy-form"
+			class="fundraising-form"
 			data-form-id="<?php echo \esc_attr( $attributes['formId'] ); ?>"
 			data-env="<?php echo \wp_get_environment_type(); ?>"
 			data-lang="<?php echo \esc_attr( \get_locale() ); ?>"

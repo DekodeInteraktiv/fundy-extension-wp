@@ -1,5 +1,5 @@
 module.exports = {
-	extends: ['plugin:@wordpress/eslint-plugin/recommended'],
+	extends: [ 'plugin:@wordpress/eslint-plugin/recommended' ],
 	globals: {
 		wp: 'off',
 	},
@@ -15,7 +15,7 @@ module.exports = {
 	parser: '@babel/eslint-parser',
 	parserOptions: {
 		babelOptions: {
-			presets: ['@wordpress/babel-preset-default'],
+			presets: [ '@wordpress/babel-preset-default' ],
 		},
 		requireConfigFile: false,
 	},

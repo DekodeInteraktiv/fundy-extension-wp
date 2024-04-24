@@ -1,15 +1,18 @@
 /**
  * External Imports.
  */
-import React from 'react';
+/**
+ * External dependencies
+ */
+import React from 'react'; // eslint-disable-line import/no-extraneous-dependencies
 
 /**
  * Internal Imports.
  */
-import {
-	useDispatch,
-	useSelect,
-} from '@wordpress/data';
+/**
+ * WordPress dependencies
+ */
+import { useDispatch, useSelect } from '@wordpress/data';
 
 import { SnackbarList } from '@wordpress/components';
 
@@ -21,7 +24,7 @@ const Notices = () => {
 			select( noticesStore )
 				.getNotices()
 				.filter( ( notice ) => notice.type === 'snackbar' ),
-		[]
+		[],
 	);
 
 	const { removeNotice } = useDispatch( noticesStore );
