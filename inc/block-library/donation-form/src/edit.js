@@ -2,12 +2,21 @@
  * WordPress dependencies
  */
 import api from '@wordpress/api';
-import apiFetch from '@wordpress/api-fetch';
 import {
+	RichText,
 	useBlockProps,
+	BlockControls,
+	HeadingLevelDropdown,
+	useBlockEditingMode,
 } from '@wordpress/block-editor';
-import { useReducer, useEffect } from '@wordpress/element';
-import { TextControl, TextareaControl, ComboboxControl } from '@wordpress/components';
+import {
+	useReducer,
+	useEffect,
+} from '@wordpress/element';
+import {
+	TextareaControl,
+	ComboboxControl,
+} from '@wordpress/components';
 import { __ } from '@wordpress/i18n';
 
 /**
@@ -40,8 +49,13 @@ export default function Edit({
 	const {
 		formId,
 		title,
+		headingLevel,
 		description,
 	} = attributes;
+
+	const tagName = 'h' + headingLevel;
+
+	const blockEditingMode = useBlockEditingMode();
 
 	useEffect(() => {
 		api.loadPromise.then( () => {
@@ -53,6 +67,11 @@ export default function Edit({
 						apiToken: response.fundraising_option_token ?? '',
 						baseURL: window.fundraisingSettings.baseURL ?? '',
 						isInitialized: true,
+					});
+				}).catch((error) => {
+					console.error(error);
+					setState({
+						error: 'Sorry, there has been a problem fetching credentials.',
 					});
 				});
 			}
@@ -105,26 +124,41 @@ export default function Edit({
 
 	return (
 		<div {...useBlockProps()}>
+			{ blockEditingMode === 'default' && (
+				<BlockControls group="block">
+					<HeadingLevelDropdown
+						value={headingLevel}
+						onChange={( headingLevel ) => setAttributes({ headingLevel })}
+					/>
+				</BlockControls>
+			) }
+
 			<div className={className}>
+				<RichText
+					label={__('Title', 'fundraising')}
+					value={title}
+					onChange={(title) => setAttributes({ title })}
+					placeholder={__('Title...', 'fundraising')}
+					tagName={tagName}
+					disabled={!isLoaded}
+					allowedFormats={[ 'core/italic', 'core/bold' ]}
+				/>
+
+				<RichText
+					label={__('Description', 'fundraising')}
+					value={description}
+					onChange={(description) => setAttributes({ description })}
+					placeholder={__('Description...', 'fundraising')}
+					tagName="p"
+					disabled={!isLoaded}
+					allowedFormats={[ 'core/italic', 'core/bold', 'core/strikethrough', 'core/link' ]}
+				/>
+
 				<ComboboxControl
 					label={__('Select a form', 'fundraising')}
 					value={formId}
 					options={forms ? forms : [{label: '', value: ''}]}
 					onChange={(formId) => setAttributes({ formId })}
-					disabled={!isLoaded}
-				/>
-
-				<TextControl
-					label={__('Title', 'fundraising')}
-					value={title}
-					onChange={(title) => setAttributes({ title })}
-					disabled={!isLoaded}
-				/>
-
-				<TextareaControl
-					label={__('Description', 'fundraising')}
-					value={description}
-					onChange={(description) => setAttributes({ description })}
 					disabled={!isLoaded}
 				/>
 

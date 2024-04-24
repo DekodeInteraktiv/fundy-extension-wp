@@ -19,6 +19,10 @@
 			"type": "string",
 			"default": ""
 		},
+		"headingLevel": {
+			"type": "integer",
+			"default": 3
+		},
 		"description": {
 			"type": "string",
 			"default": ""

@@ -47,15 +47,25 @@ function render_block(array $attributes): string {
 		return '';
 	}
 
+	$allowed_html = [
+		'strong' => [],
+		'em' => [],
+		's' => [],
+		'a' => [
+			'href' => [],
+			'title' => [],
+		],
+	];
+
 	\ob_start();
 	?>
 	<div class="fundraising-form wp-block-fundraising-form">
 		<?php if ( !empty($attributes['title'])) : ?>
-			<h3 class="fundraising-form__title"><?php echo \esc_html( $attributes['title'] ); ?></h3>
+			<h3 class="fundraising-form__title"><?php echo \wp_kses( $attributes['title'], $allowed_html ); ?></h3>
 		<?php endif; ?>
 
 		<?php if ( !empty($attributes['title'])) : ?>
-			<p class="fundraising-form__desc"><?php echo \esc_html( $attributes['description'] ); ?></p>
+			<p class="fundraising-form__desc"><?php echo \wp_kses( $attributes['description'], $allowed_html ); ?></p>
 		<?php endif; ?>
 
 		<div
