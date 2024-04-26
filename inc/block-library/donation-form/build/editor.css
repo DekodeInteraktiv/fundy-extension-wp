@@ -1,1 +1,35 @@
-.wp-block-dekode-content-generation-block{.components-placeholder{box-shadow:inset 0 0 0 1px #cc1818;padding:1em}.conversation{font-size:16px;margin-bottom:16px;width:100%;& button:first-of-type{margin-right:16px}}.messages{list-style:none;margin:0;padding:0}.message{background:rgba(0,124,186,.1);font-style:italic;margin-bottom:16px;padding:16px}}
+/*!****************************************************************************************************************************************************************************************************!*\
+  !*** css ./node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[2].use[1]!./node_modules/postcss-loader/dist/cjs.js??ruleSet[1].rules[2].use[2]!./inc/block-library/donation-form/src/editor.css ***!
+  \****************************************************************************************************************************************************************************************************/
+.wp-block-dekode-content-generation-block {
+	.components-placeholder {
+		box-shadow: inset 0 0 0 1px #cc1818;
+		padding: 1em;
+	}
+
+	.conversation {
+		width: 100%;
+		font-size: 16px;
+		margin-bottom: 16px;
+
+		& button:first-of-type {
+			margin-right: 16px;
+		}
+	}
+
+	.messages {
+		list-style: none;
+		margin: 0;
+		padding: 0;
+	}
+
+	.message {
+		background: rgba(0, 124, 186, 0.1);
+		padding: 16px;
+		margin-bottom: 16px;
+		font-style: italic;
+	}
+}
+
+
+/*# sourceMappingURL=editor.css.map*/

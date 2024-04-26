@@ -1,1 +1,358 @@
-(()=>{"use strict";var e={n:t=>{var n=t&&t.__esModule?()=>t.default:()=>t;return e.d(n,{a:n}),n},d:(t,n)=>{for(var o in n)e.o(n,o)&&!e.o(t,o)&&Object.defineProperty(t,o,{enumerable:!0,get:n[o]})},o:(e,t)=>Object.prototype.hasOwnProperty.call(e,t)};const t=window.wp.blocks,n=JSON.parse('{"$schema":"https://schemas.wp.org/trunk/block.json","apiVersion":3,"name":"fundraising/donation-form","title":"Donation Form","description":"Displays a donation form.","category":"widgets","textdomain":"fundraising","icon":"menu","supports":{"html":false},"attributes":{"formId":{"type":"number","default":0},"title":{"type":"string","default":""},"headingLevel":{"type":"integer","default":3},"description":{"type":"string","default":""}},"editorScript":"file:../build/index.js","editorStyle":"file:../build/editor.css"}'),o=window.React,i=window.wp.api;var r=e.n(i);const a=window.wp.blockEditor,l=window.wp.element,s=window.wp.components,d=window.wp.i18n;(0,t.registerBlockType)(n,{edit:function({attributes:e,setAttributes:t,className:n}){const[i,c]=(0,l.useReducer)(((e,t)=>({...e,...t})),{isInitialized:!1,isLoaded:!1,apiToken:!1,baseURL:!1,forms:!1,error:null}),{isInitialized:u,isLoaded:p,apiToken:m,baseURL:f,forms:h,error:g}=i,{formId:w,title:b,headingLevel:v,description:k}=e,E="h"+v,_=(0,a.useBlockEditingMode)();return(0,l.useEffect)((()=>{r().loadPromise.then((()=>{const e=new(r().models.Settings);!1===u&&e.fetch().then((e=>{var t,n;c({apiToken:null!==(t=e.fundraising_option_token)&&void 0!==t?t:"",baseURL:null!==(n=window.fundraisingSettings.baseURL)&&void 0!==n?n:"",isInitialized:!0})})).catch((()=>{c({error:"Sorry, there has been a problem fetching credentials."})}))}))}),[u]),(0,l.useEffect)((()=>{f&&m&&fetch(f+"/api/v1/organization/forms",{method:"GET",headers:{"Content-Type":"application/json",Authorization:"Bearer "+m}}).then((e=>{if(e.ok)return e.json();throw new Error("Network response was not ok.")})).then((e=>{const t=[];e.forEach((e=>{t.push({label:e.name,value:e.id})})),c({isLoaded:!0,forms:t,error:null})})).catch((e=>{c({error:"There has been a problem with your fetch operation: "+e})}))}),[f,m]),m?(0,o.createElement)("div",{...(0,a.useBlockProps)()},"default"===_&&(0,o.createElement)(a.BlockControls,{group:"block"},(0,o.createElement)(a.HeadingLevelDropdown,{value:v,onChange:e=>t({headingLevel:e})})),(0,o.createElement)("div",{className:n},(0,o.createElement)(a.RichText,{label:(0,d.__)("Title","fundraising"),value:b,onChange:e=>t({title:e}),placeholder:(0,d.__)("Title…","fundraising"),tagName:E,disabled:!p,allowedFormats:["core/italic","core/bold"]}),(0,o.createElement)(a.RichText,{label:(0,d.__)("Description","fundraising"),value:k,onChange:e=>t({description:e}),placeholder:(0,d.__)("Description…","fundraising"),tagName:"p",disabled:!p,allowedFormats:["core/italic","core/bold","core/strikethrough","core/link"]}),(0,o.createElement)(s.ComboboxControl,{label:(0,d.__)("Select a form","fundraising"),value:w,options:h||[{label:"",value:""}],onChange:e=>t({formId:e}),disabled:!p}),!p&&(0,o.createElement)("p",null,(0,d.__)("Loading…","fundraising")),g&&(0,o.createElement)("p",null,"Error: "+g))):(0,o.createElement)("div",{...(0,a.useBlockProps)()},(0,o.createElement)("div",{className:n},(0,o.createElement)("p",null,(0,d.__)("Please set an API Token on the plugin settings page.","fundraising"))))},save:()=>null})})();
+/******/ (() => { // webpackBootstrap
+/******/ 	"use strict";
+/******/ 	var __webpack_modules__ = ({
+
+/***/ "./inc/block-library/donation-form/src/edit.js":
+/*!*****************************************************!*\
+  !*** ./inc/block-library/donation-form/src/edit.js ***!
+  \*****************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* binding */ Edit)
+/* harmony export */ });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _wordpress_api__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @wordpress/api */ "@wordpress/api");
+/* harmony import */ var _wordpress_api__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_wordpress_api__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _wordpress_block_editor__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @wordpress/block-editor */ "@wordpress/block-editor");
+/* harmony import */ var _wordpress_block_editor__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @wordpress/element */ "@wordpress/element");
+/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(_wordpress_element__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @wordpress/components */ "@wordpress/components");
+/* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(_wordpress_components__WEBPACK_IMPORTED_MODULE_4__);
+/* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @wordpress/i18n */ "@wordpress/i18n");
+/* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_5__);
+
+/**
+ * WordPress dependencies
+ */
+
+
+
+
+
+
+/**
+ * Render the content generation block.
+ */
+function Edit({
+  attributes,
+  setAttributes,
+  className
+}) {
+  const [state, setState] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_3__.useReducer)((s, a) => ({
+    ...s,
+    ...a
+  }), {
+    isInitialized: false,
+    isLoaded: false,
+    apiToken: false,
+    baseURL: false,
+    forms: false,
+    error: null
+  });
+  const {
+    isInitialized,
+    isLoaded,
+    apiToken,
+    baseURL,
+    forms,
+    error
+  } = state;
+  const {
+    formId,
+    title,
+    headingLevel,
+    description
+  } = attributes;
+  const tagName = 'h' + headingLevel;
+  const blockEditingMode = (0,_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_2__.useBlockEditingMode)();
+  (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_3__.useEffect)(() => {
+    _wordpress_api__WEBPACK_IMPORTED_MODULE_1___default().loadPromise.then(() => {
+      const settings = new (_wordpress_api__WEBPACK_IMPORTED_MODULE_1___default().models).Settings();
+      if (false === isInitialized) {
+        settings.fetch().then(response => {
+          var _response$fundraising, _window$fundraisingSe;
+          setState({
+            apiToken: (_response$fundraising = response.fundraising_option_token) !== null && _response$fundraising !== void 0 ? _response$fundraising : '',
+            baseURL: (_window$fundraisingSe = window.fundraisingSettings.baseURL) !== null && _window$fundraisingSe !== void 0 ? _window$fundraisingSe : '',
+            isInitialized: true
+          });
+        }).catch(() => {
+          setState({
+            error: 'Sorry, there has been a problem fetching credentials.'
+          });
+        });
+      }
+    });
+  }, [isInitialized]);
+  (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_3__.useEffect)(() => {
+    if (baseURL && apiToken) {
+      fetch(baseURL + '/api/v1/organization/forms', {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: 'Bearer ' + apiToken
+        }
+      }).then(response => {
+        if (response.ok) {
+          return response.json();
+        }
+        throw new Error('Network response was not ok.');
+      }).then(data => {
+        const options = [];
+        data.forEach(form => {
+          options.push({
+            label: form.name,
+            value: form.id
+          });
+        });
+        setState({
+          isLoaded: true,
+          forms: options,
+          error: null
+        });
+      }).catch(err => {
+        setState({
+          error: 'There has been a problem with your fetch operation: ' + err
+        });
+      });
+    }
+  }, [baseURL, apiToken]);
+
+  /* eslint-disable react-hooks/rules-of-hooks */
+  if (!apiToken) {
+    return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+      ...(0,_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_2__.useBlockProps)()
+    }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+      className: className
+    }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", null, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_5__.__)('Please set an API Token on the plugin settings page.', 'fundraising'))));
+  }
+  return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    ...(0,_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_2__.useBlockProps)()
+  }, blockEditingMode === 'default' && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_2__.BlockControls, {
+    group: "block"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_2__.HeadingLevelDropdown, {
+    value: headingLevel,
+    onChange: value => setAttributes({
+      headingLevel: value
+    })
+  })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: className
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_2__.RichText, {
+    label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_5__.__)('Title', 'fundraising'),
+    value: title,
+    onChange: value => setAttributes({
+      title: value
+    }),
+    placeholder: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_5__.__)('Title…', 'fundraising'),
+    tagName: tagName,
+    disabled: !isLoaded,
+    allowedFormats: ['core/italic', 'core/bold']
+  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_2__.RichText, {
+    label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_5__.__)('Description', 'fundraising'),
+    value: description,
+    onChange: value => setAttributes({
+      description: value
+    }),
+    placeholder: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_5__.__)('Description…', 'fundraising'),
+    tagName: "p",
+    disabled: !isLoaded,
+    allowedFormats: ['core/italic', 'core/bold', 'core/strikethrough', 'core/link']
+  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_4__.ComboboxControl, {
+    label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_5__.__)('Select a form', 'fundraising'),
+    value: formId,
+    options: forms ? forms : [{
+      label: '',
+      value: ''
+    }],
+    onChange: value => setAttributes({
+      formId: value
+    }),
+    disabled: !isLoaded
+  }), !isLoaded && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", null, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_5__.__)('Loading…', 'fundraising')), error && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", null, 'Error: ' + error)));
+  /* eslint-enable react-hooks/rules-of-hooks */
+}
+
+/***/ }),
+
+/***/ "react":
+/*!************************!*\
+  !*** external "React" ***!
+  \************************/
+/***/ ((module) => {
+
+module.exports = window["React"];
+
+/***/ }),
+
+/***/ "@wordpress/api":
+/*!*****************************!*\
+  !*** external ["wp","api"] ***!
+  \*****************************/
+/***/ ((module) => {
+
+module.exports = window["wp"]["api"];
+
+/***/ }),
+
+/***/ "@wordpress/block-editor":
+/*!*************************************!*\
+  !*** external ["wp","blockEditor"] ***!
+  \*************************************/
+/***/ ((module) => {
+
+module.exports = window["wp"]["blockEditor"];
+
+/***/ }),
+
+/***/ "@wordpress/blocks":
+/*!********************************!*\
+  !*** external ["wp","blocks"] ***!
+  \********************************/
+/***/ ((module) => {
+
+module.exports = window["wp"]["blocks"];
+
+/***/ }),
+
+/***/ "@wordpress/components":
+/*!************************************!*\
+  !*** external ["wp","components"] ***!
+  \************************************/
+/***/ ((module) => {
+
+module.exports = window["wp"]["components"];
+
+/***/ }),
+
+/***/ "@wordpress/element":
+/*!*********************************!*\
+  !*** external ["wp","element"] ***!
+  \*********************************/
+/***/ ((module) => {
+
+module.exports = window["wp"]["element"];
+
+/***/ }),
+
+/***/ "@wordpress/i18n":
+/*!******************************!*\
+  !*** external ["wp","i18n"] ***!
+  \******************************/
+/***/ ((module) => {
+
+module.exports = window["wp"]["i18n"];
+
+/***/ }),
+
+/***/ "./inc/block-library/donation-form/src/block.json":
+/*!********************************************************!*\
+  !*** ./inc/block-library/donation-form/src/block.json ***!
+  \********************************************************/
+/***/ ((module) => {
+
+module.exports = /*#__PURE__*/JSON.parse('{"$schema":"https://schemas.wp.org/trunk/block.json","apiVersion":3,"name":"fundraising/donation-form","title":"Donation Form","description":"Displays a donation form.","category":"widgets","textdomain":"fundraising","icon":"menu","supports":{"html":false},"attributes":{"formId":{"type":"number","default":0},"title":{"type":"string","default":""},"headingLevel":{"type":"integer","default":3},"description":{"type":"string","default":""}},"editorScript":"file:../build/index.js","editorStyle":"file:../build/editor.css"}');
+
+/***/ })
+
+/******/ 	});
+/************************************************************************/
+/******/ 	// The module cache
+/******/ 	var __webpack_module_cache__ = {};
+/******/ 	
+/******/ 	// The require function
+/******/ 	function __webpack_require__(moduleId) {
+/******/ 		// Check if module is in cache
+/******/ 		var cachedModule = __webpack_module_cache__[moduleId];
+/******/ 		if (cachedModule !== undefined) {
+/******/ 			return cachedModule.exports;
+/******/ 		}
+/******/ 		// Create a new module (and put it into the cache)
+/******/ 		var module = __webpack_module_cache__[moduleId] = {
+/******/ 			// no module.id needed
+/******/ 			// no module.loaded needed
+/******/ 			exports: {}
+/******/ 		};
+/******/ 	
+/******/ 		// Execute the module function
+/******/ 		__webpack_modules__[moduleId](module, module.exports, __webpack_require__);
+/******/ 	
+/******/ 		// Return the exports of the module
+/******/ 		return module.exports;
+/******/ 	}
+/******/ 	
+/************************************************************************/
+/******/ 	/* webpack/runtime/compat get default export */
+/******/ 	(() => {
+/******/ 		// getDefaultExport function for compatibility with non-harmony modules
+/******/ 		__webpack_require__.n = (module) => {
+/******/ 			var getter = module && module.__esModule ?
+/******/ 				() => (module['default']) :
+/******/ 				() => (module);
+/******/ 			__webpack_require__.d(getter, { a: getter });
+/******/ 			return getter;
+/******/ 		};
+/******/ 	})();
+/******/ 	
+/******/ 	/* webpack/runtime/define property getters */
+/******/ 	(() => {
+/******/ 		// define getter functions for harmony exports
+/******/ 		__webpack_require__.d = (exports, definition) => {
+/******/ 			for(var key in definition) {
+/******/ 				if(__webpack_require__.o(definition, key) && !__webpack_require__.o(exports, key)) {
+/******/ 					Object.defineProperty(exports, key, { enumerable: true, get: definition[key] });
+/******/ 				}
+/******/ 			}
+/******/ 		};
+/******/ 	})();
+/******/ 	
+/******/ 	/* webpack/runtime/hasOwnProperty shorthand */
+/******/ 	(() => {
+/******/ 		__webpack_require__.o = (obj, prop) => (Object.prototype.hasOwnProperty.call(obj, prop))
+/******/ 	})();
+/******/ 	
+/******/ 	/* webpack/runtime/make namespace object */
+/******/ 	(() => {
+/******/ 		// define __esModule on exports
+/******/ 		__webpack_require__.r = (exports) => {
+/******/ 			if(typeof Symbol !== 'undefined' && Symbol.toStringTag) {
+/******/ 				Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
+/******/ 			}
+/******/ 			Object.defineProperty(exports, '__esModule', { value: true });
+/******/ 		};
+/******/ 	})();
+/******/ 	
+/************************************************************************/
+var __webpack_exports__ = {};
+// This entry need to be wrapped in an IIFE because it need to be isolated against other modules in the chunk.
+(() => {
+/*!******************************************************!*\
+  !*** ./inc/block-library/donation-form/src/index.js ***!
+  \******************************************************/
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _wordpress_blocks__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @wordpress/blocks */ "@wordpress/blocks");
+/* harmony import */ var _wordpress_blocks__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_wordpress_blocks__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _block_json__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./block.json */ "./inc/block-library/donation-form/src/block.json");
+/* harmony import */ var _edit__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./edit */ "./inc/block-library/donation-form/src/edit.js");
+/**
+ * WordPress dependencies
+ */
+
+
+/**
+ * Internal dependencies
+ */
+
+
+(0,_wordpress_blocks__WEBPACK_IMPORTED_MODULE_0__.registerBlockType)(_block_json__WEBPACK_IMPORTED_MODULE_1__, {
+  edit: _edit__WEBPACK_IMPORTED_MODULE_2__["default"],
+  save: () => null
+});
+})();
+
+/******/ })()
+;
+//# sourceMappingURL=index.js.map
