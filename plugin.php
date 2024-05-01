@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Fundraising by Dekode
  * Description: Integrates with the Fundraising Engine, making it easy to add donation forms to your website.
- * Version: 0.3.1
+ * Version: 0.3.2
  * Update URI: false
  *
  * @package fundraising
@@ -16,7 +16,7 @@ if ( ! \defined( 'ABSPATH' ) ) {
 	die();
 }
 
-\define( 'FUNDRAISING_VERSION', '0.3.1' );
+\define( 'FUNDRAISING_VERSION', '0.3.2' );
 \define( 'FUNDRAISING_PLUGIN_URL', \plugin_dir_url( __FILE__ ) );
 \define( 'FUNDRAISING_PLUGIN_DIR', \plugin_dir_path( __FILE__ ) );
 \define( 'FUNDRAISING_MIN_PHP_VERSION', '8.0' );
