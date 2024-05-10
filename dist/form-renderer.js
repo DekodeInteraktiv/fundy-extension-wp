@@ -3708,7 +3708,7 @@ function fa(e) {
     case "stage":
     case "development":
     case "develop":
-      return "https://fundy-stage-be.do.dekodes.no/event";
+      return "https://fundy-stage-be.do.dekodes.no:9051/event";
     case "production":
     default:
       return "https://fundy-prod.do.dekodes.no/event";
