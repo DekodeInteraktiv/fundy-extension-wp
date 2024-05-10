@@ -55,7 +55,7 @@ function requirements_error_notice() {
 	if ( ! \php_version_check() ) {
 		$notices[] = \sprintf(
 			/* translators: placeholder 1 is minimum required PHP version, placeholder 2 is installed PHP version. */
-			\esc_html__( 'Fundraising plugin requires PHP %1$s or higher. You’re still on %2$s.', 'fundraising' ),
+			\esc_html__( 'Fundraising plugin requires PHP %1$s or higher. You are still on %2$s.', 'fundraising' ),
 			\esc_html( FUNDRAISING_MIN_PHP_VERSION ),
 			\esc_html( PHP_VERSION )
 		);
