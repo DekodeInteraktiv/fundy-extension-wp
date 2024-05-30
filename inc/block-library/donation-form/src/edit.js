@@ -100,14 +100,12 @@ export default function Edit( { attributes, setAttributes, className } ) {
 	if ( ! apiToken ) {
 		return (
 			<div { ...useBlockProps() }>
-				<div className={ className }>
-					<p>
-						{ __(
-							'Please set an API Token on the plugin settings page.',
-							'fundraising',
-						) }
-					</p>
-				</div>
+				<p>
+					{ __(
+						'Please set an API Token on the plugin settings page.',
+						'fundraising',
+					) }
+				</p>
 			</div>
 		);
 	}
@@ -125,7 +123,7 @@ export default function Edit( { attributes, setAttributes, className } ) {
 				</BlockControls>
 			) }
 
-			<div className={ className }>
+			<>
 				<RichText
 					label={ __( 'Title', 'fundraising' ) }
 					value={ title }
@@ -164,7 +162,7 @@ export default function Edit( { attributes, setAttributes, className } ) {
 				{ ! isLoaded && <p>{ __( 'Loading…', 'fundraising' ) }</p> }
 
 				{ error && <p>{ 'Error: ' + error }</p> }
-			</div>
+			</>
 		</div>
 	);
 	/* eslint-enable react-hooks/rules-of-hooks */
