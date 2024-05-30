@@ -10,7 +10,7 @@ import {
 	useBlockEditingMode,
 } from '@wordpress/block-editor';
 import { useReducer, useEffect } from '@wordpress/element';
-import { SelectControl } from '@wordpress/components';
+import { ComboboxControl } from '@wordpress/components';
 import { __ } from '@wordpress/i18n';
 
 /**
@@ -151,7 +151,7 @@ export default function Edit({ attributes, setAttributes }) {
 					]}
 				/>
 
-				<SelectControl
+				<ComboboxControl
 					label={__('Select a form', 'fundraising')}
 					value={formId}
 					className="fundraising-form"
