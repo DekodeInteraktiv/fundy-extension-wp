@@ -9,7 +9,7 @@ import { registerBlockType } from '@wordpress/blocks';
 import name from './block.json';
 import edit from './edit';
 
-registerBlockType( name, {
+registerBlockType(name, {
 	edit,
 	save: () => null,
-} );
+});
