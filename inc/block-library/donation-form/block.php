@@ -59,9 +59,13 @@ function render_block(array $attributes): string {
 
 	$headingLevel = 'h' . $attributes['headingLevel'];
 
+	$wrapper_attributes = \get_block_wrapper_attributes( [
+		'class' => 'fundraising-form-wrapper',
+	] );
+
 	\ob_start();
 	?>
-	<div class="fundraising-form-wrapper wp-block-fundraising-form">
+	<div <?php echo $wrapper_attributes; ?>>
 		<?php if ( !empty($attributes['title'])) : ?>
 			<?php echo "<$headingLevel class='fundraising-form-wrapper__title'>"; ?>
 				<?php echo \wp_kses( $attributes['title'], $allowed_html ); ?>
