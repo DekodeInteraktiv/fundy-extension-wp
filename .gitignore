@@ -5,6 +5,7 @@
 #/**/build
 /.cache
 .env
+.vscode
 
 # Allow local environment overrides.
 .wp-env.override.json
