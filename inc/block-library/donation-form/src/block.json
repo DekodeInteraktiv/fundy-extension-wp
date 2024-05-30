@@ -29,7 +29,7 @@
 		},
 		"headingLevel": {
 			"type": "integer",
-			"default": 3
+			"default": 2
 		},
 		"description": {
 			"type": "string",
