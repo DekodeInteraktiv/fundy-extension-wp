@@ -81,6 +81,7 @@ function render_block(array $attributes): string {
 			data-form-id="<?php echo \esc_attr( $attributes['formId'] ); ?>"
 			data-env="<?php echo \wp_get_environment_type(); ?>"
 			data-lang="<?php echo \esc_attr( \get_locale() ); ?>"
+			data-button-classes="wp-element-button"
 		></div>
 	</div>
 	<?php
