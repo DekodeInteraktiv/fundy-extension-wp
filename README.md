@@ -15,6 +15,7 @@ The fundraising platform has many components in different repositories:
 ## Made by
 
 - Peter Booker <peter.booker@dekode.no>
+- Stian Øveråsen <stian.overasen@dekode.no>
 
 ## Setup
 
