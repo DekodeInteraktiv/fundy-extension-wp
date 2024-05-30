@@ -1,25 +1,24 @@
 module.exports = {
 	extends: ['@wordpress/stylelint-config/scss'],
+	plugins: ['stylelint-order'],
 	rules: {
-		'at-rule-empty-line-before': null,
-		'at-rule-no-unknown': null,
-		'comment-empty-line-before': null,
-		'font-weight-notation': null,
-		'max-line-length': null,
+		'at-rule-no-unknown': [
+			true,
+			{
+				ignoreAtRules: ['mixin', 'define-mixin', 'include'],
+			},
+		],
+		'scss/at-rule-no-unknown': [
+			true,
+			{
+				ignoreAtRules: ['mixin', 'define-mixin', 'include'],
+			},
+		],
 		'no-descending-specificity': null,
-		'rule-empty-line-before': null,
-		'selector-class-pattern': null,
-		'value-keyword-case': null,
-		'scss/operator-no-unspaced': null,
+		'order/properties-alphabetical-order': true,
 		'scss/selector-no-redundant-nesting-selector': null,
-		'scss/at-import-partial-extension': null,
-		'scss/no-global-function-names': null,
-		'scss/comment-no-empty': null,
-		'scss/at-extend-no-missing-placeholder': null,
-		'scss/operator-no-newline-after': null,
-		'scss/at-if-closing-brace-newline-after': null,
-		'scss/at-else-empty-line-before': null,
-		'scss/at-if-closing-brace-space-after': null,
-		'no-invalid-position-at-import-rule': null,
+		'selector-class-pattern': null,
+		'max-line-length': null,
+		'function-url-quotes': null,
 	},
 };

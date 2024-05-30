@@ -19,6 +19,7 @@
 		"lint-staged": "^15.2.5",
 		"prettier": "^3.2.5",
 		"resolve-url-loader": "~5.0.0",
+		"stylelint-order": "^6.0.4",
 		"webpack-remove-empty-scripts": "~1.0.4"
 	},
 	"scripts": {
