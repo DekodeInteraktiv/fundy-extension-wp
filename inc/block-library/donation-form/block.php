@@ -72,7 +72,7 @@ function render_block(array $attributes): string {
 			<?php echo "</$headingLevel>"; ?>
 		<?php endif; ?>
 
-		<?php if ( !empty($attributes['title'])) : ?>
+		<?php if ( !empty($attributes['description'])) : ?>
 			<p class="fundraising-form-wrapper__desc"><?php echo \wp_kses( $attributes['description'], $allowed_html ); ?></p>
 		<?php endif; ?>
 
