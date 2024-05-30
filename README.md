@@ -18,9 +18,9 @@ The fundraising platform has many components in different repositories:
 
 ## Setup
 
-You can get up and running with a few steps:
+You can get up and running with a few steps (requires Docker):
 
 ```bash
 npm ci
-npm run wp-now
+npm run wp-env start
 ```
