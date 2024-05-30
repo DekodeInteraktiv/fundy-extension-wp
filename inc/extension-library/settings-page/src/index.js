@@ -30,27 +30,27 @@ import Notices from './components/Notices';
 import './style.css';
 
 function Settings() {
-	const [ state, setState ] = useReducer( ( s, a ) => ( { ...s, ...a } ), {
+	const [state, setState] = useReducer((s, a) => ({ ...s, ...a }), {
 		isLoaded: false,
 		apiToken: '',
-	} );
+	});
 
 	const { isLoaded, apiToken } = state;
 
-	useEffect( () => {
-		api.loadPromise.then( () => {
+	useEffect(() => {
+		api.loadPromise.then(() => {
 			const settings = new api.models.Settings();
 
-			if ( false === isLoaded ) {
-				settings.fetch().then( ( response ) => {
-					setState( {
+			if (false === isLoaded) {
+				settings.fetch().then((response) => {
+					setState({
 						apiToken: response.fundraising_option_token ?? '',
 						isLoaded: true,
-					} );
-				} );
+					});
+				});
 			}
-		} );
-	}, [ isLoaded ] );
+		});
+	}, [isLoaded]);
 
 	return (
 		<Fragment>
@@ -58,7 +58,7 @@ function Settings() {
 				<div className="fundraising__container">
 					<div className="fundraising__title">
 						<h1>
-							{ __( 'Fundraising Settings', 'fundraising' ) }{ ' ' }
+							{__('Fundraising Settings', 'fundraising')}{' '}
 							<Icon icon="admin-plugins" />
 						</h1>
 					</div>
@@ -71,39 +71,37 @@ function Settings() {
 						work, please provide the details below.
 					</p>
 					<TextControl
-						help={ __(
+						help={__(
 							'The API token for your Fundy organization.',
 							'fundraising',
-						) }
-						label={ __( 'Fundy API Token', 'fundraising' ) }
-						onChange={ ( value ) =>
-							setState( { apiToken: value } )
-						}
-						value={ apiToken }
+						)}
+						label={__('Fundy API Token', 'fundraising')}
+						onChange={(value) => setState({ apiToken: value })}
+						value={apiToken}
 					/>
 				</PanelBody>
 			</div>
 			<div className="fundraising__save">
 				<Button
 					isPrimary
-					onClick={ () => {
-						const settings = new api.models.Settings( {
+					onClick={() => {
+						const settings = new api.models.Settings({
 							fundraising_option_token: apiToken,
-						} );
+						});
 
 						settings.save();
 
-						dispatch( 'core/notices' ).createNotice(
+						dispatch('core/notices').createNotice(
 							'success',
-							__( 'Settings Saved', 'fundraising' ),
+							__('Settings Saved', 'fundraising'),
 							{
 								type: 'snackbar',
 								isDismissible: true,
 							},
 						);
-					} }
+					}}
 				>
-					{ __( 'Save', 'fundraising' ) }
+					{__('Save', 'fundraising')}
 				</Button>
 			</div>
 			<div className="fundraising__notices">
@@ -113,11 +111,11 @@ function Settings() {
 	);
 }
 
-domReady( function () {
-	const elem = document.getElementById( 'fundraising-plugin-settings' );
+domReady(function () {
+	const elem = document.getElementById('fundraising-plugin-settings');
 
-	if ( elem ) {
-		const root = createRoot( elem );
-		root.render( <Settings /> );
+	if (elem) {
+		const root = createRoot(elem);
+		root.render(<Settings />);
 	}
-} );
+});
