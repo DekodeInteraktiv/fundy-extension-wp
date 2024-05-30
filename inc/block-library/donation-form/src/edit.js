@@ -2,13 +2,7 @@
  * WordPress dependencies
  */
 import api from '@wordpress/api';
-import {
-	RichText,
-	useBlockProps,
-	BlockControls,
-	HeadingLevelDropdown,
-	useBlockEditingMode,
-} from '@wordpress/block-editor';
+import { useBlockProps } from '@wordpress/block-editor';
 import { useReducer, useEffect } from '@wordpress/element';
 import { SelectControl } from '@wordpress/components';
 import { __ } from '@wordpress/i18n';
@@ -29,8 +23,6 @@ export default function Edit({ attributes, setAttributes }) {
 	const { isInitialized, isLoaded, apiToken, baseURL, forms, error } = state;
 
 	const { formId } = attributes;
-
-	const blockEditingMode = useBlockEditingMode();
 
 	useEffect(() => {
 		api.loadPromise.then(() => {
