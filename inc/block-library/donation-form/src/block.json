@@ -6,7 +6,7 @@
 	"description": "Displays a donation form.",
 	"category": "widgets",
 	"textdomain": "fundraising",
-	"icon": "menu",
+	"icon": "clipboard",
 	"supports": {
 		"html": false,
 		"color": {
@@ -22,18 +22,6 @@
 		"formId": {
 			"type": "number",
 			"default": 0
-		},
-		"title": {
-			"type": "string",
-			"default": ""
-		},
-		"headingLevel": {
-			"type": "integer",
-			"default": 2
-		},
-		"description": {
-			"type": "string",
-			"default": ""
 		}
 	},
 	"editorScript": "file:../build/index.js",

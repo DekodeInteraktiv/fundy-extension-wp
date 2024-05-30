@@ -47,45 +47,25 @@ function render_block(array $attributes): string {
 		return '';
 	}
 
-	$allowed_html = [
-		'strong' => [],
-		'em' => [],
-		's' => [],
-		'a' => [
-			'href' => [],
-			'title' => [],
-		],
-	];
-
-	$headingLevel = 'h' . $attributes['headingLevel'];
-
-	$wrapper_attributes = \get_block_wrapper_attributes( [
-		'class' => 'fundraising-form-wrapper',
-	] );
-
-	\ob_start();
-	?>
-	<div <?php echo $wrapper_attributes; ?>>
-		<?php if ( !empty($attributes['title'])) : ?>
-			<?php echo "<$headingLevel class='fundraising-form-wrapper__title'>"; ?>
-				<?php echo \wp_kses( $attributes['title'], $allowed_html ); ?>
-			<?php echo "</$headingLevel>"; ?>
-		<?php endif; ?>
-
-		<?php if ( !empty($attributes['description'])) : ?>
-			<p class="fundraising-form-wrapper__desc"><?php echo \wp_kses( $attributes['description'], $allowed_html ); ?></p>
-		<?php endif; ?>
-
-		<div
-			class="fundraising-form"
-			data-form-id="<?php echo \esc_attr( $attributes['formId'] ); ?>"
-			data-env="<?php echo \wp_get_environment_type(); ?>"
-			data-lang="<?php echo \esc_attr( \get_locale() ); ?>"
-			data-button-classes="wp-element-button"
-		></div>
-	</div>
-	<?php
-	return \ob_get_clean();
+	return sprintf( '
+		<div %s>
+			<div
+				class="fundraising-form"
+				data-form-id="%s"
+				data-env="%s"
+				data-lang="%s"
+				data-button-classes="%s"
+			></div>
+		</div>
+		',
+		\get_block_wrapper_attributes( [
+			'class' => 'fundraising-form-wrapper',
+		] ),
+		\esc_attr( $attributes['formId'] ),
+		\esc_attr( \wp_get_environment_type() ),
+		\esc_attr( \get_locale() ),
+		\esc_attr( 'wp-element-button' ),
+	);
 }
 
 /**

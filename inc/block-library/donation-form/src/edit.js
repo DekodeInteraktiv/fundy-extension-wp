@@ -2,13 +2,7 @@
  * WordPress dependencies
  */
 import api from '@wordpress/api';
-import {
-	RichText,
-	useBlockProps,
-	BlockControls,
-	HeadingLevelDropdown,
-	useBlockEditingMode,
-} from '@wordpress/block-editor';
+import { useBlockProps } from '@wordpress/block-editor';
 import { useReducer, useEffect } from '@wordpress/element';
 import { SelectControl } from '@wordpress/components';
 import { __ } from '@wordpress/i18n';
@@ -28,11 +22,7 @@ export default function Edit({ attributes, setAttributes }) {
 
 	const { isInitialized, isLoaded, apiToken, baseURL, forms, error } = state;
 
-	const { formId, title, headingLevel, description } = attributes;
-
-	const tagName = 'h' + headingLevel;
-
-	const blockEditingMode = useBlockEditingMode();
+	const { formId } = attributes;
 
 	useEffect(() => {
 		api.loadPromise.then(() => {
@@ -73,13 +63,11 @@ export default function Edit({ attributes, setAttributes }) {
 					throw new Error('Network response was not ok.');
 				})
 				.then((data) => {
-					const options = [];
-					data.forEach((form) => {
-						options.push({
-							label: form.name,
-							value: form.id,
-						});
-					});
+					const options = data.map((form) => ({
+						value: form.id,
+						label: form.name,
+					}));
+
 					setState({
 						isLoaded: true,
 						forms: options,
@@ -112,58 +100,18 @@ export default function Edit({ attributes, setAttributes }) {
 
 	return (
 		<div {...useBlockProps()}>
-			{blockEditingMode === 'default' && (
-				<BlockControls group="block">
-					<HeadingLevelDropdown
-						value={headingLevel}
-						onChange={(value) =>
-							setAttributes({ headingLevel: value })
-						}
-					/>
-				</BlockControls>
-			)}
+			<SelectControl
+				label={__('Select a form', 'fundraising')}
+				value={formId}
+				className="fundraising-form"
+				options={forms ? forms : [{ label: '', value: '' }]}
+				onChange={(value) => setAttributes({ formId: value })}
+				disabled={!isLoaded}
+			/>
 
-			<>
-				<RichText
-					label={__('Title', 'fundraising')}
-					value={title}
-					className="fundraising-form-wrapper__title"
-					onChange={(value) => setAttributes({ title: value })}
-					placeholder={__('Title…', 'fundraising')}
-					tagName={tagName}
-					disabled={!isLoaded}
-					allowedFormats={['core/italic', 'core/bold']}
-				/>
+			{!isLoaded && <p>{__('Loading…', 'fundraising')}</p>}
 
-				<RichText
-					label={__('Description', 'fundraising')}
-					value={description}
-					className="fundraising-form-wrapper__desc"
-					onChange={(value) => setAttributes({ description: value })}
-					placeholder={__('Description…', 'fundraising')}
-					tagName="p"
-					disabled={!isLoaded}
-					allowedFormats={[
-						'core/italic',
-						'core/bold',
-						'core/strikethrough',
-						'core/link',
-					]}
-				/>
-
-				<SelectControl
-					label={__('Select a form', 'fundraising')}
-					value={formId}
-					className="fundraising-form"
-					options={forms ? forms : [{ label: '', value: '' }]}
-					onChange={(value) => setAttributes({ formId: value })}
-					disabled={!isLoaded}
-				/>
-
-				{!isLoaded && <p>{__('Loading…', 'fundraising')}</p>}
-
-				{error && <p>{'Error: ' + error}</p>}
-			</>
+			{error && <p>{'Error: ' + error}</p>}
 		</div>
 	);
 	/* eslint-enable react-hooks/rules-of-hooks */
