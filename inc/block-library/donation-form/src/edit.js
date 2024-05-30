@@ -127,6 +127,7 @@ export default function Edit( { attributes, setAttributes, className } ) {
 				<RichText
 					label={ __( 'Title', 'fundraising' ) }
 					value={ title }
+					className="fundraising-form-wrapper__title"
 					onChange={ ( value ) => setAttributes( { title: value } ) }
 					placeholder={ __( 'Title…', 'fundraising' ) }
 					tagName={ tagName }
@@ -137,6 +138,7 @@ export default function Edit( { attributes, setAttributes, className } ) {
 				<RichText
 					label={ __( 'Description', 'fundraising' ) }
 					value={ description }
+					className="fundraising-form-wrapper__desc"
 					onChange={ ( value ) =>
 						setAttributes( { description: value } )
 					}
@@ -154,6 +156,7 @@ export default function Edit( { attributes, setAttributes, className } ) {
 				<ComboboxControl
 					label={ __( 'Select a form', 'fundraising' ) }
 					value={ formId }
+					className="fundraising-form"
 					options={ forms ? forms : [ { label: '', value: '' } ] }
 					onChange={ ( value ) => setAttributes( { formId: value } ) }
 					disabled={ ! isLoaded }
