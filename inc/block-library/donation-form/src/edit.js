@@ -10,7 +10,7 @@ import { __ } from '@wordpress/i18n';
 /**
  * Render the content generation block.
  */
-export default function Edit({ attributes, setAttributes }) {
+export default function Edit({ attributes: { formId }, setAttributes }) {
 	const [state, setState] = useReducer((s, a) => ({ ...s, ...a }), {
 		isInitialized: false,
 		isLoaded: false,
@@ -21,8 +21,6 @@ export default function Edit({ attributes, setAttributes }) {
 	});
 
 	const { isInitialized, isLoaded, apiToken, baseURL, forms, error } = state;
-
-	const { formId } = attributes;
 
 	useEffect(() => {
 		api.loadPromise.then(() => {
@@ -105,7 +103,7 @@ export default function Edit({ attributes, setAttributes }) {
 				value={formId}
 				className="fundraising-form"
 				options={forms ? forms : [{ label: '', value: '' }]}
-				onChange={(value) => setAttributes({ formId: value })}
+				onChange={(value) => setAttributes({ formId: parseInt(value) })}
 				disabled={!isLoaded}
 			/>
 
