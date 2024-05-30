@@ -28,3 +28,7 @@
 		padding: 16px;
 	}
 }
+
+.wp-block-fundraising-donation-form .components-input-control__label {
+	color: unset;
+}
