@@ -4,7 +4,7 @@
 import api from '@wordpress/api';
 import { useBlockProps } from '@wordpress/block-editor';
 import { useReducer, useEffect } from '@wordpress/element';
-import { SelectControl } from '@wordpress/components';
+import { SelectControl, Placeholder } from '@wordpress/components';
 import { __ } from '@wordpress/i18n';
 
 /**
@@ -86,30 +86,37 @@ export default function Edit({ attributes: { formId }, setAttributes }) {
 	if (!apiToken) {
 		return (
 			<div {...useBlockProps()}>
-				<p>
-					{__(
+				<Placeholder
+					instructions={__(
 						'Please set an API Token on the plugin settings page.',
 						'fundraising',
 					)}
-				</p>
+				></Placeholder>
 			</div>
 		);
 	}
 
 	return (
 		<div {...useBlockProps()}>
-			<SelectControl
-				label={__('Select a form', 'fundraising')}
-				value={formId}
-				className="fundraising-form"
-				options={forms ? forms : [{ label: '', value: '' }]}
-				onChange={(value) => setAttributes({ formId: parseInt(value) })}
-				disabled={!isLoaded}
-			/>
+			<Placeholder
+				label={__('Fundraising form', 'fundraising')}
+				isColumnLayout
+			>
+				<SelectControl
+					label={__('Select a form', 'fundraising')}
+					value={formId}
+					className="fundraising-form"
+					options={forms ? forms : [{ label: '', value: '' }]}
+					onChange={(value) =>
+						setAttributes({ formId: parseInt(value) })
+					}
+					disabled={!isLoaded}
+				/>
 
-			{!isLoaded && <p>{__('Loading…', 'fundraising')}</p>}
+				{!isLoaded && <p>{__('Loading…', 'fundraising')}</p>}
 
-			{error && <p>{'Error: ' + error}</p>}
+				{error && <p>{'Error: ' + error}</p>}
+			</Placeholder>
 		</div>
 	);
 	/* eslint-enable react-hooks/rules-of-hooks */
