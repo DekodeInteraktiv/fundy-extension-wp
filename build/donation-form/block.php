@@ -7,7 +7,7 @@
 
 declare( strict_types = 1 );
 
-namespace Dekode\Fundraising\BlockLibrary\DonationForm;
+namespace Dekode\Fundraising\DonationForm;
 
 /**
  * Hooks.
