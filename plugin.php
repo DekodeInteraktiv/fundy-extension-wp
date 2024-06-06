@@ -84,7 +84,7 @@ if ( ! php_version_check() || ! wp_version_check() ) {
 }
 
 require_once FUNDRAISING_PLUGIN_DIR . 'inc/assets.php';
-require_once FUNDRAISING_PLUGIN_DIR . 'inc/rest.php';
+require_once FUNDRAISING_PLUGIN_DIR . 'inc/head.php';
 
 // Require all generated blocks and plugins
 \array_map( fn( $f ) => require_once $f, \glob( FUNDRAISING_PLUGIN_DIR . '/build/*/block.php' ) );
