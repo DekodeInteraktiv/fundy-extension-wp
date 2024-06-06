@@ -20,4 +20,4 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Load blocks.
  */
-\array_map( fn( $f ) => require_once $f, \glob( FUNDRAISING_PLUGIN_DIR . '/inc/block-library/build/*/block.php' ) );
+\array_map( fn( $f ) => require_once $f, \glob( FUNDRAISING_PLUGIN_DIR . '/build/*/block.php' ) );
