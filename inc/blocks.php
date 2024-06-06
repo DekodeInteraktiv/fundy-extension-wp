@@ -18,6 +18,6 @@ if ( ! defined( 'ABSPATH' ) ) {
  */
 
 /**
- * Load blocks (with potential inner child blocks from /dir/subdir/).
+ * Load blocks.
  */
 \array_map( fn( $f ) => require_once $f, \glob( FUNDRAISING_PLUGIN_DIR . '/inc/block-library/build/*/block.php' ) );

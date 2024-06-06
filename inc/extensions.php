@@ -18,8 +18,6 @@ if ( ! defined( 'ABSPATH' ) ) {
  */
 
 /**
- * Load blocks (with potential inner child blocks from /dir/subdir/).
+ * Load extensions.
  */
-foreach ( glob( FUNDRAISING_PLUGIN_DIR . 'inc/extension-library/*', GLOB_ONLYDIR ) as $dir ) {
-	require_once "$dir/extension.php";
-}
+\array_map( fn( $f ) => require_once $f, \glob( FUNDRAISING_PLUGIN_DIR . '/inc/extension-library/build/*/extension.php' ) );
