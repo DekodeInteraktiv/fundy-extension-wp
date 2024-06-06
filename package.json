@@ -10,7 +10,6 @@
 	"devDependencies": {
 		"@wordpress/env": "~9.7.0",
 		"@wordpress/eslint-plugin": "^17.7.0",
-		"@wordpress/icons": "~9.46.0",
 		"@wordpress/scripts": "~27.6.0",
 		"@wordpress/stylelint-config": "~21.38.0",
 		"dotenv": "~16.4.5",
@@ -18,18 +17,16 @@
 		"husky": "^9.0.11",
 		"lint-staged": "^15.2.5",
 		"prettier": "^3.2.5",
-		"resolve-url-loader": "~5.0.0",
-		"stylelint-order": "^6.0.4",
-		"webpack-remove-empty-scripts": "~1.0.4"
+		"stylelint-order": "^6.0.4"
 	},
 	"scripts": {
 		"prepare": "husky install",
-		"build": "wp-scripts build",
-		"start": "wp-scripts start",
-		"lint": "npm run lint-js && npm run lint-css && npm run lint-format",
-		"lint-js": "wp-scripts lint-js",
-		"lint-css": "wp-scripts lint-style",
-		"lint-format": "prettier --check .",
+		"build": "wp-scripts build --webpack-copy-php",
+		"dev": "wp-scripts start --webpack-copy-php",
+		"lint": "npm run lint:js && npm run lint:css && npm run lint:format",
+		"lint:js": "wp-scripts lint-js",
+		"lint:css": "wp-scripts lint-style",
+		"lint:format": "prettier --check .",
 		"format": "prettier --write .",
 		"lint-staged": "lint-staged",
 		"wp-env": "wp-env"

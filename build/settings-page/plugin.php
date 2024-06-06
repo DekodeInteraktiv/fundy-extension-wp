@@ -7,7 +7,7 @@
 
 declare( strict_types = 1 );
 
-namespace Dekode\Fundraising\ExtensionLibrary\SettingsPage;
+namespace Dekode\Fundraising\SettingsPage;
 
 /**
  * Hooks
@@ -78,12 +78,12 @@ function register_settings(): void {
  * Register Assets
  */
 function register_assets(): void {
-	if ( \file_exists( plugin_dir_path( __FILE__ ) . 'build/index.asset.php' ) ) {
-		$asset_file = include plugin_dir_path( __FILE__ ) . 'build/index.asset.php';
+	if ( \file_exists( plugin_dir_path( __FILE__ ) . '/editor.asset.php' ) ) {
+		$asset_file = include plugin_dir_path( __FILE__ ) . '/editor.asset.php';
 
 		\wp_register_script(
 			'fundraising-settings',
-			plugins_url( 'settings-page/build/index.js', dirname( __FILE__ ) ),
+			plugins_url( '/settings-page/editor.js', dirname( __FILE__ ) ),
 			$asset_file['dependencies'],
 			$asset_file['version'],
 			false

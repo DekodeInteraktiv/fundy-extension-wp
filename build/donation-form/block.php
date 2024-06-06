@@ -7,7 +7,7 @@
 
 declare( strict_types = 1 );
 
-namespace Dekode\Fundraising\BlockLibrary\DonationForm;
+namespace Dekode\Fundraising\DonationForm;
 
 /**
  * Hooks.
@@ -20,12 +20,9 @@ namespace Dekode\Fundraising\BlockLibrary\DonationForm;
  * @return void
  */
 function register_block(): void {
-	\register_block_type_from_metadata(
-		__DIR__ . '/src',
-		[
-			'render_callback' => __NAMESPACE__ . '\\render_block',
-		]
-	);
+	\register_block_type( __DIR__, [
+		'render_callback' => __NAMESPACE__ . '\\render_block',
+	] );
 
 	\wp_localize_script(
 		'fundraising-donation-form-editor-script',
@@ -39,9 +36,7 @@ function register_block(): void {
 /**
  * Render the block.
  */
-function render_block(array $attributes): string {
-	\wp_enqueue_script( 'fundy-form-script' );
-
+function render_block( array $attributes ): string {
 	// If no form ID is set, return empty string.
 	if ( empty( $attributes['formId'] ) ) {
 		return '';

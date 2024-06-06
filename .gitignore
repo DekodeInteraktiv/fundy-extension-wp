@@ -6,6 +6,7 @@
 /.cache
 .env
 composer.lock
+.turbo
 
 # Allow local environment overrides.
 .wp-env.override.json
