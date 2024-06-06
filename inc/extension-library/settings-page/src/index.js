@@ -27,8 +27,6 @@ import api from '@wordpress/api';
  */
 import Notices from './components/Notices';
 
-import './style.css';
-
 function Settings() {
 	const [state, setState] = useReducer((s, a) => ({ ...s, ...a }), {
 		isLoaded: false,
