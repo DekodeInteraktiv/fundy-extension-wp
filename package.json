@@ -7,6 +7,10 @@
 		"npm": ">=10",
 		"yarn": "Please use npm"
 	},
+	"workspaces": [
+		"inc/block-library",
+		"inc/settings-page"
+	],
 	"devDependencies": {
 		"@wordpress/env": "~9.7.0",
 		"@wordpress/eslint-plugin": "^17.7.0",
@@ -20,19 +24,21 @@
 		"prettier": "^3.2.5",
 		"resolve-url-loader": "~5.0.0",
 		"stylelint-order": "^6.0.4",
+		"turbo": "^1.13.4",
 		"webpack-remove-empty-scripts": "~1.0.4"
 	},
 	"scripts": {
 		"prepare": "husky install",
-		"build": "wp-scripts build",
-		"start": "wp-scripts start",
+		"build": "turbo run build",
+		"dev": "turbo run dev",
 		"lint": "npm run lint-js && npm run lint-css && npm run lint-format",
 		"lint-js": "wp-scripts lint-js",
 		"lint-css": "wp-scripts lint-style",
 		"lint-format": "prettier --check .",
 		"format": "prettier --write .",
 		"lint-staged": "lint-staged",
-		"wp-env": "wp-env"
+		"wp-env": "wp-env",
+		"clean": "turbo run clean && rm -rf node_modules"
 	},
 	"lint-staged": {
 		"*.css": [

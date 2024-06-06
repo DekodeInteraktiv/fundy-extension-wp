@@ -20,6 +20,4 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Load blocks (with potential inner child blocks from /dir/subdir/).
  */
-foreach ( glob( FUNDRAISING_PLUGIN_DIR . 'inc/block-library/*', GLOB_ONLYDIR ) as $dir ) {
-	require_once "$dir/block.php";
-}
+\array_map( fn( $f ) => require_once $f, \glob( FUNDRAISING_PLUGIN_DIR . '/inc/block-library/build/*/block.php' ) );

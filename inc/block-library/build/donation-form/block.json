@@ -1,0 +1,30 @@
+{
+  "$schema": "https://schemas.wp.org/trunk/block.json",
+  "apiVersion": 3,
+  "name": "fundraising/donation-form",
+  "title": "Donation Form",
+  "description": "Displays a donation form.",
+  "category": "widgets",
+  "textdomain": "fundraising",
+  "icon": "clipboard",
+  "supports": {
+    "html": false,
+    "color": {
+      "background": true,
+      "text": true
+    },
+    "spacing": {
+      "margin": true,
+      "padding": true
+    }
+  },
+  "attributes": {
+    "formId": {
+      "type": "number",
+      "default": 0
+    }
+  },
+  "editorScript": "file:editor.js",
+  "editorStyle": "file:editor.css",
+  "viewScript": "fundy-form-script"
+}
