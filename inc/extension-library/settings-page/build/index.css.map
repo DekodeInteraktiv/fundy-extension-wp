@@ -1,1 +1,0 @@
-{"version":3,"file":"index.css","mappings":";;;AAAA;;EAEE;;AAEF;CACC,sBAAsB;AACvB","sources":["webpack://fundraising-extension-wp/./inc/extension-library/settings-page/src/style.css"],"sourcesContent":["/**\n * Settings Page.\n */\n\n.settings_page_options_fundraising {\n\tbackground-color: #000;\n}\n"],"names":[],"sourceRoot":""}

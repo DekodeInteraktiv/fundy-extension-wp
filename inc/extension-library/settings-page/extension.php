@@ -91,11 +91,5 @@ function register_assets(): void {
 		\wp_enqueue_script( 'fundraising-settings' );
 	}
 
-	\wp_register_style(
-		'fundraising-settings-style',
-		plugins_url( 'build/index.css', dirname(__FILE__) ),
-		['wp-components'],
-		\filemtime( __DIR__ . '/build/index.css' ),
-	);
-	\wp_enqueue_style( 'fundraising-settings-style' );
+	\wp_enqueue_style( 'wp-components' );
 }
