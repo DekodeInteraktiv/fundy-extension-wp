@@ -3744,7 +3744,7 @@ function no(e) {
       return "https://fundy-stage-be.do.dekodes.no";
     case "production":
     default:
-      return "https://fundy-prod.do.dekodes.no/core";
+      return "https://fundy.cloud/core";
   }
 }
 function pa() {
