@@ -68,8 +68,9 @@ function render_block( array $attributes ): string {
  */
 function get_fundy_url() {
 	switch (\wp_get_environment_type()) {
-		case 'local':
+		case 'fundy':
 			return 'http://localhost';
+		case 'local':
 		case 'staging':
 		case 'stage':
 		case 'development':
