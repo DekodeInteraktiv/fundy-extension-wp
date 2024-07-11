@@ -35,3 +35,5 @@ npm run build
 When setting up on client sites, if you want to connect to a non-production Fundy environment, you will need to define the `FUNDY_CORE_URL` constant in WordPress. You might want to set it to the staging environment `https://fundy-stage-be.do.dekodes.no`.
 
 If you do not do this, it will automatically connect to the production Fundy environment.
+
+For local development you can edit this constant in the `.wp-env.json` file and then restart the wp-env environment.

@@ -9,8 +9,6 @@ declare( strict_types = 1 );
 
 namespace Dekode\Fundraising\Head;
 
-use function Dekode\Fundraising\DonationForm\get_fundy_url;
-
 if ( ! defined( 'ABSPATH' ) ) {
 	die();
 }
@@ -25,7 +23,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  */
 function add_dns_prefetch( array $hints, string $relation_type ): array {
 	if ( 'preconnect' === $relation_type ) {
-		$hints[] = get_fundy_url();
+		$hints[] = \FUNDY_CORE_URL;
 	}
 
 	return $hints;

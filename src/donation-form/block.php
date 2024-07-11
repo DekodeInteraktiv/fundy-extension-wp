@@ -28,7 +28,7 @@ function register_block(): void {
 		'fundraising-donation-form-editor-script',
 		'fundraisingSettings',
 		[
-			'baseURL' => FUNDY_CORE_URL,
+			'baseURL' => \FUNDY_CORE_URL,
 		]
 	);
 }
