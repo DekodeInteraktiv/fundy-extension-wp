@@ -28,8 +28,8 @@ if (\is_blog_admin()) {
  */
 function register_page(): void {
 	\add_options_page(
-		\__( 'Fundraising Settings', 'fundraising' ),
-		\__( 'Fundraising', 'fundraising' ),
+		\__( 'Fundy Settings', 'fundraising' ),
+		\__( 'Fundy', 'fundraising' ),
 		'manage_options',
 		'options_fundraising',
 		__NAMESPACE__ . '\\render_page',
