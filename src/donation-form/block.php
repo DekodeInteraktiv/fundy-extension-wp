@@ -28,7 +28,7 @@ function register_block(): void {
 		'fundraising-donation-form-editor-script',
 		'fundraisingSettings',
 		[
-			'baseURL' => get_fundy_url(),
+			'baseURL' => FUNDY_CORE_URL,
 		]
 	);
 }
@@ -61,23 +61,4 @@ function render_block( array $attributes ): string {
 		\esc_attr( \get_locale() ),
 		\esc_attr( 'wp-element-button' ),
 	);
-}
-
-/**
- * Return the Fundy URL based on environment.
- */
-function get_fundy_url() {
-	switch (\wp_get_environment_type()) {
-		case 'fundy':
-			return 'http://localhost';
-		case 'local':
-		case 'staging':
-		case 'stage':
-		case 'development':
-		case 'develop':
-			return 'https://fundy-stage-be.do.dekodes.no';
-		case 'production':
-		default:
-			return 'https://fundy-prod.do.dekodes.no/core';
-	}
 }
