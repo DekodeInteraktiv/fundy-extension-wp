@@ -71,6 +71,11 @@ export default function Edit({ attributes: { formId }, setAttributes }) {
 						forms: options,
 						error: null,
 					});
+
+					// If no form is saved, set first form as selected.
+					if (!formId) {
+						setAttributes({ formId: parseInt(options[0].value) });
+					}
 				})
 				.catch((err) => {
 					setState({
