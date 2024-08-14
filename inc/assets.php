@@ -19,5 +19,5 @@ if ( ! defined( 'ABSPATH' ) ) {
 \add_action( 'wp_enqueue_scripts', __NAMESPACE__ . '\\register_scripts' );
 
 function register_scripts() {
-	\wp_register_script( 'fundy-form-script', 'https://fundy-storage.fra1.cdn.digitaloceanspaces.com/form-renderer.latest.js', ['react', 'react-dom'], false, true );
+	\wp_register_script( 'fundy-form-script', 'https://assets.fundy.cloud/form-renderer.latest.js', [], false, true );
 }
