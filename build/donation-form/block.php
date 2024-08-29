@@ -28,7 +28,8 @@ function register_block(): void {
 		'fundraising-donation-form-editor-script',
 		'fundraisingSettings',
 		[
-			'baseURL' => \FUNDY_CORE_URL,
+			'baseURL'  => \FUNDY_CORE_URL,
+			'apiToken' => \get_option('fundraising_option_token', ''),
 		]
 	);
 }
@@ -47,8 +48,7 @@ function render_block( array $attributes ): string {
 			<div
 				class="fundraising-form"
 				data-form-id="%s"
-				data-env="%s"
-				data-lang="%s"
+				data-core-url="%s"
 				data-button-classes="%s"
 			></div>
 		</div>
@@ -57,8 +57,7 @@ function render_block( array $attributes ): string {
 			'class' => 'fundraising-form-wrapper',
 		] ),
 		\esc_attr( $attributes['formId'] ),
-		\esc_attr( \wp_get_environment_type() ),
-		\esc_attr( \get_locale() ),
+		\esc_attr( \FUNDY_CORE_URL ),
 		\esc_attr( 'wp-element-button' ),
 	);
 }

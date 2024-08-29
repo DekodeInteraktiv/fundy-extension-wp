@@ -1,7 +1,6 @@
 /**
  * WordPress dependencies
  */
-import api from '@wordpress/api';
 import { useBlockProps } from '@wordpress/block-editor';
 import { useReducer, useEffect } from '@wordpress/element';
 import { SelectControl, Placeholder } from '@wordpress/components';
@@ -14,8 +13,8 @@ export default function Edit({ attributes: { formId }, setAttributes }) {
 	const [state, setState] = useReducer((s, a) => ({ ...s, ...a }), {
 		isInitialized: false,
 		isLoaded: false,
-		apiToken: false,
-		baseURL: false,
+		apiToken: window.fundraisingSettings.apiToken ?? '',
+		baseURL: window.fundraisingSettings.baseURL ?? '',
 		forms: false,
 		error: null,
 	});
@@ -23,27 +22,12 @@ export default function Edit({ attributes: { formId }, setAttributes }) {
 	const { isInitialized, isLoaded, apiToken, baseURL, forms, error } = state;
 
 	useEffect(() => {
-		api.loadPromise.then(() => {
-			const settings = new api.models.Settings();
-
-			if (false === isInitialized) {
-				settings
-					.fetch()
-					.then((response) => {
-						setState({
-							apiToken: response.fundraising_option_token ?? '',
-							baseURL: window.fundraisingSettings.baseURL ?? '',
-							isInitialized: true,
-						});
-					})
-					.catch(() => {
-						setState({
-							error: 'Sorry, there has been a problem fetching credentials.',
-						});
-					});
-			}
-		});
-	}, [isInitialized]);
+		if (false === isInitialized && apiToken && baseURL) {
+			setState({
+				isInitialized: true,
+			});
+		}
+	}, [isInitialized, apiToken, baseURL]);
 
 	useEffect(() => {
 		if (baseURL && apiToken) {
@@ -85,7 +69,7 @@ export default function Edit({ attributes: { formId }, setAttributes }) {
 					});
 				});
 		}
-	}, [baseURL, apiToken]);
+	}, [baseURL, apiToken, formId, setAttributes]);
 
 	/* eslint-disable react-hooks/rules-of-hooks */
 	if (!apiToken) {
