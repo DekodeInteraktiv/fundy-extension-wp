@@ -70,7 +70,6 @@ function register_settings(): void {
 			'type'         => 'string',
 			'show_in_rest' => true,
 			'default'      => '',
-			'capability'   => 'edit_posts'
 		]
 	);
 }
