@@ -1,5 +1,5 @@
 {
-	"core": "WordPress/WordPress",
+	"core": null,
 	"phpVersion": "8.1",
 	"plugins": ["."],
 	"config": {
@@ -7,6 +7,6 @@
 		"SCRIPT_DEBUG": true,
 		"WP_DEBUG_LOG": "/tmp/wp-errors.log",
 		"FS_METHOD": "direct",
-		"FUNDY_CORE_URL": "https://fundy-stage-be.do.dekodes.no"
+		"FUNDY_CORE_URL": "http://localhost"
 	}
 }
