@@ -22,6 +22,7 @@
 	},
 	"scripts": {
 		"lint": "./vendor/bin/phpcs .",
-		"make-pot": "./vendor/bin/wp i18n make-pot . languages/fundraising.pot --exclude=\".github,.cache,node_modules,vendor,tests\" --slug=fundraising"
+		"make-pot": "./vendor/bin/wp i18n make-pot . languages/fundy.pot --exclude=\".github,.cache,node_modules,vendor,tests\" --slug=fundy",
+		"make-json": "./vendor/bin/wp i18n make-json languages --no-purge"
 	}
 }

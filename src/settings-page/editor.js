@@ -1,23 +1,15 @@
 /**
- * External Imports.
- */
-/**
  * External dependencies
  */
-import React, { useEffect, useReducer } from 'react'; // eslint-disable-line import/no-extraneous-dependencies
+import React from 'react'; // eslint-disable-line import/no-extraneous-dependencies
+import { createRoot } from 'react-dom/client'; // eslint-disable-line import/no-extraneous-dependencies
 
-/**
- * Internal Imports.
- */
 /**
  * WordPress dependencies
  */
 import { __ } from '@wordpress/i18n';
-
 import { Button, Icon, TextControl, PanelBody } from '@wordpress/components';
-
-import { Fragment, createRoot } from '@wordpress/element';
-
+import { Fragment, useEffect, useReducer } from '@wordpress/element';
 import { dispatch } from '@wordpress/data';
 import domReady from '@wordpress/dom-ready';
 import api from '@wordpress/api';
@@ -52,11 +44,11 @@ function Settings() {
 
 	return (
 		<Fragment>
-			<div className="fundraising__header">
-				<div className="fundraising__container">
-					<div className="fundraising__title">
+			<div className="fundy__header">
+				<div className="fundy__container">
+					<div className="fundy__title">
 						<h1>
-							{__('Fundraising Settings', 'fundraising')}{' '}
+							{__('Fundy Settings', 'fundy')}{' '}
 							<Icon icon="admin-plugins" />
 						</h1>
 					</div>
@@ -71,17 +63,17 @@ function Settings() {
 					<TextControl
 						help={__(
 							'The API token for your Fundy organization.',
-							'fundraising',
+							'fundy',
 						)}
-						label={__('Fundy API Token', 'fundraising')}
+						label={__('Fundy API Token', 'fundy')}
 						onChange={(value) => setState({ apiToken: value })}
 						value={apiToken}
 					/>
 				</PanelBody>
 			</div>
-			<div className="fundraising__save">
+			<div className="fundy__save">
 				<Button
-					isPrimary
+					variant="primary"
 					onClick={() => {
 						const settings = new api.models.Settings({
 							fundraising_option_token: apiToken,
@@ -91,7 +83,7 @@ function Settings() {
 
 						dispatch('core/notices').createNotice(
 							'success',
-							__('Settings Saved', 'fundraising'),
+							__('Settings Saved', 'fundy'),
 							{
 								type: 'snackbar',
 								isDismissible: true,
@@ -99,10 +91,10 @@ function Settings() {
 						);
 					}}
 				>
-					{__('Save', 'fundraising')}
+					{__('Save', 'fundy')}
 				</Button>
 			</div>
-			<div className="fundraising__notices">
+			<div className="fundy__notices">
 				<Notices />
 			</div>
 		</Fragment>

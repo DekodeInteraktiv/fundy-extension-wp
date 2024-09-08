@@ -6,7 +6,7 @@
  * Version: 0.10.1
  * Update URI: false
  *
- * @package fundraising
+ * @package fundy
  */
 
 declare( strict_types = 1 );
@@ -36,6 +36,14 @@ if ( ! \defined( 'FUNDY_CORE_URL' ) ) {
 		\define( 'FUNDY_CORE_URL', 'https://fundy.cloud/core' );
 	}
 }
+
+/**
+ * Load plugin text domain.
+ */
+function load_textdomain(): void {
+	\load_plugin_textdomain( 'fundy', false, FUNDRAISING_PLUGIN_DIR . '/languages' );
+}
+\add_action( 'init', __NAMESPACE__ . '\\load_textdomain' );
 
 /**
  * Check for required PHP version.

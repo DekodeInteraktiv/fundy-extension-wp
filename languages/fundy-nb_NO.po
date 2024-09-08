@@ -1,0 +1,76 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/fundy\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"POT-Creation-Date: 2024-09-08T09:35:09+00:00\n"
+"PO-Revision-Date: 2024-09-08 10:55+0100\n"
+"Language: nb_NO\n"
+"X-Generator: Poedit 3.5\n"
+"X-Poedit-Basepath: .\n"
+
+#. Plugin Name of the plugin
+msgid "Fundy by Dekode"
+msgstr ""
+
+#. Description of the plugin
+msgid "Integrates with Fundy, making it easy to add donation forms to your website."
+msgstr ""
+
+#: build/donation-receipt/frontend.js:90
+#: src/donation-receipt/components/Receipt/Receipt.jsx:82
+#: build/donation-receipt/frontend.js:82
+msgid "Unfortunately, we were unable to load the details for the donation at this moment; the link may have expired."
+msgstr "Detaljene for donasjonen fikk vi dessverre ikke lastet inn akkurat nå, mulig lenken har gått ut på tid."
+
+#: build/donation-receipt/frontend.js:92
+#: src/donation-receipt/components/Receipt/Receipt.jsx:95
+#: build/donation-receipt/frontend.js:95
+msgid "Company name"
+msgstr "Giver"
+
+#: build/donation-receipt/frontend.js:92
+#: src/donation-receipt/components/Receipt/Receipt.jsx:101
+#: build/donation-receipt/frontend.js:101
+msgid "Contact person"
+msgstr "Kontaktperson"
+
+#: build/donation-receipt/frontend.js:92
+#: build/donation-receipt/frontend.js:94
+#: src/donation-receipt/components/Receipt/Receipt.jsx:107
+#: src/donation-receipt/components/Receipt/Receipt.jsx:134
+#: build/donation-receipt/frontend.js:107
+#: build/donation-receipt/frontend.js:134
+msgid "Date"
+msgstr "Dato"
+
+#: build/donation-receipt/frontend.js:92
+#: build/donation-receipt/frontend.js:94
+#: src/donation-receipt/components/Receipt/Receipt.jsx:113
+#: src/donation-receipt/components/Receipt/Receipt.jsx:140
+#: build/donation-receipt/frontend.js:113
+#: build/donation-receipt/frontend.js:140
+msgid "Total amount"
+msgstr "Total donasjon"
+
+#: build/donation-receipt/frontend.js:92
+#: src/donation-receipt/components/Receipt/Receipt.jsx:119
+#: build/donation-receipt/frontend.js:119
+msgid "Invoice"
+msgstr "Faktura"
+
+#: build/donation-receipt/frontend.js:94
+#: src/donation-receipt/components/Receipt/Receipt.jsx:120
+#: build/donation-receipt/frontend.js:120
+msgid "Download invoice"
+msgstr "Last ned faktura"
+
+#: build/donation-receipt/frontend.js:94
+#: src/donation-receipt/components/Receipt/Receipt.jsx:128
+#: build/donation-receipt/frontend.js:128
+msgid "Name"
+msgstr "Navn"

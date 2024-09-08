@@ -2,12 +2,12 @@
 /**
  * Donation Form.
  *
- * @package fundraising
+ * @package fundy
  */
 
 declare( strict_types = 1 );
 
-namespace Dekode\Fundraising\DonationForm;
+namespace Dekode\Fundy\DonationForm;
 
 /**
  * Hooks.
@@ -23,6 +23,8 @@ function register_block(): void {
 	\register_block_type( __DIR__, [
 		'render_callback' => __NAMESPACE__ . '\\render_block',
 	] );
+
+	\wp_set_script_translations( 'fundraising-donation-form-editor', 'fundy', FUNDRAISING_PLUGIN_DIR . '/languages' );
 
 	\wp_localize_script(
 		'fundraising-donation-form-editor-script',
@@ -43,7 +45,7 @@ function render_block( array $attributes ): string {
 		return '';
 	}
 
-	return sprintf( '
+	return \sprintf( '
 		<div %s>
 			<div
 				class="fundraising-form"

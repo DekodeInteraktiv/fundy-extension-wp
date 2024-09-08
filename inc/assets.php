@@ -2,12 +2,12 @@
 /**
  * Assets.
  *
- * @package fundraising
+ * @package fundy
  */
 
 declare( strict_types = 1 );
 
-namespace Dekode\Fundraising\Assets;
+namespace Dekode\Fundy\Assets;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	die();

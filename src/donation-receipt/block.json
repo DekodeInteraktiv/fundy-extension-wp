@@ -1,9 +1,9 @@
 {
 	"$schema": "https://schemas.wp.org/trunk/block.json",
 	"apiVersion": 3,
-	"name": "fundraising/donation-form",
-	"title": "Donation Form",
-	"description": "Displays a donation form.",
+	"name": "fundy/donation-receipt",
+	"title": "Donation Receipt",
+	"description": "Displays a donation receipt on a thank you page.",
 	"category": "widgets",
 	"textdomain": "fundy",
 	"icon": "clipboard",
@@ -16,14 +16,10 @@
 		"spacing": {
 			"margin": true,
 			"padding": true
-		}
+		},
+		"multiple": false
 	},
-	"attributes": {
-		"formId": {
-			"type": "number",
-			"default": 0
-		}
-	},
+	"attributes": {},
 	"editorScript": "file:editor.js",
-	"viewScript": "fundy-form-script"
+	"script": "file:frontend.js"
 }
