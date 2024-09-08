@@ -2,12 +2,12 @@
 /**
  * Settings page.
  *
- * @package fundraising
+ * @package fundy
  */
 
 declare( strict_types = 1 );
 
-namespace Dekode\Fundraising\SettingsPage;
+namespace Dekode\Fundy\SettingsPage;
 
 /**
  * Hooks

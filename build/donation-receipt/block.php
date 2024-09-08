@@ -1,13 +1,13 @@
 <?php
 /**
- * Donation Form.
+ * Donation Receipt.
  *
  * @package fundy
  */
 
 declare( strict_types = 1 );
 
-namespace Dekode\Fundy\DonationForm;
+namespace Dekode\Fundy\DonationReceipt;
 
 /**
  * Hooks.
@@ -25,11 +25,10 @@ function register_block(): void {
 	] );
 
 	\wp_localize_script(
-		'fundraising-donation-form-editor-script',
-		'fundraisingSettings',
+		'fundy-donation-receipt-script',
+		'fundySettings',
 		[
 			'baseURL'  => \FUNDY_CORE_URL,
-			'apiToken' => \get_option('fundraising_option_token', ''),
 		]
 	);
 }
@@ -38,26 +37,15 @@ function register_block(): void {
  * Render the block.
  */
 function render_block( array $attributes ): string {
-	// If no form ID is set, return empty string.
-	if ( empty( $attributes['formId'] ) ) {
-		return '';
-	}
-
 	return \sprintf( '
 		<div %s>
 			<div
-				class="fundraising-form"
-				data-form-id="%s"
-				data-core-url="%s"
-				data-button-classes="%s"
+				class="fundy-receipt"
 			></div>
 		</div>
 		',
 		\get_block_wrapper_attributes( [
-			'class' => 'fundraising-form-wrapper',
-		] ),
-		\esc_attr( $attributes['formId'] ),
-		\esc_attr( \FUNDY_CORE_URL ),
-		\esc_attr( 'wp-element-button' ),
+			'class' => 'fundy-receipt-wrapper',
+		] )
 	);
 }

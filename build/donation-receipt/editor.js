@@ -2,10 +2,10 @@
 /******/ 	"use strict";
 /******/ 	var __webpack_modules__ = ({
 
-/***/ "./src/donation-form/edit.js":
-/*!***********************************!*\
-  !*** ./src/donation-form/edit.js ***!
-  \***********************************/
+/***/ "./src/donation-receipt/edit.js":
+/*!**************************************!*\
+  !*** ./src/donation-receipt/edit.js ***!
+  \**************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 __webpack_require__.r(__webpack_exports__);
@@ -40,98 +40,21 @@ function Edit({
   },
   setAttributes
 }) {
-  var _window$fundraisingSe, _window$fundraisingSe2;
   const [state, setState] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.useReducer)((s, a) => ({
     ...s,
     ...a
   }), {
-    isInitialized: false,
-    isLoaded: false,
-    apiToken: (_window$fundraisingSe = window.fundraisingSettings.apiToken) !== null && _window$fundraisingSe !== void 0 ? _window$fundraisingSe : '',
-    baseURL: (_window$fundraisingSe2 = window.fundraisingSettings.baseURL) !== null && _window$fundraisingSe2 !== void 0 ? _window$fundraisingSe2 : '',
-    forms: false,
-    error: null
+    template: 'default'
   });
   const {
-    isInitialized,
-    isLoaded,
-    apiToken,
-    baseURL,
-    forms,
-    error
+    template
   } = state;
-  (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.useEffect)(() => {
-    if (false === isInitialized && apiToken && baseURL) {
-      setState({
-        isInitialized: true
-      });
-    }
-  }, [isInitialized, apiToken, baseURL]);
-  (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.useEffect)(() => {
-    if (baseURL && apiToken) {
-      fetch(baseURL + '/api/v1/organization/forms', {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: 'Bearer ' + apiToken
-        }
-      }).then(response => {
-        if (response.ok) {
-          return response.json();
-        }
-        throw new Error('Network response was not ok.');
-      }).then(data => {
-        const options = data.map(form => ({
-          value: form.id,
-          label: form.name
-        }));
-        setState({
-          isLoaded: true,
-          forms: options,
-          error: null
-        });
-
-        // If no form is saved, set first form as selected.
-        if (!formId) {
-          setAttributes({
-            formId: parseInt(options[0].value)
-          });
-        }
-      }).catch(err => {
-        setState({
-          error: 'There has been a problem with your fetch operation: ' + err
-        });
-      });
-    }
-  }, [baseURL, apiToken, formId, setAttributes]);
-
-  /* eslint-disable react-hooks/rules-of-hooks */
-  if (!apiToken) {
-    return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-      ...(0,_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_1__.useBlockProps)()
-    }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__.Placeholder, {
-      instructions: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_4__.__)('Please set an API Token on the plugin settings page.', 'fundraising')
-    }));
-  }
   return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     ...(0,_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_1__.useBlockProps)()
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__.Placeholder, {
-    label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_4__.__)('Fundy form', 'fundy'),
+    label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_4__.__)('Fundy Receipt', 'fundy'),
     isColumnLayout: true
-  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__.SelectControl, {
-    label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_4__.__)('Select a form', 'fundy'),
-    value: formId,
-    className: "fundraising-form",
-    options: forms ? forms : [{
-      label: '',
-      value: ''
-    }],
-    onChange: value => setAttributes({
-      formId: parseInt(value)
-    }),
-    disabled: !isLoaded
-  }), !isLoaded && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", null, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_4__.__)('Loading…', 'fundy')), error && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", null, 'Error: ' + error)));
-  /* eslint-enable react-hooks/rules-of-hooks */
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("table", null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("tbody", null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("tr", null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("td", null, "Name"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("td", null, "John Smith")), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("tr", null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("td", null, "Email"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("td", null, "name@email.no")), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("tr", null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("td", null, "Phone"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("td", null, "12345678")), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("tr", null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("td", null, "Address"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("td", null, "Karl Johans gate 16")), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("tr", null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("td", null, "City"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("td", null, "Oslo")), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("tr", null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("td", null, "Postcode"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("td", null, "0154"))))));
 }
 
 /***/ }),
@@ -196,13 +119,13 @@ module.exports = window["wp"]["i18n"];
 
 /***/ }),
 
-/***/ "./src/donation-form/block.json":
-/*!**************************************!*\
-  !*** ./src/donation-form/block.json ***!
-  \**************************************/
+/***/ "./src/donation-receipt/block.json":
+/*!*****************************************!*\
+  !*** ./src/donation-receipt/block.json ***!
+  \*****************************************/
 /***/ ((module) => {
 
-module.exports = /*#__PURE__*/JSON.parse('{"$schema":"https://schemas.wp.org/trunk/block.json","apiVersion":3,"name":"fundraising/donation-form","title":"Donation Form","description":"Displays a donation form.","category":"widgets","textdomain":"fundy","icon":"clipboard","supports":{"html":false,"color":{"background":true,"text":true},"spacing":{"margin":true,"padding":true}},"attributes":{"formId":{"type":"number","default":0}},"editorScript":"file:editor.js","viewScript":"fundy-form-script"}');
+module.exports = /*#__PURE__*/JSON.parse('{"$schema":"https://schemas.wp.org/trunk/block.json","apiVersion":3,"name":"fundy/donation-receipt","title":"Donation Receipt","description":"Displays a donation receipt on a thank you page.","category":"widgets","textdomain":"fundy","icon":"clipboard","supports":{"html":false,"color":{"background":true,"text":true},"spacing":{"margin":true,"padding":true},"multiple":false},"attributes":{},"editorScript":"file:editor.js","script":"file:frontend.js"}');
 
 /***/ })
 
@@ -275,14 +198,14 @@ module.exports = /*#__PURE__*/JSON.parse('{"$schema":"https://schemas.wp.org/tru
 /******/ 	
 /************************************************************************/
 var __webpack_exports__ = {};
-/*!*************************************!*\
-  !*** ./src/donation-form/editor.js ***!
-  \*************************************/
+/*!****************************************!*\
+  !*** ./src/donation-receipt/editor.js ***!
+  \****************************************/
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _wordpress_blocks__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @wordpress/blocks */ "@wordpress/blocks");
 /* harmony import */ var _wordpress_blocks__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_wordpress_blocks__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _block_json__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./block.json */ "./src/donation-form/block.json");
-/* harmony import */ var _edit__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./edit */ "./src/donation-form/edit.js");
+/* harmony import */ var _block_json__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./block.json */ "./src/donation-receipt/block.json");
+/* harmony import */ var _edit__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./edit */ "./src/donation-receipt/edit.js");
 /**
  * WordPress dependencies
  */

@@ -2,12 +2,12 @@
 /**
  * Donation Form.
  *
- * @package fundraising
+ * @package fundy
  */
 
 declare( strict_types = 1 );
 
-namespace Dekode\Fundraising\DonationForm;
+namespace Dekode\Fundy\DonationForm;
 
 /**
  * Hooks.
@@ -43,7 +43,7 @@ function render_block( array $attributes ): string {
 		return '';
 	}
 
-	return sprintf( '
+	return \sprintf( '
 		<div %s>
 			<div
 				class="fundraising-form"

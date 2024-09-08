@@ -2,12 +2,12 @@
 /**
  * Head.
  *
- * @package fundraising
+ * @package fundy
  */
 
 declare( strict_types = 1 );
 
-namespace Dekode\Fundraising\Head;
+namespace Dekode\Fundy\Head;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	die();

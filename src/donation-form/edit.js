@@ -88,11 +88,11 @@ export default function Edit({ attributes: { formId }, setAttributes }) {
 	return (
 		<div {...useBlockProps()}>
 			<Placeholder
-				label={__('Fundraising form', 'fundraising')}
+				label={__('Fundy form', 'fundy')}
 				isColumnLayout
 			>
 				<SelectControl
-					label={__('Select a form', 'fundraising')}
+					label={__('Select a form', 'fundy')}
 					value={formId}
 					className="fundraising-form"
 					options={forms ? forms : [{ label: '', value: '' }]}
@@ -102,7 +102,7 @@ export default function Edit({ attributes: { formId }, setAttributes }) {
 					disabled={!isLoaded}
 				/>
 
-				{!isLoaded && <p>{__('Loading…', 'fundraising')}</p>}
+				{!isLoaded && <p>{__('Loading…', 'fundy')}</p>}
 
 				{error && <p>{'Error: ' + error}</p>}
 			</Placeholder>

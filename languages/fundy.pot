@@ -1,0 +1,125 @@
+# Copyright (C) 2024 
+# This file is distributed under the same license as the Fundy by Dekode plugin.
+msgid ""
+msgstr ""
+"Project-Id-Version: Fundy by Dekode 0.10.1\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/fundy\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"POT-Creation-Date: 2024-09-08T09:35:09+00:00\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"X-Generator: WP-CLI 2.11.0-alpha\n"
+"X-Domain: fundy\n"
+
+#. Plugin Name of the plugin
+msgid "Fundy by Dekode"
+msgstr ""
+
+#. Description of the plugin
+msgid "Integrates with Fundy, making it easy to add donation forms to your website."
+msgstr ""
+
+#: build/donation-form/editor.js:119
+#: src/donation-form/edit.js:91
+#: build/donation-form/editor.js:91
+msgid "Fundy form"
+msgstr ""
+
+#: build/donation-form/editor.js:122
+#: src/donation-form/edit.js:95
+#: build/donation-form/editor.js:95
+msgid "Select a form"
+msgstr ""
+
+#: build/donation-form/editor.js:133
+#: src/donation-form/edit.js:105
+#: build/donation-form/editor.js:105
+msgid "Loading…"
+msgstr ""
+
+#: build/donation-receipt/editor.js:55
+#: src/donation-receipt/edit.js:22
+#: build/donation-receipt/editor.js:22
+msgid "Fundy Receipt"
+msgstr ""
+
+#: build/donation-receipt/frontend.js:90
+#: src/donation-receipt/components/Receipt/Receipt.jsx:82
+#: build/donation-receipt/frontend.js:82
+msgid "Unfortunately, we were unable to load the details for the donation at this moment; the link may have expired."
+msgstr ""
+
+#: build/donation-receipt/frontend.js:92
+#: src/donation-receipt/components/Receipt/Receipt.jsx:95
+#: build/donation-receipt/frontend.js:95
+msgid "Company name"
+msgstr ""
+
+#: build/donation-receipt/frontend.js:92
+#: src/donation-receipt/components/Receipt/Receipt.jsx:101
+#: build/donation-receipt/frontend.js:101
+msgid "Contact person"
+msgstr ""
+
+#: build/donation-receipt/frontend.js:92
+#: build/donation-receipt/frontend.js:94
+#: src/donation-receipt/components/Receipt/Receipt.jsx:107
+#: src/donation-receipt/components/Receipt/Receipt.jsx:134
+#: build/donation-receipt/frontend.js:107
+#: build/donation-receipt/frontend.js:134
+msgid "Date"
+msgstr ""
+
+#: build/donation-receipt/frontend.js:92
+#: build/donation-receipt/frontend.js:94
+#: src/donation-receipt/components/Receipt/Receipt.jsx:113
+#: src/donation-receipt/components/Receipt/Receipt.jsx:140
+#: build/donation-receipt/frontend.js:113
+#: build/donation-receipt/frontend.js:140
+msgid "Total amount"
+msgstr ""
+
+#: build/donation-receipt/frontend.js:92
+#: src/donation-receipt/components/Receipt/Receipt.jsx:119
+#: build/donation-receipt/frontend.js:119
+msgid "Invoice"
+msgstr ""
+
+#: build/donation-receipt/frontend.js:94
+#: src/donation-receipt/components/Receipt/Receipt.jsx:120
+#: build/donation-receipt/frontend.js:120
+msgid "Download invoice"
+msgstr ""
+
+#: build/donation-receipt/frontend.js:94
+#: src/donation-receipt/components/Receipt/Receipt.jsx:128
+#: build/donation-receipt/frontend.js:128
+msgid "Name"
+msgstr ""
+
+#: build/settings-page/editor.js:339
+#: src/settings-page/editor.js:51
+#: build/settings-page/editor.js:184
+msgid "Fundy Settings"
+msgstr ""
+
+#: build/settings-page/editor.js:347
+#: src/settings-page/editor.js:68
+#: build/settings-page/editor.js:201
+msgid "Fundy API Token"
+msgstr ""
+
+#: build/settings-page/editor.js:361
+#: src/settings-page/editor.js:86
+#: build/settings-page/editor.js:219
+msgid "Settings Saved"
+msgstr ""
+
+#: build/settings-page/editor.js:366
+#: src/settings-page/editor.js:94
+#: build/settings-page/editor.js:227
+msgid "Save"
+msgstr ""
