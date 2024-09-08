@@ -3,7 +3,7 @@
  * Plugin Name: Fundy by Dekode
  * Description: Integrates with Fundy, making it easy to add donation forms to your website.
  * URL: https://fundy.cloud
- * Version: 0.10.1
+ * Version: 0.11.0
  * Update URI: false
  *
  * @package fundy
@@ -17,7 +17,7 @@ if ( ! \defined( 'ABSPATH' ) ) {
 	die();
 }
 
-\define( 'FUNDRAISING_VERSION', '0.10.1' );
+\define( 'FUNDRAISING_VERSION', '0.11.0' );
 \define( 'FUNDRAISING_PLUGIN_URL', \plugin_dir_url( __FILE__ ) );
 \define( 'FUNDRAISING_PLUGIN_DIR', \plugin_dir_path( __FILE__ ) );
 \define( 'FUNDRAISING_MIN_PHP_VERSION', '8.0' );
@@ -75,7 +75,7 @@ function wp_version_check() {
 function requirements_error_notice() {
 	$notices = [];
 
-	if ( ! \php_version_check() ) {
+	if ( ! php_version_check() ) {
 		$notices[] = \sprintf(
 			/* translators: placeholder 1 is minimum required PHP version, placeholder 2 is installed PHP version. */
 			\esc_html__( 'Fundraising plugin requires PHP %1$s or higher. You are still on %2$s.', 'fundraising' ),
