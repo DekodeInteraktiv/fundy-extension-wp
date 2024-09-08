@@ -89,6 +89,8 @@ function register_assets(): void {
 			false
 		);
 		\wp_enqueue_script( 'fundraising-settings' );
+
+		\wp_set_script_translations( 'fundraising-settings', 'fundy', FUNDRAISING_PLUGIN_DIR . '/languages' );
 	}
 
 	\wp_enqueue_style( 'wp-components' );

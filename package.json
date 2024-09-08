@@ -27,7 +27,7 @@
 		"dev": "wp-scripts start --webpack-copy-php",
 		"lint": "npm run lint:js && npm run lint:css && npm run lint:format",
 		"lint:js": "wp-scripts lint-js",
-		"lint:css": "wp-scripts lint-style",
+		"lint:css": "wp-scripts lint-style --allow-empty-input",
 		"lint:format": "prettier --check .",
 		"format": "prettier --write .",
 		"lint-staged": "lint-staged",

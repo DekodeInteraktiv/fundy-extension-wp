@@ -41,7 +41,7 @@ if ( ! \defined( 'FUNDY_CORE_URL' ) ) {
  * Load plugin text domain.
  */
 function load_textdomain(): void {
-	\load_plugin_textdomain( 'fundy', false, \dirname( \plugin_basename( __FILE__ ) ) . '/languages' );
+	\load_plugin_textdomain( 'fundy', false, FUNDRAISING_PLUGIN_DIR . '/languages' );
 }
 \add_action( 'init', __NAMESPACE__ . '\\load_textdomain' );
 

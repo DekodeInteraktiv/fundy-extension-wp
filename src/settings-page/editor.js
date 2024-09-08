@@ -2,7 +2,7 @@
  * External dependencies
  */
 import React from 'react'; // eslint-disable-line import/no-extraneous-dependencies
-import { createRoot } from 'react-dom/client';
+import { createRoot } from 'react-dom/client'; // eslint-disable-line import/no-extraneous-dependencies
 
 /**
  * WordPress dependencies
@@ -63,7 +63,7 @@ function Settings() {
 					<TextControl
 						help={__(
 							'The API token for your Fundy organization.',
-							'fundraising',
+							'fundy',
 						)}
 						label={__('Fundy API Token', 'fundy')}
 						onChange={(value) => setState({ apiToken: value })}

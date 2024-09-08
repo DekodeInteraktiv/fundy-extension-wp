@@ -24,6 +24,8 @@ function register_block(): void {
 		'render_callback' => __NAMESPACE__ . '\\render_block',
 	] );
 
+	\wp_set_script_translations( 'fundraising-donation-form-editor', 'fundy', FUNDRAISING_PLUGIN_DIR . '/languages' );
+
 	\wp_localize_script(
 		'fundraising-donation-form-editor-script',
 		'fundraisingSettings',

@@ -1,16 +1,11 @@
 /**
  * External dependencies
  */
-import React from 'react';
 
 /**
  * WordPress dependencies
  */
-import {
-	Fragment,
-	useReducer,
-	useEffect,
-} from '@wordpress/element';
+import { Fragment, useReducer, useEffect } from '@wordpress/element';
 import { __ } from '@wordpress/i18n';
 
 const Receipt = () => {
@@ -21,16 +16,16 @@ const Receipt = () => {
 		donation: null,
 	});
 
-	const {
-		isLoaded,
-		isError,
-		baseURL,
-		donation,
-	} = state;
+	const { isLoaded, isError, baseURL, donation } = state;
 
 	useEffect(() => {
 		const queryParams = getQueryParams();
-		if (!queryParams.donationId || !queryParams.token || !queryParams.expiry || !baseURL) {
+		if (
+			!queryParams.donationId ||
+			!queryParams.token ||
+			!queryParams.expiry ||
+			!baseURL
+		) {
 			setState({
 				isLoaded: true,
 				isError: true,
@@ -41,7 +36,7 @@ const Receipt = () => {
 			donation_id: queryParams.donationId,
 			token: queryParams.token,
 			expiry: queryParams.expiry,
-		}
+		};
 
 		const queryString = new URLSearchParams(params).toString();
 
@@ -70,7 +65,7 @@ const Receipt = () => {
 					isError: true,
 				});
 			});
-	}, []);
+	}, [baseURL]);
 
 	if (!isLoaded) {
 		return null;
@@ -79,7 +74,12 @@ const Receipt = () => {
 	if (isError || !donation) {
 		return (
 			<Fragment>
-				<p>{__('Unfortunately, we were unable to load the details for the donation at this moment; the link may have expired.', 'fundy')}</p>
+				<p>
+					{__(
+						'Unfortunately, we were unable to load the details for the donation at this moment; the link may have expired.',
+						'fundy',
+					)}
+				</p>
 			</Fragment>
 		);
 	}
@@ -88,61 +88,78 @@ const Receipt = () => {
 		<Fragment>
 			<table>
 				<tbody>
-				{donation && donation.company_name ? (
-					<>
-						{donation.company_name && (
-							<tr>
-								<td>{__('Company name', 'fundy')}</td>
-								<td>{donation.company_name}</td>
-							</tr>
-						)}
-						{donation.first_name && (
-							<tr>
-								<td>{__('Contact person', 'fundy')}</td>
-								<td>{donation.first_name + ' ' + donation?.last_name}</td>
-							</tr>
-						)}
-						{donation.created_at && (
-							<tr>
-								<td>{__('Date', 'fundy')}</td>
-								<td>{donation.created_at}</td>
-							</tr>
-						)}
-						{donation.amount && (
-							<tr>
-								<td>{__('Total amount', 'fundy')}</td>
-								<td>{donation.amount}</td>
-							</tr>
-						)}
-						{donation.invoice_url && (
-							<tr>
-								<td>{__('Invoice', 'fundy')}</td>
-								<td><a href={donation.invoice_url}>{__('Download invoice', 'fundy')} &#8658;</a></td>
-							</tr>
-						)}
-					</>
-				) : (
-					<>
-						{donation.first_name && (
-							<tr>
-								<td>{__('Name', 'fundy')}</td>
-								<td>{donation.first_name + ' ' + donation?.last_name}</td>
-							</tr>
-						)}
-						{donation.created_at && (
-							<tr>
-								<td>{__('Date', 'fundy')}</td>
-								<td>{formatDateTime(donation.created_at)}</td>
-							</tr>
-						)}
-						{donation.amount && (
-							<tr>
-								<td>{__('Total amount', 'fundy')}</td>
-								<td>{donation.amount}</td>
-							</tr>
-						)}
-					</>
-				)}
+					{donation && donation.company_name ? (
+						<Fragment>
+							{donation.company_name && (
+								<tr>
+									<td>{__('Company name', 'fundy')}</td>
+									<td>{donation.company_name}</td>
+								</tr>
+							)}
+							{donation.first_name && (
+								<tr>
+									<td>{__('Contact person', 'fundy')}</td>
+									<td>
+										{donation.first_name +
+											' ' +
+											donation?.last_name}
+									</td>
+								</tr>
+							)}
+							{donation.created_at && (
+								<tr>
+									<td>{__('Date', 'fundy')}</td>
+									<td>
+										{formatDateTime(donation.created_at)}
+									</td>
+								</tr>
+							)}
+							{donation.amount && (
+								<tr>
+									<td>{__('Total amount', 'fundy')}</td>
+									<td>{donation.amount}</td>
+								</tr>
+							)}
+							{donation.invoice_url && (
+								<tr>
+									<td>{__('Invoice', 'fundy')}</td>
+									<td>
+										<a href={donation.invoice_url}>
+											{__('Download invoice', 'fundy')}{' '}
+											&#8658;
+										</a>
+									</td>
+								</tr>
+							)}
+						</Fragment>
+					) : (
+						<Fragment>
+							{donation.first_name && (
+								<tr>
+									<td>{__('Name', 'fundy')}</td>
+									<td>
+										{donation.first_name +
+											' ' +
+											donation?.last_name}
+									</td>
+								</tr>
+							)}
+							{donation.created_at && (
+								<tr>
+									<td>{__('Date', 'fundy')}</td>
+									<td>
+										{formatDateTime(donation.created_at)}
+									</td>
+								</tr>
+							)}
+							{donation.amount && (
+								<tr>
+									<td>{__('Total amount', 'fundy')}</td>
+									<td>{donation.amount}</td>
+								</tr>
+							)}
+						</Fragment>
+					)}
 				</tbody>
 			</table>
 		</Fragment>
@@ -165,9 +182,8 @@ function getQueryParams() {
 	return {
 		donationId: params.get('donation_id') || null,
 		token: params.get('token') || null,
-		expiry: params.get('expiry') || null
+		expiry: params.get('expiry') || null,
 	};
 }
 
 export default Receipt;
-

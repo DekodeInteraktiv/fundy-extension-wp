@@ -343,7 +343,7 @@ function Settings() {
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__.PanelBody, {
     title: "General"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", null, "The plugin must authenticate with the Fundy server to work, please provide the details below."), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__.TextControl, {
-    help: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__.__)('The API token for your Fundy organization.', 'fundraising'),
+    help: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__.__)('The API token for your Fundy organization.', 'fundy'),
     label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__.__)('Fundy API Token', 'fundy'),
     onChange: value => setState({
       apiToken: value

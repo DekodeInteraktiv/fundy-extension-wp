@@ -1,21 +1,25 @@
 /**
- * External dependencies.
+ * External dependencies
  */
-import { createRoot } from 'react-dom/client';
+
+/**
+ * WordPress dependencies
+ */
+import { createRoot } from 'react-dom/client'; // eslint-disable-line import/no-extraneous-dependencies
 import domReady from '@wordpress/dom-ready';
 
 /**
- * Internal dependencies.
+ * Internal dependencies
  */
 import Receipt from './components/Receipt';
 
 /**
  * Render the donation receipt component.
  */
-domReady( function () {
+domReady(function () {
 	const receiptBlocks = document.querySelectorAll('.fundy-receipt');
 
-	receiptBlocks.forEach(block => {
-		createRoot( block ).render( <Receipt /> );
+	receiptBlocks.forEach((block) => {
+		createRoot(block).render(<Receipt />);
 	});
-} );
+});
