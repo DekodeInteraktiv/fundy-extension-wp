@@ -72,6 +72,16 @@ function register_settings(): void {
 			'default'      => '',
 		]
 	);
+
+	\register_setting(
+		'fundraising_settings',
+		'fundraising_option_development_script',
+		[ // phpcs:ignore Generic.Arrays.DisallowShortArraySyntax.Found
+			'type'         => 'boolean',
+			'show_in_rest' => true,
+			'default'      => false,
+		]
+	);
 }
 
 /**

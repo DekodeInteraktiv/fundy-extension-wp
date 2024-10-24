@@ -1,20 +1,20 @@
 /**
- * External Imports.
- */
-/**
  * External dependencies
  */
 import React, { useEffect, useReducer } from 'react'; // eslint-disable-line import/no-extraneous-dependencies
 
 /**
- * Internal Imports.
- */
-/**
  * WordPress dependencies
  */
 import { __ } from '@wordpress/i18n';
 
-import { Button, Icon, TextControl, PanelBody } from '@wordpress/components';
+import {
+	Button,
+	Icon,
+	TextControl,
+	ToggleControl,
+	PanelBody,
+} from '@wordpress/components';
 
 import { Fragment, createRoot } from '@wordpress/element';
 
@@ -31,9 +31,10 @@ function Settings() {
 	const [state, setState] = useReducer((s, a) => ({ ...s, ...a }), {
 		isLoaded: false,
 		apiToken: '',
+		developmentScript: false,
 	});
 
-	const { isLoaded, apiToken } = state;
+	const { isLoaded, apiToken, developmentScript } = state;
 
 	useEffect(() => {
 		api.loadPromise.then(() => {
@@ -43,6 +44,9 @@ function Settings() {
 				settings.fetch().then((response) => {
 					setState({
 						apiToken: response.fundraising_option_token ?? '',
+						developmentScript:
+							response.fundraising_option_development_script ??
+							false,
 						isLoaded: true,
 					});
 				});
@@ -77,6 +81,17 @@ function Settings() {
 						onChange={(value) => setState({ apiToken: value })}
 						value={apiToken}
 					/>
+					<ToggleControl
+						help={__(
+							'Whether to use the development version of the form renderer script.',
+							'fundraising',
+						)}
+						label={__('Use Development Script?', 'fundraising')}
+						onChange={(value) =>
+							setState({ developmentScript: value })
+						}
+						checked={developmentScript}
+					/>
 				</PanelBody>
 			</div>
 			<div className="fundraising__save">
@@ -85,6 +100,8 @@ function Settings() {
 					onClick={() => {
 						const settings = new api.models.Settings({
 							fundraising_option_token: apiToken,
+							fundraising_option_development_script:
+								developmentScript,
 						});
 
 						settings.save();

@@ -9,7 +9,7 @@ declare( strict_types = 1 );
 
 namespace Dekode\Fundraising\Head;
 
-if ( ! defined( 'ABSPATH' ) ) {
+if ( ! \defined( 'ABSPATH' ) ) {
 	die();
 }
 
