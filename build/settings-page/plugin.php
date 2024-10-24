@@ -28,8 +28,8 @@ if (\is_blog_admin()) {
  */
 function register_page(): void {
 	\add_options_page(
-		\__( 'Fundy Settings', 'fundraising' ),
-		\__( 'Fundy', 'fundraising' ),
+		\__( 'Fundy Settings', 'fundy' ),
+		\__( 'Fundy', 'fundy' ),
 		'manage_options',
 		'options_fundraising',
 		__NAMESPACE__ . '\\render_page',
@@ -51,7 +51,7 @@ function render_page() {
  * @param
  */
 function settings_link( array $links ) : array {
-	$label = \esc_html__( 'Settings', 'fundraising' );
+	$label = \esc_html__( 'Settings', 'fundy' );
 	$slug  = 'options_fundraising';
 
 	\array_unshift( $links, "<a href='options-general.php?page=$slug'>$label</a>" );
@@ -70,6 +70,16 @@ function register_settings(): void {
 			'type'         => 'string',
 			'show_in_rest' => true,
 			'default'      => '',
+		]
+	);
+
+	\register_setting(
+		'fundraising_settings',
+		'fundraising_option_development_script',
+		[ // phpcs:ignore Generic.Arrays.DisallowShortArraySyntax.Found
+			'type'         => 'boolean',
+			'show_in_rest' => true,
+			'default'      => false,
 		]
 	);
 }

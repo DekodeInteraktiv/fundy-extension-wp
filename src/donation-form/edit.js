@@ -78,7 +78,7 @@ export default function Edit({ attributes: { formId }, setAttributes }) {
 				<Placeholder
 					instructions={__(
 						'Please set an API Token on the plugin settings page.',
-						'fundraising',
+						'fundy',
 					)}
 				></Placeholder>
 			</div>
