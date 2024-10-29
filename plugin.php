@@ -78,7 +78,7 @@ function requirements_error_notice() {
 	if ( ! php_version_check() ) {
 		$notices[] = \sprintf(
 			/* translators: placeholder 1 is minimum required PHP version, placeholder 2 is installed PHP version. */
-			\esc_html__( 'Fundraising plugin requires PHP %1$s or higher. You are still on %2$s.', 'fundraising' ),
+			\esc_html__( 'Fundraising plugin requires PHP %1$s or higher. You are still on %2$s.', 'fundy' ),
 			\esc_html( FUNDRAISING_MIN_PHP_VERSION ),
 			\esc_html( PHP_VERSION )
 		);
@@ -87,7 +87,7 @@ function requirements_error_notice() {
 	if ( ! wp_version_check() ) {
 		$notices[] = \sprintf(
 			/* translators: placeholder 1 is minimum required WordPress version, placeholder 2 is installed WordPress version. */
-			\esc_html__( 'Fundraising plugin requires at least WordPress in version %1$s, You are on %2$s.', 'fundraising' ),
+			\esc_html__( 'Fundraising plugin requires at least WordPress in version %1$s, You are on %2$s.', 'fundy' ),
 			\esc_html( FUNDRAISING_MIN_WP_VERSION ),
 			\esc_html( $GLOBALS['wp_version'] )
 		);
