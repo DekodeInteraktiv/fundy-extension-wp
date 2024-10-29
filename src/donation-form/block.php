@@ -45,6 +45,8 @@ function render_block( array $attributes ): string {
 		return '';
 	}
 
+	\wp_enqueue_script( 'fundy-form-script' );
+
 	return \sprintf( '
 		<div %s>
 			<div

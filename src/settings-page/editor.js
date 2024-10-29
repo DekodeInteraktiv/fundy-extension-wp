@@ -31,7 +31,7 @@ function Settings() {
 	const [state, setState] = useReducer((s, a) => ({ ...s, ...a }), {
 		isLoaded: false,
 		apiToken: '',
-		developmentScript: false,
+		developmentScript: 'false',
 	});
 
 	const { isLoaded, apiToken, developmentScript } = state;
@@ -46,7 +46,7 @@ function Settings() {
 						apiToken: response.fundraising_option_token ?? '',
 						developmentScript:
 							response.fundraising_option_development_script ??
-							false,
+							'false',
 						isLoaded: true,
 					});
 				});
@@ -88,9 +88,9 @@ function Settings() {
 						)}
 						label={__('Use Development Script?', 'fundy')}
 						onChange={(value) =>
-							setState({ developmentScript: value })
+							setState({ developmentScript: value ? 'true' : 'false' })
 						}
-						checked={developmentScript}
+						checked={'true' === developmentScript ? true : false}
 					/>
 				</PanelBody>
 			</div>
