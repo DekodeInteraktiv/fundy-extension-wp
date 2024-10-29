@@ -9,7 +9,7 @@ declare( strict_types = 1 );
 
 namespace Dekode\Fundy\Assets;
 
-if ( ! defined( 'ABSPATH' ) ) {
+if ( ! \defined( 'ABSPATH' ) ) {
 	die();
 }
 
@@ -19,11 +19,15 @@ if ( ! defined( 'ABSPATH' ) ) {
 \add_action( 'wp_enqueue_scripts', __NAMESPACE__ . '\\register_scripts' );
 
 function register_scripts() {
-	$development_script = \get_option( 'fundraising_option_development_script' );
+	if ( \wp_script_is( 'fundy-form-script', 'registered' ) ) {
+		return;
+	}
 
-	if ( true == $development_script ) {
-		\wp_register_script( 'fundy-form-script', 'https://assets.fundy.cloud/form-renderer.development.js', [], false, true );
+	$development_script = \get_option( 'fundraising_option_development_script', 'false' );
+
+	if ( 'true' === $development_script ) {
+		\wp_register_script( 'fundy-form-script', 'https://assets.fundy.cloud/form-renderer.development.js', [], null, true );
 	} else {
-		\wp_register_script( 'fundy-form-script', 'https://assets.fundy.cloud/form-renderer.latest.js', [], false, true );
+		\wp_register_script( 'fundy-form-script', 'https://assets.fundy.cloud/form-renderer.latest.js', [], null, true );
 	}
 }
