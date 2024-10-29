@@ -88,7 +88,9 @@ function Settings() {
 						)}
 						label={__('Use Development Script?', 'fundy')}
 						onChange={(value) =>
-							setState({ developmentScript: value ? 'true' : 'false' })
+							setState({
+								developmentScript: value ? 'true' : 'false',
+							})
 						}
 						checked={'true' === developmentScript ? true : false}
 					/>
