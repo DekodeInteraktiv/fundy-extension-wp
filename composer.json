@@ -10,11 +10,11 @@
 			"dealerdirect/phpcodesniffer-composer-installer": true
 		},
 		"platform": {
-			"php": "8.1"
+			"php": "8.0"
 		}
 	},
 	"require": {
-		"php": ">=8.1"
+		"php": ">=8.0"
 	},
 	"require-dev": {
 		"dekode/coding-standards": "~5.0.0",
