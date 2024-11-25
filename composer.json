@@ -1,7 +1,7 @@
 {
-	"name": "dekode/fundraising-extension-wp",
+	"name": "dekode/fundy-extension-wp",
 	"type": "wordpress-plugin",
-	"description": "WordPress plugin for the Dekode Fundraising Engine.",
+	"description": "WordPress plugin for Fundy by Dekode.",
 	"minimum-stability": "dev",
 	"config": {
 		"sort-packages": true,

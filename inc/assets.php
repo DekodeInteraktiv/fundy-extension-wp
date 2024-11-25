@@ -16,9 +16,9 @@ if ( ! \defined( 'ABSPATH' ) ) {
 /**
  * Hooks
  */
-\add_action( 'wp_enqueue_scripts', __NAMESPACE__ . '\\register_scripts' );
+\add_action( 'wp_enqueue_scripts', __NAMESPACE__ . '\\register_assets' );
 
-function register_scripts() {
+function register_assets() {
 	if ( \wp_script_is( 'fundy-form-script', 'registered' ) ) {
 		return;
 	}
@@ -26,8 +26,16 @@ function register_scripts() {
 	$development_script = \get_option( 'fundraising_option_development_script', 'false' );
 
 	if ( 'true' === $development_script ) {
-		\wp_register_script( 'fundy-form-script', 'https://assets.fundy.cloud/form-renderer.development.js', [], null, true );
+		\wp_register_script( 'fundy-form-script', 'https://assets.fundy.cloud/fundy-forms.development.js', [], null, true );
+
+		if ( \apply_filters( 'fundy/enqueue/form_styles', true ) ) {
+			\wp_enqueue_style( 'fundy-form-style', 'https://assets.fundy.cloud/fundy-forms.development.css', [], null, 'all' );
+		}
 	} else {
-		\wp_register_script( 'fundy-form-script', 'https://assets.fundy.cloud/form-renderer.latest.js', [], null, true );
+		\wp_register_script( 'fundy-form-script', 'https://assets.fundy.cloud/fundy-forms.latest.js', [], null, true );
+
+		if ( \apply_filters( 'fundy/enqueue/form_styles', true ) ) {
+			\wp_enqueue_style( 'fundy-form-style', 'https://assets.fundy.cloud/fundy-forms.latest.css', [], null, 'all' );
+		}
 	}
 }

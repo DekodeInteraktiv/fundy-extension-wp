@@ -1,5 +1,5 @@
 {
-	"name": "fundraising-extension-wp",
+	"name": "fundy-extension-wp",
 	"version": "1.0.0",
 	"private": true,
 	"engines": {
@@ -8,18 +8,18 @@
 		"yarn": "Please use npm"
 	},
 	"devDependencies": {
-		"@wordpress/dom-ready": "^4.7.0",
-		"@wordpress/element": "^6.7.0",
-		"@wordpress/env": "~9.7.0",
-		"@wordpress/eslint-plugin": "^17.7.0",
-		"@wordpress/scripts": "~27.6.0",
-		"@wordpress/stylelint-config": "~21.38.0",
+		"@wordpress/dom-ready": "~4.12.0",
+		"@wordpress/element": "~6.12.0",
+		"@wordpress/env": "~10.12.0",
+		"@wordpress/eslint-plugin": "~21.5.0",
+		"@wordpress/scripts": "~30.5.1",
+		"@wordpress/stylelint-config": "~23.4.0",
 		"dotenv": "~16.4.5",
-		"eslint-plugin-prettier": "^5.1.3",
-		"husky": "^9.0.11",
-		"lint-staged": "^15.2.5",
-		"prettier": "^3.2.5",
-		"stylelint-order": "^6.0.4"
+		"eslint-plugin-prettier": "~5.2.1",
+		"husky": "~9.1.7",
+		"lint-staged": "~15.2.10",
+		"prettier": "~3.3.3",
+		"stylelint-order": "~6.0.4"
 	},
 	"scripts": {
 		"prepare": "husky install",
