@@ -1,7 +1,7 @@
 {
 	"$schema": "https://schemas.wp.org/trunk/block.json",
 	"apiVersion": 3,
-	"name": "fundraising/donation-form",
+	"name": "fundy/donation-form",
 	"title": "Donation Form",
 	"description": "Displays a donation form.",
 	"category": "widgets",

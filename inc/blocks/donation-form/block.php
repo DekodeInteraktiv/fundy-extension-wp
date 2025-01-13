@@ -24,14 +24,14 @@ function register_block(): void {
 		'render_callback' => __NAMESPACE__ . '\\render_block',
 	] );
 
-	\wp_set_script_translations( 'fundraising-donation-form-editor', 'fundy', FUNDRAISING_PLUGIN_DIR . '/languages' );
+	\wp_set_script_translations( 'fundy-donation-form-editor', 'fundy', FUNDY_PLUGIN_DIR . '/languages' );
 
 	\wp_localize_script(
-		'fundraising-donation-form-editor-script',
-		'fundraisingSettings',
+		'fundy-donation-form-editor-script',
+		'fundySettings',
 		[
 			'baseURL'  => \FUNDY_CORE_URL,
-			'apiToken' => \get_option('fundraising_option_token', ''),
+			'apiToken' => \get_option('fundy_option_token', ''),
 		]
 	);
 }
@@ -50,7 +50,7 @@ function render_block( array $attributes ): string {
 	return \sprintf( '
 		<div %s>
 			<div
-				class="fundraising-form"
+				class="fundy-form"
 				data-form-id="%s"
 				data-core-url="%s"
 				data-button-classes="%s"
@@ -58,7 +58,7 @@ function render_block( array $attributes ): string {
 		</div>
 		',
 		\get_block_wrapper_attributes( [
-			'class' => 'fundraising-form-wrapper',
+			'class' => 'fundy-form-wrapper',
 		] ),
 		\esc_attr( $attributes['formId'] ),
 		\esc_attr( \FUNDY_CORE_URL ),

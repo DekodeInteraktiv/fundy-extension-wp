@@ -24,8 +24,8 @@ function register_block(): void {
 		'render_callback' => __NAMESPACE__ . '\\render_block',
 	] );
 
-	\wp_set_script_translations( 'fundy-donation-receipt-editor-script', 'fundy', FUNDRAISING_PLUGIN_DIR . '/languages' );
-	\wp_set_script_translations( 'fundy-donation-receipt-script', 'fundy', FUNDRAISING_PLUGIN_DIR . '/languages' );
+	\wp_set_script_translations( 'fundy-donation-receipt-editor-script', 'fundy', FUNDY_PLUGIN_DIR . '/languages' );
+	\wp_set_script_translations( 'fundy-donation-receipt-script', 'fundy', FUNDY_PLUGIN_DIR . '/languages' );
 
 	\wp_localize_script(
 		'fundy-donation-receipt-script',
