@@ -38,3 +38,35 @@ function register_settings(): void {
 		]
 	);
 }
+
+/**
+ * Retrieve the API key.
+ */
+function get_api_key(): string {
+	$site_key = \get_option( 'fundy_api_key', '' );
+	if ( ! empty( $site_key ) ) {
+		return $site_key;
+	}
+
+	if ( \is_multisite() ) {
+		return \get_network_option( null, 'fundy_api_key', '' );
+	}
+
+	return '';
+}
+
+/**
+ * Retrieve the render script environment.
+ */
+function get_script_env(): string {
+	$site_env = \get_option( 'fundy_script_env', '' );
+	if ( ! empty( $site_env ) ) {
+		return $site_env;
+	}
+
+	if ( \is_multisite() ) {
+		return \get_network_option( null, 'fundy_script_env', 'prod' );
+	}
+
+	return 'prod';
+}

@@ -1,16 +1,18 @@
-# Fundraising Extension for WordPress
+# Fundy Extension for WordPress
 
 Provides a WordPress integration for displaying donation forms.
 
 ## Repositories
 
-The fundraising platform has many components in different repositories:
+The fundy platform has many components in different repositories:
 
-- [fundraising-core](https://github.com/DekodeInteraktiv/fundraising-core)
-- [fundraising-analytics](https://github.com/DekodeInteraktiv/fundraising-analytics)
-- [fundraising-interface](https://github.com/DekodeInteraktiv/fundraising-interface)
-- [fundraising-form-renderer](https://github.com/DekodeInteraktiv/fundraising-form-renderer)
-- [fundraising-extension-wp](https://github.com/DekodeInteraktiv/fundraising-extension-wp)
+- [fundy-core](https://github.com/DekodeInteraktiv/fundy-core)
+- [fundy-surge](https://github.com/DekodeInteraktiv/fundy-surge)
+- [fundy-interface](https://github.com/DekodeInteraktiv/fundy-interface)
+- [fundy-forms](https://github.com/DekodeInteraktiv/fundy-forms)
+- [fundy-extension-wp](https://github.com/DekodeInteraktiv/fundy-extension-wp)
+- [fundy-worker-schema](https://github.com/DekodeInteraktiv/fundy-worker-schema)
+- [fundy-client-styling](https://github.com/DekodeInteraktiv/fundy-client-styling)
 
 ## Made by
 

@@ -87,9 +87,9 @@ export default function Edit({ attributes: { formId }, setAttributes }) {
 
 	return (
 		<div {...useBlockProps()}>
-			<Placeholder label={__('Fundy form', 'fundy')} isColumnLayout>
+			<Placeholder label={__('Fundy Form', 'fundy')} isColumnLayout>
 				<SelectControl
-					label={__('Select a form', 'fundy')}
+					label={__('Select a Form', 'fundy')}
 					value={formId}
 					className="fundy-form"
 					options={forms ? forms : [{ label: '', value: '' }]}

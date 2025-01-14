@@ -9,6 +9,8 @@ declare( strict_types = 1 );
 
 namespace Dekode\Fundy\DonationForm;
 
+use function Dekode\Fundy\Settings\get_api_key;
+
 /**
  * Hooks.
  */
@@ -20,7 +22,7 @@ namespace Dekode\Fundy\DonationForm;
  * @return void
  */
 function register_block(): void {
-	\register_block_type( __DIR__, [
+	\register_block_type_from_metadata( FUNDY_PLUGIN_DIR . '/build/blocks/donation-form/block.json', [
 		'render_callback' => __NAMESPACE__ . '\\render_block',
 	] );
 
@@ -31,7 +33,7 @@ function register_block(): void {
 		'fundySettings',
 		[
 			'baseURL'  => \FUNDY_CORE_URL,
-			'apiToken' => \get_option('fundy_option_token', ''),
+			'apiToken' => get_api_key(),
 		]
 	);
 }
@@ -50,7 +52,7 @@ function render_block( array $attributes ): string {
 	return \sprintf( '
 		<div %s>
 			<div
-				class="fundy-form"
+				class="fundy-form fundraising-form"
 				data-form-id="%s"
 				data-core-url="%s"
 				data-button-classes="%s"
