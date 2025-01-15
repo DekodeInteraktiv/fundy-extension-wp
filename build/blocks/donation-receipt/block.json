@@ -1,0 +1,25 @@
+{
+  "$schema": "https://schemas.wp.org/trunk/block.json",
+  "apiVersion": 3,
+  "name": "fundy/donation-receipt",
+  "title": "Donation Receipt",
+  "description": "Displays a donation receipt on a thank you page.",
+  "category": "widgets",
+  "textdomain": "fundy",
+  "icon": "clipboard",
+  "supports": {
+    "html": false,
+    "color": {
+      "background": true,
+      "text": true
+    },
+    "spacing": {
+      "margin": true,
+      "padding": true
+    },
+    "multiple": false
+  },
+  "attributes": {},
+  "editorScript": "file:editor.js",
+  "script": "file:frontend.js"
+}
