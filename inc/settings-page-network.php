@@ -183,7 +183,7 @@ function render_page(): void {
 	?>
 	<div class="wrap">
 		<h1><?php \esc_html_e( 'Fundy Network Settings', 'fundy' ); ?></h1>
-		<form action="edit.php?action=fundy_network_settings_group" method="post">
+		<form action="options.php" method="post">
 			<?php
 			\settings_fields( 'fundy_network_settings_group' );
 
