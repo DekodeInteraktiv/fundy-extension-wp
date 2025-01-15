@@ -114,6 +114,4 @@ require_once FUNDY_PLUGIN_DIR . 'inc/head.php';
 
 // Blocks.
 require_once FUNDY_PLUGIN_DIR . 'src/blocks/donation-form/block.php';
-
-// Require all generated blocks.
-//\array_map( fn( $f ) => require_once $f, \glob( FUNDY_PLUGIN_DIR . '/inc/blocks/*/block.php' ) );
+require_once FUNDY_PLUGIN_DIR . 'src/blocks/donation-receipt/block.php';
