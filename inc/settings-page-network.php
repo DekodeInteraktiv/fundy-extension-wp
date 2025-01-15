@@ -56,7 +56,7 @@ function register_settings(): void {
 	\add_settings_section(
 		'fundy_network_settings_section',
 		\__( 'Fundy Network Configuration', 'fundy' ),
-		__NAMESPACE__ . '\\fundy_settings_section_callback',
+		__NAMESPACE__ . '\\settings_section_callback',
 		'fundy_network_settings_page'
 	);
 
@@ -114,7 +114,7 @@ function settings_section_callback(): void {
  * Field callback for the API Key.
  */
 function api_key_callback(): void {
-	$options = get_network_option(
+	$options = \get_network_option(
 		null,
 		'fundy_network_options',
 		[
