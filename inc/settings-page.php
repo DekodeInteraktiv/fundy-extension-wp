@@ -9,12 +9,16 @@ declare( strict_types = 1 );
 
 namespace Dekode\Fundy\SettingsPage;
 
+if ( ! \defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 /**
  * Admin Hooks
  */
 if (\is_blog_admin()) {
+	\add_action( 'admin_init', __NAMESPACE__ . '\\register_settings' );
 	\add_action( 'admin_menu', __NAMESPACE__ . '\\register_page' );
-	\add_action( 'plugin_action_links_' . \plugin_basename( __FILE__ ), __NAMESPACE__ . '\\settings_link' );
 }
 
 /**
@@ -25,101 +29,128 @@ function register_page(): void {
 		\__( 'Fundy Settings', 'fundy' ),
 		\__( 'Fundy', 'fundy' ),
 		'manage_options',
-		'options_fundy',
+		'fundy_settings_page',
 		__NAMESPACE__ . '\\render_page',
 	);
 }
 
 /**
- * Renders Page
+ * Register settings using the WordPress Settings API.
  */
-function render_page() {
-	if (
-		isset( $_POST['fundy_settings_nonce'] )
-		&& \wp_verify_nonce( \sanitize_key( $_POST['fundy_settings_nonce'] ), 'fundy_save' )
-	) {
-		$api_key = \sanitize_text_field( $_POST['fundy_api_key'] ?? '' );
-		\update_option( 'fundy_api_key', $api_key );
+function register_settings(): void {
+	\register_setting(
+		'fundy_settings_group',
+		'fundy_options',
+		[
+			'type'              => 'array',
+			'sanitize_callback' => __NAMESPACE__ . '\\sanitize_options',
+			'default'           => [
+				'api_key'    => '',
+				'script_env' => 'prod',
+			],
+		]
+	);
 
-		$script_env = ( $_POST['fundy_script_env'] === 'dev' ) ? 'dev' : 'prod';
-		\update_option( 'fundy_script_env', $script_env );
+	\add_settings_section(
+		'fundy_settings_section',
+		\__( 'Fundy Configuration', 'fundy' ),
+		__NAMESPACE__ . '\\section_callback',
+		'fundy_settings_page',
+	);
 
-		// Admin notice.
-		echo '<div class="updated"><p>' . \__( 'Settings updated.', 'fundy' ) . '</p></div>';
-	}
+	\add_settings_field(
+		'fundy_api_key',
+		\__( 'API Key', 'fundy' ),
+		__NAMESPACE__ . '\\api_key_callback',
+		'fundy_settings_page',
+		'fundy_settings_section'
+	);
 
-	$api_key    = \get_option( 'fundy_api_key', '' );
-	$script_env = \get_option( 'fundy_script_env', 'prod' );
+	// Add the Script Environment field.
+	\add_settings_field(
+		'fundy_script_env',
+		\__( 'Script Environment', 'fundy' ),
+		__NAMESPACE__ . '\\script_env_callback',
+		'fundy_settings_page',
+		'fundy_settings_section'
+	);
+}
+
+/**
+ * Sanitization callback for fundy_options.
+ */
+function sanitize_options( array $input ): array {
+	$sanitized['api_key'] = isset( $input['api_key'] )
+		? \sanitize_text_field( $input['api_key'] )
+		: '';
+
+	$sanitized['script_env'] = ( isset( $input['script_env'] ) && 'dev' === $input['script_env'] )
+		? 'dev'
+		: 'prod';
+
+	return $sanitized;
+}
+
+/**
+ * The settings section callback function.
+ */
+function section_callback(): void {
+	echo '<p>' . \esc_html__( 'Configure Fundy plugin settings.', 'fundy' ) . '</p>';
+}
+
+/**
+ * Field callback for the API Key.
+ */
+function api_key_callback(): void {
+	$options = \get_option( 'fundy_options' );
+	$api_key = isset( $options['api_key'] ) ? $options['api_key'] : '';
 	?>
-	<div class="wrap">
-		<h1><?php \_e( 'Fundy Settings', 'fundy' ); ?></h1>
-
-		<form method="post" action="">
-			<?php \wp_nonce_field( 'fundy_save', 'fundy_settings_nonce' ); ?>
-
-			<table class="form-table">
-				<tr>
-					<th scope="row">
-						<label for="fundy_api_key">
-							<?php \_e( 'API Key', 'fundy' ); ?>
-						</label>
-					</th>
-					<td>
-						<input type="text"
-							id="fundy_api_key"
-							name="fundy_api_key"
-							value="<?php echo \esc_attr( $api_key ); ?>"
-							class="regular-text"
-						/>
-					</td>
-				</tr>
-
-				<tr>
-					<th scope="row">
-						<?php \_e( 'Script Environment', 'fundy' ); ?>
-					</th>
-					<td>
-						<fieldset>
-							<label>
-								<input
-									type="radio"
-									name="fundy_script_env"
-									value="dev"
-									<?php \checked( $script_env, 'dev' ); ?>
-								/>
-								<?php \_e( 'Development', 'fundy' ); ?>
-							</label>
-							<br/>
-							<label>
-								<input
-									type="radio"
-									name="fundy_script_env"
-									value="prod"
-									<?php \checked( $script_env, 'prod' ); ?>
-								/>
-								<?php \_e( 'Production', 'fundy' ); ?>
-							</label>
-						</fieldset>
-					</td>
-				</tr>
-			</table>
-
-			<?php \submit_button( \__('Save', 'fundy') ); ?>
-		</form>
-	</div>
+	<input type="text" name="fundy_options[api_key]" value="<?php echo \esc_attr( $api_key ); ?>" class="regular-text">
 	<?php
 }
 
 /**
- * Add Settings Link to Plugin Screen.
- *
- * @param
+ * Field callback for the Script Environment.
  */
-function settings_link( array $links ) : array {
-	$label = \esc_html__( 'Settings', 'fundy' );
-	$slug  = 'options_fundy';
+function script_env_callback(): void {
+	$options    = \get_option( 'fundy_options' );
+	$script_env = isset( $options['script_env'] ) ? $options['script_env'] : 'prod';
+	?>
+	<fieldset>
+		<label>
+			<input type="radio" name="fundy_options[script_env]" value="dev" <?php \checked( $script_env, 'dev' ); ?>>
+			<?php \esc_html_e( 'Development', 'fundy' ); ?>
+		</label>
+		<br>
+		<label>
+			<input type="radio" name="fundy_options[script_env]" value="prod" <?php \checked( $script_env, 'prod' ); ?>>
+			<?php \esc_html_e( 'Production', 'fundy' ); ?>
+		</label>
+	</fieldset>
+	<?php
+}
 
-	\array_unshift( $links, "<a href='options-general.php?page=$slug'>$label</a>" );
+/**
+ * Renders Page
+ */
+function render_page(): void {
+	// Check if the user has the capability to manage options.
+	if ( ! current_user_can( 'manage_options' ) ) {
+		return;
+	}
 
-	return $links;
+	?>
+	<div class="wrap">
+		<h1><?php \esc_html_e( 'Fundy Settings', 'fundy' ); ?></h1>
+		<form action="options.php" method="post">
+			<?php
+			\settings_fields( 'fundy_settings_group' );
+
+			\do_settings_sections( 'fundy_settings_page' );
+
+			\submit_button( \__( 'Save', 'fundy' ) );
+			?>
+		</form>
+	</div>
+	<?php
 }

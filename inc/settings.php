@@ -38,35 +38,48 @@ function register_settings(): void {
 		]
 	);
 }
-
 /**
  * Retrieve the API key.
  */
 function get_api_key(): string {
-	$site_key = \get_option( 'fundy_api_key', '' );
-	if ( ! empty( $site_key ) ) {
-		return $site_key;
-	}
+    $site_options = \get_option( 'fundy_options', [] );
+    $api_key      = $site_options['api_key'] ?? '';
 
-	if ( \is_multisite() ) {
-		return \get_network_option( null, 'fundy_api_key', '' );
-	}
+    if ( ! empty( $api_key ) ) {
+        return $api_key;
+    }
 
-	return '';
+    if ( \is_multisite() ) {
+        $network_options = \get_network_option( null, 'fundy_network_options', [] );
+        $api_key         = $network_options['api_key'] ?? '';
+
+        if ( ! empty( $api_key ) ) {
+            return $api_key;
+        }
+    }
+
+    return '';
 }
 
 /**
- * Retrieve the render script environment.
+ * Retrieve the render script environment ('dev' or 'prod').
  */
 function get_script_env(): string {
-	$site_env = \get_option( 'fundy_script_env', '' );
-	if ( ! empty( $site_env ) ) {
-		return $site_env;
-	}
+    $site_options = \get_option( 'fundy_options', [] );
+    $script_env   = $site_options['script_env'] ?? '';
 
-	if ( \is_multisite() ) {
-		return \get_network_option( null, 'fundy_script_env', 'prod' );
-	}
+    if ( ! empty( $script_env ) ) {
+        return $script_env;
+    }
 
-	return 'prod';
+    if ( \is_multisite() ) {
+        $network_options = \get_network_option( null, 'fundy_network_options', [] );
+        $script_env      = $network_options['script_env'] ?? '';
+
+        if ( ! empty( $script_env ) ) {
+            return $script_env;
+        }
+    }
+
+    return 'prod';
 }
