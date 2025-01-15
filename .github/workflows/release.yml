@@ -45,7 +45,6 @@ jobs:
                   git rm .stylelintignore
                   git rm .stylelintrc.js
                   git rm .wp-env.json
-                  git rm .wp-env.override.json
                   git rm package.json
                   git rm package-lock.json
                   git rm phpcs.xml.dist
