@@ -2,7 +2,7 @@
 /**/.idea
 /**/node_modules
 /vendor
-#/**/build
+/build
 /.cache
 .env
 composer.lock
