@@ -7,7 +7,9 @@
 
 declare( strict_types = 1 );
 
-namespace Dekode\Fundy\DonationForm;
+namespace Dekode\Fundy\Blocks\DonationForm;
+
+use function Dekode\Fundy\Settings\get_api_key;
 
 /**
  * Hooks.
@@ -20,18 +22,18 @@ namespace Dekode\Fundy\DonationForm;
  * @return void
  */
 function register_block(): void {
-	\register_block_type( __DIR__, [
+	\register_block_type_from_metadata( \FUNDY_PLUGIN_DIR . 'build/blocks/donation-form/block.json', [
 		'render_callback' => __NAMESPACE__ . '\\render_block',
 	] );
 
-	\wp_set_script_translations( 'fundraising-donation-form-editor', 'fundy', FUNDRAISING_PLUGIN_DIR . '/languages' );
+	\wp_set_script_translations( 'fundy-donation-form-editor-script', 'fundy', \FUNDY_PLUGIN_DIR . '/languages' );
 
 	\wp_localize_script(
-		'fundraising-donation-form-editor-script',
-		'fundraisingSettings',
+		'fundy-donation-form-editor-script',
+		'fundySettings',
 		[
 			'baseURL'  => \FUNDY_CORE_URL,
-			'apiToken' => \get_option('fundraising_option_token', ''),
+			'apiToken' => get_api_key(),
 		]
 	);
 }
@@ -50,7 +52,7 @@ function render_block( array $attributes ): string {
 	return \sprintf( '
 		<div %s>
 			<div
-				class="fundraising-form"
+				class="fundy-form fundraising-form"
 				data-form-id="%s"
 				data-core-url="%s"
 				data-button-classes="%s"
@@ -58,7 +60,7 @@ function render_block( array $attributes ): string {
 		</div>
 		',
 		\get_block_wrapper_attributes( [
-			'class' => 'fundraising-form-wrapper',
+			'class' => 'fundy-form-wrapper',
 		] ),
 		\esc_attr( $attributes['formId'] ),
 		\esc_attr( \FUNDY_CORE_URL ),

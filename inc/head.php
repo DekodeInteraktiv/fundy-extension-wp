@@ -9,7 +9,7 @@ declare( strict_types = 1 );
 
 namespace Dekode\Fundy\Head;
 
-if ( ! defined( 'ABSPATH' ) ) {
+if ( ! \defined( 'ABSPATH' ) ) {
 	die();
 }
 

@@ -3,7 +3,7 @@
  * Plugin Name: Fundy by Dekode
  * Description: Integrates with Fundy, making it easy to add donation forms to your website.
  * URL: https://fundy.cloud
- * Version: 1.0.2
+ * Version: 2.0.0
  * Update URI: false
  *
  * @package fundy
@@ -11,17 +11,17 @@
 
 declare( strict_types = 1 );
 
-namespace Dekode\Fundraising;
+namespace Dekode\Fundy;
 
 if ( ! \defined( 'ABSPATH' ) ) {
 	die();
 }
 
-\define( 'FUNDRAISING_VERSION', '1.0.2' );
-\define( 'FUNDRAISING_PLUGIN_URL', \plugin_dir_url( __FILE__ ) );
-\define( 'FUNDRAISING_PLUGIN_DIR', \plugin_dir_path( __FILE__ ) );
-\define( 'FUNDRAISING_MIN_PHP_VERSION', '8.0' );
-\define( 'FUNDRAISING_MIN_WP_VERSION', '6.0' );
+\define( 'FUNDY_VERSION', '2.0.0' );
+\define( 'FUNDY_PLUGIN_URL', \plugin_dir_url( __FILE__ ) );
+\define( 'FUNDY_PLUGIN_DIR', \plugin_dir_path( __FILE__ ) );
+\define( 'FUNDY_MIN_PHP_VERSION', '8.0' );
+\define( 'FUNDY_MIN_WP_VERSION', '6.0' );
 
 /**
  * Define the Fundy Core URL.
@@ -31,9 +31,9 @@ if ( ! \defined( 'ABSPATH' ) ) {
  */
 if ( ! \defined( 'FUNDY_CORE_URL' ) ) {
 	if ( \function_exists( 'env' ) ) {
-		\define( 'FUNDY_CORE_URL', \env( 'FUNDY_CORE_URL', 'https://fundy.cloud/core' ) );
+		\define( 'FUNDY_CORE_URL', \env( 'FUNDY_CORE_URL', 'https://fundy.cloud/' ) );
 	} else {
-		\define( 'FUNDY_CORE_URL', 'https://fundy.cloud/core' );
+		\define( 'FUNDY_CORE_URL', 'https://fundy.cloud/' );
 	}
 }
 
@@ -41,7 +41,7 @@ if ( ! \defined( 'FUNDY_CORE_URL' ) ) {
  * Load plugin text domain.
  */
 function load_textdomain(): void {
-	\load_plugin_textdomain( 'fundy', false, FUNDRAISING_PLUGIN_DIR . '/languages' );
+	\load_plugin_textdomain( 'fundy', false, FUNDY_PLUGIN_DIR . '/languages' );
 }
 \add_action( 'init', __NAMESPACE__ . '\\load_textdomain' );
 
@@ -51,7 +51,7 @@ function load_textdomain(): void {
  * @return bool
  */
 function php_version_check() {
-	if ( \version_compare( PHP_VERSION, FUNDRAISING_MIN_PHP_VERSION, '<' ) ) {
+	if ( \version_compare( PHP_VERSION, FUNDY_MIN_PHP_VERSION, '<' ) ) {
 		return false;
 	}
 	return true;
@@ -63,7 +63,7 @@ function php_version_check() {
  * @return bool
  */
 function wp_version_check() {
-	if ( \version_compare( $GLOBALS['wp_version'], FUNDRAISING_MIN_WP_VERSION, '<' ) ) {
+	if ( \version_compare( $GLOBALS['wp_version'], FUNDY_MIN_WP_VERSION, '<' ) ) {
 		return false;
 	}
 	return true;
@@ -78,8 +78,8 @@ function requirements_error_notice() {
 	if ( ! php_version_check() ) {
 		$notices[] = \sprintf(
 			/* translators: placeholder 1 is minimum required PHP version, placeholder 2 is installed PHP version. */
-			\esc_html__( 'Fundraising plugin requires PHP %1$s or higher. You are still on %2$s.', 'fundy' ),
-			\esc_html( FUNDRAISING_MIN_PHP_VERSION ),
+			\esc_html__( 'Fundy plugin requires PHP %1$s or higher. You are still on %2$s.', 'fundy' ),
+			\esc_html( FUNDY_MIN_PHP_VERSION ),
 			\esc_html( PHP_VERSION )
 		);
 	}
@@ -87,8 +87,8 @@ function requirements_error_notice() {
 	if ( ! wp_version_check() ) {
 		$notices[] = \sprintf(
 			/* translators: placeholder 1 is minimum required WordPress version, placeholder 2 is installed WordPress version. */
-			\esc_html__( 'Fundraising plugin requires at least WordPress in version %1$s, You are on %2$s.', 'fundy' ),
-			\esc_html( FUNDRAISING_MIN_WP_VERSION ),
+			\esc_html__( 'Fundy plugin requires at least WordPress in version %1$s, You are on %2$s.', 'fundy' ),
+			\esc_html( FUNDY_MIN_WP_VERSION ),
 			\esc_html( $GLOBALS['wp_version'] )
 		);
 	}
@@ -106,9 +106,12 @@ if ( ! php_version_check() || ! wp_version_check() ) {
 	return;
 }
 
-require_once FUNDRAISING_PLUGIN_DIR . 'inc/assets.php';
-require_once FUNDRAISING_PLUGIN_DIR . 'inc/head.php';
+require_once FUNDY_PLUGIN_DIR . 'inc/settings.php';
+require_once FUNDY_PLUGIN_DIR . 'inc/settings-page.php';
+require_once FUNDY_PLUGIN_DIR . 'inc/settings-page-network.php';
+require_once FUNDY_PLUGIN_DIR . 'inc/assets.php';
+require_once FUNDY_PLUGIN_DIR . 'inc/head.php';
 
-// Require all generated blocks and plugins
-\array_map( fn( $f ) => require_once $f, \glob( FUNDRAISING_PLUGIN_DIR . '/build/*/block.php' ) );
-\array_map( fn( $f ) => require_once $f, \glob( FUNDRAISING_PLUGIN_DIR . '/build/*/plugin.php' ) );
+// Blocks.
+require_once FUNDY_PLUGIN_DIR . 'src/blocks/donation-form/block.php';
+require_once FUNDY_PLUGIN_DIR . 'src/blocks/donation-receipt/block.php';

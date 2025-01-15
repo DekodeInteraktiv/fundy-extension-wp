@@ -13,8 +13,8 @@ export default function Edit({ attributes: { formId }, setAttributes }) {
 	const [state, setState] = useReducer((s, a) => ({ ...s, ...a }), {
 		isInitialized: false,
 		isLoaded: false,
-		apiToken: window.fundraisingSettings.apiToken ?? '',
-		baseURL: window.fundraisingSettings.baseURL ?? '',
+		apiToken: window.fundySettings.apiToken ?? '',
+		baseURL: window.fundySettings.baseURL ?? '',
 		forms: false,
 		error: null,
 	});
@@ -87,11 +87,11 @@ export default function Edit({ attributes: { formId }, setAttributes }) {
 
 	return (
 		<div {...useBlockProps()}>
-			<Placeholder label={__('Fundy form', 'fundy')} isColumnLayout>
+			<Placeholder label={__('Fundy Form', 'fundy')} isColumnLayout>
 				<SelectControl
-					label={__('Select a form', 'fundy')}
+					label={__('Select a Form', 'fundy')}
 					value={formId}
-					className="fundraising-form"
+					className="fundy-form"
 					options={forms ? forms : [{ label: '', value: '' }]}
 					onChange={(value) =>
 						setAttributes({ formId: parseInt(value) })
