@@ -7,7 +7,7 @@
 
 declare( strict_types = 1 );
 
-namespace Dekode\Fundy\DonationForm;
+namespace Dekode\Fundy\Blocks\DonationForm;
 
 use function Dekode\Fundy\Settings\get_api_key;
 
@@ -22,11 +22,11 @@ use function Dekode\Fundy\Settings\get_api_key;
  * @return void
  */
 function register_block(): void {
-	\register_block_type_from_metadata( FUNDY_PLUGIN_DIR . '/build/blocks/donation-form/block.json', [
+	\register_block_type_from_metadata( \FUNDY_PLUGIN_DIR . 'build/blocks/donation-form/block.json', [
 		'render_callback' => __NAMESPACE__ . '\\render_block',
 	] );
 
-	\wp_set_script_translations( 'fundy-donation-form-editor', 'fundy', FUNDY_PLUGIN_DIR . '/languages' );
+	\wp_set_script_translations( 'fundy-donation-form-editor-script', 'fundy', \FUNDY_PLUGIN_DIR . '/languages' );
 
 	\wp_localize_script(
 		'fundy-donation-form-editor-script',

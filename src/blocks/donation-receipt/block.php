@@ -7,7 +7,7 @@
 
 declare( strict_types = 1 );
 
-namespace Dekode\Fundy\DonationReceipt;
+namespace Dekode\Fundy\Blocks\DonationReceipt;
 
 /**
  * Hooks.
@@ -20,20 +20,22 @@ namespace Dekode\Fundy\DonationReceipt;
  * @return void
  */
 function register_block(): void {
-	\register_block_type( __DIR__, [
+	\register_block_type_from_metadata( \FUNDY_PLUGIN_DIR . 'build/blocks/donation-receipt/block.json', [
 		'render_callback' => __NAMESPACE__ . '\\render_block',
 	] );
 
-	\wp_set_script_translations( 'fundy-donation-receipt-editor-script', 'fundy', FUNDY_PLUGIN_DIR . '/languages' );
-	\wp_set_script_translations( 'fundy-donation-receipt-script', 'fundy', FUNDY_PLUGIN_DIR . '/languages' );
+	\wp_set_script_translations( 'fundy-donation-receipt-editor-script', 'fundy', \FUNDY_PLUGIN_DIR . '/languages' );
+	\wp_set_script_translations( 'fundy-donation-receipt-script', 'fundy', \FUNDY_PLUGIN_DIR . '/languages' );
 
-	\wp_localize_script(
-		'fundy-donation-receipt-script',
-		'fundySettings',
-		[
-			'baseURL'  => \FUNDY_CORE_URL,
-		]
-	);
+	if (! \is_admin() ) {
+		\wp_localize_script(
+			'fundy-donation-receipt-script',
+			'fundySettings',
+			[
+				'baseURL'  => \FUNDY_CORE_URL,
+			]
+		);
+	}
 }
 
 /**
