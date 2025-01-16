@@ -58,13 +58,15 @@ function register_settings(): void {
 		'fundy_settings_page',
 	);
 
-	\add_settings_field(
-		'fundy_override_network',
-		\__( 'Override Network Settings', 'fundy' ),
-		__NAMESPACE__ . '\\override_network_callback',
-		'fundy_settings_page',
-		'fundy_settings_section'
-	);
+	if ( \is_multisite() ) {
+		\add_settings_field(
+			'fundy_override_network',
+			\__( 'Override Network Settings', 'fundy' ),
+			__NAMESPACE__ . '\\override_network_callback',
+			'fundy_settings_page',
+			'fundy_settings_section'
+		);
+	}
 
 	\add_settings_field(
 		'fundy_api_key',
@@ -94,6 +96,12 @@ function sanitize_options( array|null $input ): array {
 	}
 
 	$sanitized['override_network'] = ! empty( $input['override_network'] ) ? 'yes' : '';
+	if (\is_multisite() && 'yes' !== $sanitized['override_network']) {
+		$sanitized['api_key'] = '';
+		$sanitized['script_env'] = '';
+
+		return $sanitized;
+	}
 
 	$sanitized['api_key'] = isset( $input['api_key'] )
 		? \sanitize_text_field( $input['api_key'] )
@@ -144,7 +152,7 @@ function api_key_callback(): void {
 		name="fundy_options[api_key]"
 		value="<?php echo \esc_attr( $api_key ); ?>"
 		class="regular-text"
-		<?php \disabled( empty( $options['override_network'] ) ); ?>
+		<?php \disabled( ( \is_multisite() && empty( $options['override_network'] ) ) ); ?>
 	/>
 	<?php
 }
@@ -163,7 +171,7 @@ function script_env_callback(): void {
 				name="fundy_options[script_env]"
 				value="dev"
 				<?php \checked( $script_env, 'dev' ); ?>
-				<?php \disabled( empty( $options['override_network'] ) ); ?>
+				<?php \disabled( ( \is_multisite() && empty( $options['override_network'] ) ) ); ?>
 			/>
 			<?php \esc_html_e( 'Development', 'fundy' ); ?>
 		</label>
@@ -174,7 +182,7 @@ function script_env_callback(): void {
 				name="fundy_options[script_env]"
 				value="prod"
 				<?php \checked( $script_env, 'prod' ); ?>
-				<?php \disabled( empty( $options['override_network'] ) ); ?>
+				<?php \disabled( ( \is_multisite() && empty( $options['override_network'] ) ) ); ?>
 			/>
 			<?php \esc_html_e( 'Production', 'fundy' ); ?>
 		</label>
