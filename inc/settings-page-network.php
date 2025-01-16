@@ -13,12 +13,10 @@ if ( ! \defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-/**
- * Hooks.
- */
 if ( \is_multisite() ) {
 	\add_action( 'network_admin_menu', __NAMESPACE__ . '\\register_page' );
 	\add_action( 'network_admin_menu', __NAMESPACE__ . '\\register_settings' );
+	\add_action( 'network_admin_edit_fundy_network_settings_group', __NAMESPACE__ . '\\save_network_settings' );
 }
 
 /**
@@ -52,48 +50,61 @@ function register_settings(): void {
 		]
 	);
 
-	// Add a settings section to group related fields.
 	\add_settings_section(
 		'fundy_network_settings_section',
-		\__( 'Fundy Network Configuration', 'fundy' ),
+		\__( 'General Configuration', 'fundy' ),
 		__NAMESPACE__ . '\\settings_section_callback',
-		'fundy_network_settings_page'
+		'fundy_network_settings_page',
 	);
 
-	// Add the API Key field.
 	\add_settings_field(
 		'fundy_api_key',
 		\__( 'API Key', 'fundy' ),
 		__NAMESPACE__ . '\\api_key_callback',
 		'fundy_network_settings_page',
-		'fundy_network_settings_section'
+		'fundy_network_settings_section',
 	);
 
-	// Add the Script Environment field.
 	\add_settings_field(
 		'fundy_script_env',
 		\__( 'Script Environment', 'fundy' ),
 		__NAMESPACE__ . '\\script_env_callback',
 		'fundy_network_settings_page',
-		'fundy_network_settings_section'
+		'fundy_network_settings_section',
 	);
 }
 
 /**
+ * Save network settings when form is submitted to edit.php?action=fundy_network_settings_group.
+ */
+function save_network_settings(): void {
+	if ( ! \current_user_can( 'manage_network_options' ) ) {
+		\wp_die( \esc_html__( 'Insufficient permissions.', 'fundy' ) );
+	}
+
+	// Verify the nonce.
+	\check_admin_referer( 'fundy_network_settings_group-options' );
+	$raw_input = $_POST['fundy_network_options'] ?? [];
+	$sanitized = sanitize_network_options( (array) $raw_input );
+	\update_site_option( 'fundy_network_options', $sanitized );
+
+	\wp_safe_redirect(
+		\add_query_arg(
+			[ 'page' => 'fundy_network_settings_page', 'updated' => 'true' ],
+			\network_admin_url( 'settings.php' )
+		)
+	);
+	exit;
+}
+
+/**
  * Sanitization callback for 'fundy_network_options'.
- *
- * This function runs when the option is saved,
- * ensuring the data is valid and safe before storing in network options.
- *
- * @param array $input Raw input from settings form.
- *
- * @return array Sanitized array of options.
  */
 function sanitize_network_options( array $input ): array {
 	$sanitized = [];
 
 	$sanitized['api_key'] = isset( $input['api_key'] )
-		? sanitize_text_field( $input['api_key'] )
+		? \sanitize_text_field( $input['api_key'] )
 		: '';
 
 	$sanitized['script_env'] = ( isset( $input['script_env'] ) && 'dev' === $input['script_env'] )
@@ -107,23 +118,15 @@ function sanitize_network_options( array $input ): array {
  * Callback for our settings section description.
  */
 function settings_section_callback(): void {
-	echo '<p>' . \esc_html__( 'Configure Fundy network-wide settings here.', 'fundy' ) . '</p>';
+	echo '<p>' . \esc_html__( 'If you are unsure about the settings here please talk to your Fundy contact.', 'fundy' ) . '</p>';
 }
 
 /**
  * Field callback for the API Key.
  */
 function api_key_callback(): void {
-	$options = \get_network_option(
-		null,
-		'fundy_network_options',
-		[
-			'api_key'    => '',
-			'script_env' => 'prod',
-		]
-	);
-
-	$api_key = isset( $options['api_key'] ) ? $options['api_key'] : '';
+	$options = \get_network_option( null, 'fundy_network_options', [] );
+	$api_key = $options['api_key'] ?? '';
 	?>
 	<input
 		type="text"
@@ -138,16 +141,8 @@ function api_key_callback(): void {
  * Field callback for the Script Environment.
  */
 function script_env_callback(): void {
-	$options = \get_network_option(
-		null,
-		'fundy_network_options',
-		[
-			'api_key'    => '',
-			'script_env' => 'prod',
-		]
-	);
-
-	$script_env = isset( $options['script_env'] ) ? $options['script_env'] : 'prod';
+	$options    = \get_network_option( null, 'fundy_network_options', [] );
+	$script_env = $options['script_env'] ?? 'prod';
 	?>
 	<fieldset>
 		<label>
@@ -158,8 +153,7 @@ function script_env_callback(): void {
 				<?php \checked( $script_env, 'dev' ); ?>
 			/>
 			<?php \esc_html_e( 'Development', 'fundy' ); ?>
-		</label>
-		<br/>
+		</label><br/>
 		<label>
 			<input
 				type="radio"
@@ -182,8 +176,8 @@ function render_page(): void {
 	}
 	?>
 	<div class="wrap">
-		<h1><?php \esc_html_e( 'Fundy Network Settings', 'fundy' ); ?></h1>
-		<form action="options.php" method="post">
+		<h1><?php \esc_html_e( 'Fundy Settings', 'fundy' ); ?></h1>
+		<form action="<?php echo \add_query_arg( 'action', 'fundy_network_settings_group', 'edit.php' ) ?>" method="post">
 			<?php
 			\settings_fields( 'fundy_network_settings_group' );
 

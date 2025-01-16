@@ -53,9 +53,17 @@ function register_settings(): void {
 
 	\add_settings_section(
 		'fundy_settings_section',
-		\__( 'Fundy Configuration', 'fundy' ),
+		\__( 'General Configuration', 'fundy' ),
 		__NAMESPACE__ . '\\section_callback',
 		'fundy_settings_page',
+	);
+
+	\add_settings_field(
+		'fundy_override_network',
+		\__( 'Override Network Settings', 'fundy' ),
+		__NAMESPACE__ . '\\override_network_callback',
+		'fundy_settings_page',
+		'fundy_settings_section'
 	);
 
 	\add_settings_field(
@@ -66,7 +74,6 @@ function register_settings(): void {
 		'fundy_settings_section'
 	);
 
-	// Add the Script Environment field.
 	\add_settings_field(
 		'fundy_script_env',
 		\__( 'Script Environment', 'fundy' ),
@@ -79,7 +86,15 @@ function register_settings(): void {
 /**
  * Sanitization callback for fundy_options.
  */
-function sanitize_options( array $input ): array {
+function sanitize_options( array|null $input ): array {
+	$sanitized = [];
+
+	if (! $input) {
+		return $sanitized;
+	}
+
+	$sanitized['override_network'] = ! empty( $input['override_network'] ) ? 'yes' : '';
+
 	$sanitized['api_key'] = isset( $input['api_key'] )
 		? \sanitize_text_field( $input['api_key'] )
 		: '';
@@ -95,7 +110,26 @@ function sanitize_options( array $input ): array {
  * The settings section callback function.
  */
 function section_callback(): void {
-	echo '<p>' . \esc_html__( 'Configure Fundy plugin settings.', 'fundy' ) . '</p>';
+	echo '<p>' . \esc_html__( 'If you are unsure about the settings here please talk to your Fundy contact.', 'fundy' ) . '</p>';
+}
+
+/**
+ * Field callback for the Override Network.
+ */
+function override_network_callback(): void {
+	$options = \get_option( 'fundy_options', [] );
+	$override = ! empty( $options['override_network'] ) ? 'yes' : 'no';
+	?>
+	<label>
+		<input
+			type="checkbox"
+			name="fundy_options[override_network]"
+			value="yes"
+			<?php \checked( $override, 'yes' ); ?>
+		/>
+		<?php \esc_html_e( 'Override network settings?', 'fundy' ); ?>
+	</label>
+	<?php
 }
 
 /**
@@ -105,7 +139,13 @@ function api_key_callback(): void {
 	$options = \get_option( 'fundy_options' );
 	$api_key = isset( $options['api_key'] ) ? $options['api_key'] : '';
 	?>
-	<input type="text" name="fundy_options[api_key]" value="<?php echo \esc_attr( $api_key ); ?>" class="regular-text">
+	<input
+		type="text"
+		name="fundy_options[api_key]"
+		value="<?php echo \esc_attr( $api_key ); ?>"
+		class="regular-text"
+		<?php \disabled( empty( $options['override_network'] ) ); ?>
+	/>
 	<?php
 }
 
@@ -118,12 +158,24 @@ function script_env_callback(): void {
 	?>
 	<fieldset>
 		<label>
-			<input type="radio" name="fundy_options[script_env]" value="dev" <?php \checked( $script_env, 'dev' ); ?>>
+			<input
+				type="radio"
+				name="fundy_options[script_env]"
+				value="dev"
+				<?php \checked( $script_env, 'dev' ); ?>
+				<?php \disabled( empty( $options['override_network'] ) ); ?>
+			/>
 			<?php \esc_html_e( 'Development', 'fundy' ); ?>
 		</label>
 		<br>
 		<label>
-			<input type="radio" name="fundy_options[script_env]" value="prod" <?php \checked( $script_env, 'prod' ); ?>>
+			<input
+				type="radio"
+				name="fundy_options[script_env]"
+				value="prod"
+				<?php \checked( $script_env, 'prod' ); ?>
+				<?php \disabled( empty( $options['override_network'] ) ); ?>
+			/>
 			<?php \esc_html_e( 'Production', 'fundy' ); ?>
 		</label>
 	</fieldset>
@@ -134,8 +186,7 @@ function script_env_callback(): void {
  * Renders Page
  */
 function render_page(): void {
-	// Check if the user has the capability to manage options.
-	if ( ! current_user_can( 'manage_options' ) ) {
+	if ( ! \current_user_can( 'manage_options' ) ) {
 		return;
 	}
 
