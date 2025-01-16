@@ -1,6 +1,6 @@
 # Fundy Extension for WordPress
 
-Provides a WordPress integration for displaying donation forms.
+Provides a WordPress integration for displaying various fundraising related content, like donation forms and receipts.
 
 ## Repositories
 
@@ -19,6 +19,22 @@ The fundy platform has many components in different repositories:
 - Peter Booker <peter.booker@dekode.no>
 - Stian Øveråsen <stian.overasen@dekode.no>
 
+## Compatibility
+
+This plugin needs to be compatible with as wide a range of WordPress versions as possible. It is currently working with WordPress 6.0 to 6.7.
+
+Compatibility should be kept in mind while developing new features.
+
+## Environment Variables
+
+You can define the env var `FUNDY_CORE_URL` to connect to a non-production Fundy environment. For example you can set it to the staging environment with `https://stage.fundy.cloud/core`.
+
+For local development you can edit this constant in the `.wp-env.json` file and then restart the wp-env environment.
+
+## Filters
+
+* `fundy/enqueue/form_styles` (bool) - Whether to enqueue the Fundy form styles. Default is true.
+
 ## Setup
 
 You can get up and running with a few steps (requires Docker):
@@ -33,9 +49,3 @@ You can then build the project with:
 ```bash
 npm run build
 ```
-
-When setting up on client sites, if you want to connect to a non-production Fundy environment, you will need to define the `FUNDY_CORE_URL` constant in WordPress. You might want to set it to the staging environment `https://fundy-stage-be.do.dekodes.no`.
-
-If you do not do this, it will automatically connect to the production Fundy environment.
-
-For local development you can edit this constant in the `.wp-env.json` file and then restart the wp-env environment.
