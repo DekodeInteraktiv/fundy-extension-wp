@@ -30,8 +30,8 @@ if ( ! \defined( 'ABSPATH' ) ) {
  * variable and if not default to production URL.
  */
 if ( ! \defined( 'FUNDY_CORE_URL' ) ) {
-	if ( \function_exists( 'env' ) ) {
-		\define( 'FUNDY_CORE_URL', \env( 'FUNDY_CORE_URL', 'https://fundy.cloud/' ) );
+	if ( \function_exists( 'env' ) && ! empty( \env( 'FUNDY_CORE_URL' ) ) {
+		\define( 'FUNDY_CORE_URL', \env( 'FUNDY_CORE_URL' ) );
 	} else {
 		\define( 'FUNDY_CORE_URL', 'https://fundy.cloud/' );
 	}
