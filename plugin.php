@@ -3,7 +3,7 @@
  * Plugin Name: Fundy by Dekode
  * Description: Integrates with Fundy, making it easy to add donation forms to your website.
  * URL: https://fundy.cloud
- * Version: 2.1.1
+ * Version: 2.1.2
  * Update URI: false
  *
  * @package fundy
@@ -17,7 +17,7 @@ if ( ! \defined( 'ABSPATH' ) ) {
 	die();
 }
 
-\define( 'FUNDY_VERSION', '2.1.1' );
+\define( 'FUNDY_VERSION', '2.1.2' );
 \define( 'FUNDY_PLUGIN_URL', \plugin_dir_url( __FILE__ ) );
 \define( 'FUNDY_PLUGIN_DIR', \plugin_dir_path( __FILE__ ) );
 \define( 'FUNDY_MIN_PHP_VERSION', '8.0' );
@@ -30,7 +30,7 @@ if ( ! \defined( 'ABSPATH' ) ) {
  * variable and if not default to production URL.
  */
 if ( ! \defined( 'FUNDY_CORE_URL' ) ) {
-	if ( \function_exists( 'env' ) && ! empty( \env( 'FUNDY_CORE_URL' ) ) {
+	if ( \function_exists( 'env' ) && ! empty( \env( 'FUNDY_CORE_URL' ) ) ) {
 		\define( 'FUNDY_CORE_URL', \env( 'FUNDY_CORE_URL' ) );
 	} else {
 		\define( 'FUNDY_CORE_URL', 'https://fundy.cloud/' );
