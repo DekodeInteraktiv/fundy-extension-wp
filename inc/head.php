@@ -9,6 +9,8 @@ declare( strict_types = 1 );
 
 namespace Dekode\Fundy\Head;
 
+use function Dekode\Fundy\get_base_url;
+
 if ( ! \defined( 'ABSPATH' ) ) {
 	die();
 }
@@ -23,7 +25,7 @@ if ( ! \defined( 'ABSPATH' ) ) {
  */
 function add_dns_prefetch( array $hints, string $relation_type ): array {
 	if ( 'preconnect' === $relation_type ) {
-		$hints[] = \FUNDY_CORE_URL;
+		$hints[] = get_base_url();
 	}
 
 	return $hints;
