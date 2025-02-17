@@ -85,6 +85,8 @@ export default function Edit({ attributes: { formId }, setAttributes }) {
 		);
 	}
 
+	const hasForms = forms && forms.length > 0;
+
 	return (
 		<div {...useBlockProps()}>
 			<Placeholder label={__('Fundy Form', 'fundy')} isColumnLayout>
@@ -98,6 +100,15 @@ export default function Edit({ attributes: { formId }, setAttributes }) {
 					}
 					disabled={!isLoaded}
 				/>
+
+				{!hasForms && (
+					<p>
+						{__(
+							'No forms found. Please create a Form on your Fundy account first.',
+							'fundy',
+						)}
+					</p>
+				)}
 
 				{!isLoaded && <p>{__('Loading…', 'fundy')}</p>}
 
