@@ -34,6 +34,8 @@ For local development you can edit this constant in the `.wp-env.json` file and 
 ## Filters
 
 * `fundy/enqueue/form_styles` (bool) - Whether to enqueue the Fundy form styles. Default is true.
+* `fundy/base_url` (string) - Used to modify the base API URL.
+
 
 ## Setup
 
