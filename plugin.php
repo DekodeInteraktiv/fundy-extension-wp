@@ -33,7 +33,7 @@ if ( ! \defined( 'FUNDY_CORE_URL' ) ) {
 	if ( \function_exists( 'env' ) && ! empty( \env( 'FUNDY_CORE_URL' ) ) ) {
 		\define( 'FUNDY_CORE_URL', \env( 'FUNDY_CORE_URL' ) );
 	} else {
-		\define( 'FUNDY_CORE_URL', 'https://fundy.cloud/' );
+		\define( 'FUNDY_CORE_URL', 'https://fundy.cloud/core' );
 	}
 }
 
@@ -96,6 +96,13 @@ function requirements_error_notice() {
 	foreach ( $notices as $notice ) {
 		echo '<div class="notice notice-error"><p>' . \esc_html( $notice ) . '</p></div>';
 	}
+}
+
+/**
+ * Get the API base URL.
+ */
+function get_base_url(): string {
+	return untrailingslashit( apply_filters( 'fundy/base_url', FUNDY_CORE_URL ) );
 }
 
 /**

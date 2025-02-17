@@ -9,6 +9,8 @@ declare( strict_types = 1 );
 
 namespace Dekode\Fundy\Blocks\DonationReceipt;
 
+use function Dekode\Fundy\get_base_url;
+
 /**
  * Hooks.
  */
@@ -32,7 +34,7 @@ function register_block(): void {
 			'fundy-donation-receipt-script',
 			'fundySettings',
 			[
-				'baseURL'  => \FUNDY_CORE_URL,
+				'baseURL'  => get_base_url(),
 			]
 		);
 	}

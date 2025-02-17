@@ -9,6 +9,7 @@ declare( strict_types = 1 );
 
 namespace Dekode\Fundy\Blocks\DonationForm;
 
+use function Dekode\Fundy\get_base_url;
 use function Dekode\Fundy\Settings\get_api_key;
 
 /**
@@ -32,7 +33,7 @@ function register_block(): void {
 		'fundy-donation-form-editor-script',
 		'fundySettings',
 		[
-			'baseURL'  => \FUNDY_CORE_URL,
+			'baseURL'  => get_base_url(),
 			'apiToken' => get_api_key(),
 		]
 	);
@@ -63,7 +64,7 @@ function render_block( array $attributes ): string {
 			'class' => 'fundy-form-wrapper',
 		] ),
 		\esc_attr( $attributes['formId'] ),
-		\esc_attr( \FUNDY_CORE_URL ),
+		\esc_attr( get_base_url() ),
 		\esc_attr( 'wp-element-button' ),
 	);
 }
