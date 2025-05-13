@@ -22,6 +22,17 @@
 		"formId": {
 			"type": "number",
 			"default": 0
+		},
+		"urlParams": {
+			"type": "array",
+			"default": [],
+			"items": {
+				"type": "object",
+				"properties": {
+					"key": { "type": "string" },
+					"value": { "type": "string" }
+				}
+			}
 		}
 	},
 	"editorScript": "file:./editor.js",

@@ -48,6 +48,14 @@ function render_block( array $attributes ): string {
 		return '';
 	}
 
+	$params = [];
+	foreach ( $attributes['urlParams'] as $p ) {
+		if ( isset( $p['key'], $p['value'] ) ) {
+			$params[ $p['key'] ] = $p['value'];
+		}
+	}
+	$json_params = \wp_json_encode( $params );
+
 	\wp_enqueue_script( 'fundy-form-script' );
 
 	return \sprintf( '
@@ -57,6 +65,7 @@ function render_block( array $attributes ): string {
 				data-form-id="%s"
 				data-core-url="%s"
 				data-button-classes="%s"
+				data-params="%s"
 			></div>
 		</div>
 		',
@@ -66,5 +75,6 @@ function render_block( array $attributes ): string {
 		\esc_attr( $attributes['formId'] ),
 		\esc_attr( get_base_url() ),
 		\esc_attr( 'wp-element-button' ),
+		\esc_attr( $json_params ),
 	);
 }
