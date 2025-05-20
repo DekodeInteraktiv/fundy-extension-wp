@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/fundy\n"
-"POT-Creation-Date: 2025-05-20T11:57:33+00:00\n"
-"PO-Revision-Date: 2025-05-20 12:58+0100\n"
+"POT-Creation-Date: 2025-05-20T15:35:30+00:00\n"
+"PO-Revision-Date: 2025-05-20 16:36+0100\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: nb_NO\n"
@@ -113,9 +113,10 @@ msgid "Loading…"
 msgstr "Laster…"
 
 #: build/blocks/donation-form/editor.js:168
+#: src/blocks/donation-form/edit.js:151
 #: build/blocks/donation-form/editor.js:151
-msgid "URL Parameters (Optional)"
-msgstr "URL-parametere (valgfritt)"
+msgid "Default URL Parameters (Optional)"
+msgstr "Standard-URL-parametere (valgfritt)"
 
 #: build/blocks/donation-form/editor.js:175
 #: src/blocks/donation-form/edit.js:158
@@ -208,10 +209,6 @@ msgstr "Faktura"
 msgid "Download invoice"
 msgstr "Last ned faktura"
 
-#: src/blocks/donation-form/edit.js:151
-msgid "Default URL Parameters (Optional)"
-msgstr "Standard-URL-parametere (valgfritt)"
-
 #: build/blocks/donation-form/block.json src/blocks/donation-form/block.json
 msgctxt "block title"
 msgid "Donation Form"
@@ -233,3 +230,6 @@ msgstr "Donasjonskvittering"
 msgctxt "block description"
 msgid "Displays a donation receipt on a thank you page."
 msgstr "Viser en donasjonskvittering på takkesiden."
+
+#~ msgid "URL Parameters (Optional)"
+#~ msgstr "URL-parametere (valgfritt)"
