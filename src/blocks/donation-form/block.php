@@ -50,13 +50,11 @@ function render_block( array $attributes ): string {
 
 	$params = [];
 	foreach ( $attributes['urlParams'] as $p ) {
-		if ( isset( $p['key'], $p['value'] ) ) {
-			$params[ $p['key'] ] = $p['value'];
+		if ( !empty( $p['key'] ) ) {
+			$params[ $p['key'] ] = $p['value'] ?? '';
 		}
 	}
 	$json_params = \wp_json_encode( $params );
-
-	\wp_enqueue_script( 'fundy-form-script' );
 
 	return \sprintf( '
 		<div %s>
