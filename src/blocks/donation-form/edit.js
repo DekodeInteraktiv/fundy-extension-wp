@@ -3,13 +3,24 @@
  */
 import { useBlockProps } from '@wordpress/block-editor';
 import { useReducer, useEffect } from '@wordpress/element';
-import { SelectControl, Placeholder } from '@wordpress/components';
+import {
+	Button,
+	Flex,
+	FlexBlock,
+	FlexItem,
+	Placeholder,
+	SelectControl,
+	TextControl,
+} from '@wordpress/components';
 import { __ } from '@wordpress/i18n';
 
 /**
  * Render the content generation block.
  */
-export default function Edit({ attributes: { formId }, setAttributes }) {
+export default function Edit({
+	attributes: { formId, urlParams = [] },
+	setAttributes,
+}) {
 	const [state, setState] = useReducer((s, a) => ({ ...s, ...a }), {
 		isInitialized: false,
 		isLoaded: false,
@@ -21,17 +32,17 @@ export default function Edit({ attributes: { formId }, setAttributes }) {
 
 	const { isInitialized, isLoaded, apiToken, baseURL, forms, error } = state;
 
+	// Initialize
 	useEffect(() => {
 		if (false === isInitialized && apiToken && baseURL) {
-			setState({
-				isInitialized: true,
-			});
+			setState({ isInitialized: true });
 		}
 	}, [isInitialized, apiToken, baseURL]);
 
+	// Fetch forms
 	useEffect(() => {
 		if (baseURL && apiToken) {
-			fetch(baseURL + '/api/v1/organization/forms', {
+			fetch(`${baseURL}/api/v1/organization/forms`, {
 				method: 'GET',
 				headers: {
 					'Content-Type': 'application/json',
@@ -39,10 +50,10 @@ export default function Edit({ attributes: { formId }, setAttributes }) {
 				},
 			})
 				.then((response) => {
-					if (response.ok) {
-						return response.json();
+					if (!response.ok) {
+						throw new Error('Network response was not ok.');
 					}
-					throw new Error('Network response was not ok.');
+					return response.json();
 				})
 				.then((data) => {
 					const options = data.map((form) => ({
@@ -57,8 +68,10 @@ export default function Edit({ attributes: { formId }, setAttributes }) {
 					});
 
 					// If no form is saved, set first form as selected.
-					if (!formId) {
-						setAttributes({ formId: parseInt(options[0].value) });
+					if (!formId && options.length) {
+						setAttributes({
+							formId: parseInt(options[0].value, 10),
+						});
 					}
 				})
 				.catch((err) => {
@@ -80,12 +93,33 @@ export default function Edit({ attributes: { formId }, setAttributes }) {
 						'Please set an API Token on the plugin settings page.',
 						'fundy',
 					)}
-				></Placeholder>
+				/>
 			</div>
 		);
 	}
 
 	const hasForms = forms && forms.length > 0;
+
+	/**
+	 * Repeater handlers
+	 */
+	const addParam = () => {
+		setAttributes({
+			urlParams: [...urlParams, { key: '', value: '' }],
+		});
+	};
+
+	const updateParam = (index, field, newValue) => {
+		const updated = urlParams.map((item, i) =>
+			i === index ? { ...item, [field]: newValue } : item,
+		);
+		setAttributes({ urlParams: updated });
+	};
+
+	const removeParam = (index) => {
+		const updated = urlParams.filter((_, i) => i !== index);
+		setAttributes({ urlParams: updated });
+	};
 
 	return (
 		<div {...useBlockProps()}>
@@ -94,9 +128,9 @@ export default function Edit({ attributes: { formId }, setAttributes }) {
 					label={__('Select a Form', 'fundy')}
 					value={formId}
 					className="fundy-form"
-					options={forms ? forms : [{ label: '', value: '' }]}
+					options={forms || [{ label: '', value: '' }]}
 					onChange={(value) =>
-						setAttributes({ formId: parseInt(value) })
+						setAttributes({ formId: parseInt(value, 10) })
 					}
 					disabled={!isLoaded}
 				/>
@@ -111,8 +145,48 @@ export default function Edit({ attributes: { formId }, setAttributes }) {
 				)}
 
 				{!isLoaded && <p>{__('Loading…', 'fundy')}</p>}
-
 				{error && <p>{'Error: ' + error}</p>}
+
+				<div className="fundy-form-params">
+					<h4>{__('Default URL Parameters (Optional)', 'fundy')}</h4>
+
+					<div style={{ marginTop: '1em' }}>
+						{urlParams.map((param, index) => (
+							<Flex key={`param-${index}`}>
+								<FlexBlock>
+									<TextControl
+										label={__('Key', 'fundy')}
+										value={param.key}
+										onChange={(val) =>
+											updateParam(index, 'key', val)
+										}
+									/>
+								</FlexBlock>
+								<FlexBlock>
+									<TextControl
+										label={__('Value', 'fundy')}
+										value={param.value}
+										onChange={(val) =>
+											updateParam(index, 'value', val)
+										}
+									/>
+								</FlexBlock>
+								<FlexItem>
+									<Button
+										isDestructive
+										onClick={() => removeParam(index)}
+										style={{ marginTop: '14px' }}
+									>
+										{__('Remove', 'fundy')}
+									</Button>
+								</FlexItem>
+							</Flex>
+						))}
+						<Button variant="link" onClick={addParam}>
+							{__('Add Parameter', 'fundy')}
+						</Button>
+					</div>
+				</div>
 			</Placeholder>
 		</div>
 	);
