@@ -9,7 +9,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2025-05-20T11:25:22+00:00\n"
+"POT-Creation-Date: 2025-05-20T11:57:33+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.13.0-alpha\n"
 "X-Domain: fundy\n"
@@ -122,7 +122,6 @@ msgid "Loading…"
 msgstr ""
 
 #: build/blocks/donation-form/editor.js:168
-#: src/blocks/donation-form/edit.js:151
 #: build/blocks/donation-form/editor.js:151
 msgid "URL Parameters (Optional)"
 msgstr ""
@@ -212,6 +211,10 @@ msgstr ""
 #: src/blocks/donation-receipt/components/Receipt/Receipt.jsx:128
 #: build/blocks/donation-receipt/frontend.js:128
 msgid "Download invoice"
+msgstr ""
+
+#: src/blocks/donation-form/edit.js:151
+msgid "Default URL Parameters (Optional)"
 msgstr ""
 
 #: build/blocks/donation-form/block.json

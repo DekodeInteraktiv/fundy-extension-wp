@@ -148,7 +148,7 @@ export default function Edit({
 				{error && <p>{'Error: ' + error}</p>}
 
 				<div className="fundy-form-params">
-					<h4>{__('URL Parameters (Optional)', 'fundy')}</h4>
+					<h4>{__('Default URL Parameters (Optional)', 'fundy')}</h4>
 
 					<div style={{ marginTop: '1em' }}>
 						{urlParams.map((param, index) => (
