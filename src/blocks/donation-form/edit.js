@@ -32,14 +32,14 @@ export default function Edit({
 
 	const { isInitialized, isLoaded, apiToken, baseURL, forms, error } = state;
 
-	// initialize
+	// Initialize
 	useEffect(() => {
 		if (false === isInitialized && apiToken && baseURL) {
 			setState({ isInitialized: true });
 		}
 	}, [isInitialized, apiToken, baseURL]);
 
-	// fetch forms
+	// Fetch forms
 	useEffect(() => {
 		if (baseURL && apiToken) {
 			fetch(`${baseURL}/api/v1/organization/forms`, {
@@ -147,8 +147,9 @@ export default function Edit({
 				{!isLoaded && <p>{__('Loading…', 'fundy')}</p>}
 				{error && <p>{'Error: ' + error}</p>}
 
-				<details open={false}>
-					<summary>{__('URL Parameters', 'fundy')}</summary>
+				<div className="fundy-form-params">
+					<h4>{__('URL Parameters (Optional)', 'fundy')}</h4>
+
 					<div style={{ marginTop: '1em' }}>
 						{urlParams.map((param, index) => (
 							<Flex key={`param-${index}`}>
@@ -181,11 +182,11 @@ export default function Edit({
 								</FlexItem>
 							</Flex>
 						))}
-						<Button variant="secondary" onClick={addParam}>
+						<Button variant="link" onClick={addParam}>
 							{__('Add Parameter', 'fundy')}
 						</Button>
 					</div>
-				</details>
+				</div>
 			</Placeholder>
 		</div>
 	);
