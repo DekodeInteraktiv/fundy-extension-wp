@@ -1,17 +1,17 @@
-# Copyright (C) 2024 
+# Copyright (C) 2025 
 # This file is distributed under the same license as the Fundy by Dekode plugin.
 msgid ""
 msgstr ""
-"Project-Id-Version: Fundy by Dekode 0.10.1\n"
+"Project-Id-Version: Fundy by Dekode 2.1.2\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/fundy\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2024-09-08T09:35:09+00:00\n"
+"POT-Creation-Date: 2025-05-20T11:25:22+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"X-Generator: WP-CLI 2.11.0-alpha\n"
+"X-Generator: WP-CLI 2.13.0-alpha\n"
 "X-Domain: fundy\n"
 
 #. Plugin Name of the plugin
@@ -22,104 +22,218 @@ msgstr ""
 msgid "Integrates with Fundy, making it easy to add donation forms to your website."
 msgstr ""
 
-#: build/donation-form/editor.js:119
-#: src/donation-form/edit.js:91
-#: build/donation-form/editor.js:91
-msgid "Fundy form"
-msgstr ""
-
-#: build/donation-form/editor.js:122
-#: src/donation-form/edit.js:95
-#: build/donation-form/editor.js:95
-msgid "Select a form"
-msgstr ""
-
-#: build/donation-form/editor.js:133
-#: src/donation-form/edit.js:105
-#: build/donation-form/editor.js:105
-msgid "Loading…"
-msgstr ""
-
-#: build/donation-receipt/editor.js:55
-#: src/donation-receipt/edit.js:22
-#: build/donation-receipt/editor.js:22
-msgid "Fundy Receipt"
-msgstr ""
-
-#: build/donation-receipt/frontend.js:90
-#: src/donation-receipt/components/Receipt/Receipt.jsx:82
-#: build/donation-receipt/frontend.js:82
-msgid "Unfortunately, we were unable to load the details for the donation at this moment; the link may have expired."
-msgstr ""
-
-#: build/donation-receipt/frontend.js:92
-#: src/donation-receipt/components/Receipt/Receipt.jsx:95
-#: build/donation-receipt/frontend.js:95
-msgid "Company name"
-msgstr ""
-
-#: build/donation-receipt/frontend.js:92
-#: src/donation-receipt/components/Receipt/Receipt.jsx:101
-#: build/donation-receipt/frontend.js:101
-msgid "Contact person"
-msgstr ""
-
-#: build/donation-receipt/frontend.js:92
-#: build/donation-receipt/frontend.js:94
-#: src/donation-receipt/components/Receipt/Receipt.jsx:107
-#: src/donation-receipt/components/Receipt/Receipt.jsx:134
-#: build/donation-receipt/frontend.js:107
-#: build/donation-receipt/frontend.js:134
-msgid "Date"
-msgstr ""
-
-#: build/donation-receipt/frontend.js:92
-#: build/donation-receipt/frontend.js:94
-#: src/donation-receipt/components/Receipt/Receipt.jsx:113
-#: src/donation-receipt/components/Receipt/Receipt.jsx:140
-#: build/donation-receipt/frontend.js:113
-#: build/donation-receipt/frontend.js:140
-msgid "Total amount"
-msgstr ""
-
-#: build/donation-receipt/frontend.js:92
-#: src/donation-receipt/components/Receipt/Receipt.jsx:119
-#: build/donation-receipt/frontend.js:119
-msgid "Invoice"
-msgstr ""
-
-#: build/donation-receipt/frontend.js:94
-#: src/donation-receipt/components/Receipt/Receipt.jsx:120
-#: build/donation-receipt/frontend.js:120
-msgid "Download invoice"
-msgstr ""
-
-#: build/donation-receipt/frontend.js:94
-#: src/donation-receipt/components/Receipt/Receipt.jsx:128
-#: build/donation-receipt/frontend.js:128
-msgid "Name"
-msgstr ""
-
-#: build/settings-page/editor.js:339
-#: src/settings-page/editor.js:51
-#: build/settings-page/editor.js:184
+#: inc/settings-page-network.php:28
+#: inc/settings-page-network.php:179
+#: inc/settings-page.php:29
+#: inc/settings-page.php:203
 msgid "Fundy Settings"
 msgstr ""
 
-#: build/settings-page/editor.js:347
-#: src/settings-page/editor.js:68
-#: build/settings-page/editor.js:201
-msgid "Fundy API Token"
+#: inc/settings-page-network.php:29
+#: inc/settings-page.php:30
+msgid "Fundy"
 msgstr ""
 
-#: build/settings-page/editor.js:361
-#: src/settings-page/editor.js:86
-#: build/settings-page/editor.js:219
-msgid "Settings Saved"
+#: inc/settings-page-network.php:55
+#: inc/settings-page.php:56
+msgid "General Configuration"
 msgstr ""
 
-#: build/settings-page/editor.js:366
-#: src/settings-page/editor.js:94
-#: build/settings-page/editor.js:227
+#: inc/settings-page-network.php:62
+#: inc/settings-page.php:73
+msgid "API Key"
+msgstr ""
+
+#: inc/settings-page-network.php:70
+#: inc/settings-page.php:81
+msgid "Script Environment"
+msgstr ""
+
+#: inc/settings-page-network.php:82
+msgid "Insufficient permissions."
+msgstr ""
+
+#: inc/settings-page-network.php:121
+#: inc/settings-page.php:121
+msgid "If you are unsure about the settings here please talk to your Fundy contact."
+msgstr ""
+
+#: inc/settings-page-network.php:155
+#: inc/settings-page.php:176
+msgid "Development"
+msgstr ""
+
+#: inc/settings-page-network.php:164
+#: inc/settings-page.php:187
+msgid "Production"
+msgstr ""
+
+#: inc/settings-page-network.php:186
+#: inc/settings-page.php:210
 msgid "Save"
+msgstr ""
+
+#: inc/settings-page.php:64
+msgid "Override Network Settings"
+msgstr ""
+
+#: inc/settings-page.php:138
+msgid "Override network settings?"
+msgstr ""
+
+#. translators: placeholder 1 is minimum required PHP version, placeholder 2 is installed PHP version.
+#: plugin.php:81
+msgid "Fundy plugin requires PHP %1$s or higher. You are still on %2$s."
+msgstr ""
+
+#. translators: placeholder 1 is minimum required WordPress version, placeholder 2 is installed WordPress version.
+#: plugin.php:90
+msgid "Fundy plugin requires at least WordPress in version %1$s, You are on %2$s."
+msgstr ""
+
+#: build/blocks/donation-form/editor.js:118
+#: src/blocks/donation-form/edit.js:92
+#: build/blocks/donation-form/editor.js:92
+msgid "Please set an API Token on the plugin settings page."
+msgstr ""
+
+#: build/blocks/donation-form/editor.js:152
+#: src/blocks/donation-form/edit.js:126
+#: build/blocks/donation-form/editor.js:126
+msgid "Fundy Form"
+msgstr ""
+
+#: build/blocks/donation-form/editor.js:155
+#: src/blocks/donation-form/edit.js:128
+#: build/blocks/donation-form/editor.js:128
+msgid "Select a Form"
+msgstr ""
+
+#: build/blocks/donation-form/editor.js:166
+#: src/blocks/donation-form/edit.js:140
+#: build/blocks/donation-form/editor.js:140
+msgid "No forms found. Please create a Form on your Fundy account first."
+msgstr ""
+
+#: build/blocks/donation-form/editor.js:166
+#: src/blocks/donation-form/edit.js:147
+#: build/blocks/donation-form/editor.js:147
+msgid "Loading…"
+msgstr ""
+
+#: build/blocks/donation-form/editor.js:168
+#: src/blocks/donation-form/edit.js:151
+#: build/blocks/donation-form/editor.js:151
+msgid "URL Parameters (Optional)"
+msgstr ""
+
+#: build/blocks/donation-form/editor.js:175
+#: src/blocks/donation-form/edit.js:158
+#: build/blocks/donation-form/editor.js:158
+msgid "Key"
+msgstr ""
+
+#: build/blocks/donation-form/editor.js:179
+#: src/blocks/donation-form/edit.js:167
+#: build/blocks/donation-form/editor.js:167
+msgid "Value"
+msgstr ""
+
+#: build/blocks/donation-form/editor.js:188
+#: src/blocks/donation-form/edit.js:180
+#: build/blocks/donation-form/editor.js:180
+msgid "Remove"
+msgstr ""
+
+#: build/blocks/donation-form/editor.js:191
+#: src/blocks/donation-form/edit.js:186
+#: build/blocks/donation-form/editor.js:186
+msgid "Add Parameter"
+msgstr ""
+
+#: build/blocks/donation-receipt/editor.js:34
+#: build/blocks/donation-receipt/frontend.js:93
+#: src/blocks/donation-receipt/components/Receipt/Receipt.jsx:139
+#: src/blocks/donation-receipt/edit.js:16
+#: build/blocks/donation-receipt/editor.js:16
+#: build/blocks/donation-receipt/frontend.js:139
+msgid "Name"
+msgstr ""
+
+#: build/blocks/donation-receipt/editor.js:34
+#: build/blocks/donation-receipt/frontend.js:91
+#: build/blocks/donation-receipt/frontend.js:93
+#: src/blocks/donation-receipt/components/Receipt/Receipt.jsx:111
+#: src/blocks/donation-receipt/components/Receipt/Receipt.jsx:149
+#: src/blocks/donation-receipt/edit.js:20
+#: build/blocks/donation-receipt/editor.js:20
+#: build/blocks/donation-receipt/frontend.js:111
+#: build/blocks/donation-receipt/frontend.js:149
+msgid "Date"
+msgstr ""
+
+#: build/blocks/donation-receipt/editor.js:34
+#: build/blocks/donation-receipt/frontend.js:91
+#: build/blocks/donation-receipt/frontend.js:93
+#: src/blocks/donation-receipt/components/Receipt/Receipt.jsx:119
+#: src/blocks/donation-receipt/components/Receipt/Receipt.jsx:157
+#: src/blocks/donation-receipt/edit.js:24
+#: build/blocks/donation-receipt/editor.js:24
+#: build/blocks/donation-receipt/frontend.js:119
+#: build/blocks/donation-receipt/frontend.js:157
+msgid "Total amount"
+msgstr ""
+
+#: build/blocks/donation-receipt/frontend.js:89
+#: src/blocks/donation-receipt/components/Receipt/Receipt.jsx:78
+#: build/blocks/donation-receipt/frontend.js:78
+msgid "Unfortunately, we were unable to load the details for the donation at this moment; the link may have expired."
+msgstr ""
+
+#: build/blocks/donation-receipt/frontend.js:91
+#: src/blocks/donation-receipt/components/Receipt/Receipt.jsx:95
+#: build/blocks/donation-receipt/frontend.js:95
+msgid "Company name"
+msgstr ""
+
+#: build/blocks/donation-receipt/frontend.js:91
+#: src/blocks/donation-receipt/components/Receipt/Receipt.jsx:101
+#: build/blocks/donation-receipt/frontend.js:101
+msgid "Contact person"
+msgstr ""
+
+#: build/blocks/donation-receipt/frontend.js:91
+#: src/blocks/donation-receipt/components/Receipt/Receipt.jsx:125
+#: build/blocks/donation-receipt/frontend.js:125
+msgid "Invoice"
+msgstr ""
+
+#: build/blocks/donation-receipt/frontend.js:93
+#: src/blocks/donation-receipt/components/Receipt/Receipt.jsx:128
+#: build/blocks/donation-receipt/frontend.js:128
+msgid "Download invoice"
+msgstr ""
+
+#: build/blocks/donation-form/block.json
+#: src/blocks/donation-form/block.json
+msgctxt "block title"
+msgid "Donation Form"
+msgstr ""
+
+#: build/blocks/donation-form/block.json
+#: src/blocks/donation-form/block.json
+msgctxt "block description"
+msgid "Displays a donation form."
+msgstr ""
+
+#: build/blocks/donation-receipt/block.json
+#: src/blocks/donation-receipt/block.json
+msgctxt "block title"
+msgid "Donation Receipt"
+msgstr ""
+
+#: build/blocks/donation-receipt/block.json
+#: src/blocks/donation-receipt/block.json
+msgctxt "block description"
+msgid "Displays a donation receipt on a thank you page."
 msgstr ""
