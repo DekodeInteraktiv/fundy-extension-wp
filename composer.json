@@ -17,8 +17,8 @@
 		"php": ">=8.0"
 	},
 	"require-dev": {
-		"dekode/coding-standards": "~5.0.0",
-		"wp-cli/i18n-command": "~2.4.3"
+		"dekode/coding-standards": "~6.2.0",
+		"wp-cli/i18n-command": "~2.6.5"
 	},
 	"scripts": {
 		"lint": "./vendor/bin/phpcs .",
