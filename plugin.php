@@ -1,10 +1,17 @@
 <?php
 /**
- * Plugin Name: Fundy by Dekode
- * Description: Integrates with Fundy, making it easy to add donation forms to your website.
- * URL: https://fundy.cloud
- * Version: 2.2.1
- * Update URI: false
+ * Plugin Name:       Fundy by Dekode
+ * Plugin URI:        https://github.com/DekodeInteraktiv/fundy-extension-wp/
+ * Description:       Integrates with Fundy, making it easy to add donation forms to your website.
+ * Version:           2.2.1
+ * Author:            Dekode Interaktiv
+ * Author URI:        https://dekode.no
+ * Text Domain:       prompress
+ * License:           GPL v3
+ * License URI:       http://www.gnu.org/licenses/gpl-3.0.txt
+ * Domain Path:       /languages
+ * Requires at least: 6.4
+ * Requires PHP:      8.1
  *
  * @package fundy
  */
