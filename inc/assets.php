@@ -38,4 +38,9 @@ function register_assets() {
 			\wp_enqueue_style( 'fundy-form-style', 'https://assets.fundy.cloud/fundy-forms.development.css', [], null, 'all' );
 		}
 	}
+
+	// Enqueue the Fundy script if the shortcode is used in the content.
+	if ( \has_shortcode( \get_post()->post_content, 'fundy_form' ) ) {
+		\wp_enqueue_script( 'fundy-form-script' );
+	}
 }
