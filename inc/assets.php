@@ -40,7 +40,11 @@ function register_assets() {
 	}
 
 	// Enqueue the Fundy script if the shortcode is used in the content.
-	if ( \has_shortcode( \get_post()->post_content, 'fundy_form' ) ) {
+	if (
+		\is_singular() &&
+		is_a( \get_queried_object(), 'WP_Post' ) &&
+		\has_shortcode( \get_queried_object()->post_content, 'fundy_form' )
+	) {
 		\wp_enqueue_script( 'fundy-form-script' );
 	}
 }
