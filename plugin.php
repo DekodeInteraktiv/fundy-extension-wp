@@ -116,6 +116,7 @@ if ( ! php_version_check() || ! wp_version_check() ) {
 require_once FUNDY_PLUGIN_DIR . 'inc/settings.php';
 require_once FUNDY_PLUGIN_DIR . 'inc/settings-page.php';
 require_once FUNDY_PLUGIN_DIR . 'inc/settings-page-network.php';
+require_once FUNDY_PLUGIN_DIR . 'inc/shortcodes.php';
 require_once FUNDY_PLUGIN_DIR . 'inc/assets.php';
 require_once FUNDY_PLUGIN_DIR . 'inc/head.php';
 
