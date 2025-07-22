@@ -77,7 +77,7 @@ test.describe('Donation form block', () => {
 		const frontendUrl = `http://localhost:8889/?p=${postId}`;
 
 		await test.step(`Navigating to frontend URL: ${frontendUrl}`, async () => {
-			await page.goto(frontendUrl, { timeout: 30000 });
+			await page.goto(frontendUrl, { timeout: 5000 });
 		});
 
 		const form = page.locator('.fundraising-form[data-form-id="110"]');

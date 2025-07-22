@@ -14,7 +14,8 @@ const config = defineConfig({
 	...baseConfig,
 	reporter: process.env.CI ? 'html' : 'line',
 	workers: 1,
-	testDir: '../specs',
+	testDir: '..',
+	testMatch: ['test-*.ts'],
 	timeout: 10000,
 	globalSetup: fileURLToPath(
 		new URL('./global-setup.js', 'file:' + __filename).href,
