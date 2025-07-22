@@ -3,19 +3,30 @@ import { test, expect } from '@wordpress/e2e-test-utils-playwright';
 test.describe('Donation form block', () => {
 	test.beforeEach(async ({ admin, editor, page }) => {
 		await admin.createNewPost();
-		await editor.insertBlock({ name: 'fundy/donation-form' });
 	});
 
-	test('Adds a functional donation form block in the editor', async ({
-		editor,
-		page,
-	}) => {
+	test('Is registered correctly', async ({ editor, page }) => {
+		await editor.insertBlock({ name: 'fundy/donation-form' });
+
 		expect(await editor.getEditedPostContent()).toBe(
 			'<!-- wp:fundy/donation-form /-->',
 		);
 	});
 
-	test('Can select a specific form', async ({ editor, page }) => {
+	test('Can be added by using "/donation form"', async ({ editor, page }) => {
+		await editor.canvas
+			.locator('role=button[name="Add default block"i]')
+			.click();
+		await page.keyboard.type('/donation form');
+		await page.keyboard.press('Enter');
+		expect(await editor.getEditedPostContent()).toBe(
+			'<!-- wp:fundy/donation-form /-->',
+		);
+	});
+
+	test('Allows selecting a specific form', async ({ editor, page }) => {
+		await editor.insertBlock({ name: 'fundy/donation-form' });
+
 		const formSelector = editor.canvas.getByLabel('Select a Form');
 		await expect(formSelector).toBeVisible();
 		await formSelector.selectOption('Test - symbolic-all-positives');
@@ -25,7 +36,9 @@ test.describe('Donation form block', () => {
 		);
 	});
 
-	test('Can set extra parameters', async ({ editor, page }) => {
+	test('Allows setting extra parameters', async ({ editor, page }) => {
+		await editor.insertBlock({ name: 'fundy/donation-form' });
+
 		const formSelector = editor.canvas.getByLabel('Select a Form');
 		await formSelector.selectOption('Test - symbolic-all-positives');
 
@@ -54,6 +67,8 @@ test.describe('Donation form block', () => {
 		editor,
 		page,
 	}) => {
+		await editor.insertBlock({ name: 'fundy/donation-form' });
+
 		const formSelector = editor.canvas.getByLabel('Select a Form');
 		await formSelector.selectOption('Test - symbolic-all-positives');
 		await editor.publishPost();
