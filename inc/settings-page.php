@@ -150,6 +150,7 @@ function api_key_callback(): void {
 	<input
 		type="text"
 		name="fundy_options[api_key]"
+		placeholder="<?php \esc_attr_e( 'Enter your API key', 'fundy' ); ?>"
 		value="<?php echo \esc_attr( $api_key ); ?>"
 		class="regular-text"
 		<?php \disabled( ( \is_multisite() && empty( $options['override_network'] ) ) ); ?>

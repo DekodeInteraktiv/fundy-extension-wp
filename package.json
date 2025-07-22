@@ -37,11 +37,7 @@
 		"wp-env": "wp-env",
 		"test": "npm-run-all lint test:unit",
 		"test:e2e": "wp-scripts test-playwright --config tests/e2e/config/playwright.config.ts",
-		"test:e2e:debug": "wp-scripts test-playwright --config tests/e2e/config/playwright.config.ts --ui",
-		"test:e2e:playwright": "npm run test:e2e",
-		"test:e2e:playwright:debug": "npm run test:e2e:debug",
-		"test:e2e:storybook": "playwright test --config test/storybook-playwright/playwright.config.ts",
-		"test:e2e:watch": "npm run test:e2e -- --watch"
+		"test:e2e:debug": "wp-scripts test-playwright --config tests/e2e/config/playwright.config.ts --ui"
 	},
 	"lint-staged": {
 		"*.css": [
