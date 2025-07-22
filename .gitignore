@@ -17,3 +17,5 @@ composer.lock
 /blob-report/
 /playwright/.cache/
 /artifacts/
+
+.phpunit.result.cache

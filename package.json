@@ -35,7 +35,7 @@
 		"format": "prettier --write .",
 		"lint-staged": "lint-staged",
 		"wp-env": "wp-env",
-		"test": "npm-run-all lint test:unit",
+		"test:php": "wp-env run tests-wordpress phpunit -c /var/www/html/wp-content/plugins/fundy-extension-wp/phpunit.xml.dist --verbose",
 		"test:e2e": "wp-scripts test-playwright --config tests/e2e/config/playwright.config.ts",
 		"test:e2e:debug": "wp-scripts test-playwright --config tests/e2e/config/playwright.config.ts --ui"
 	},

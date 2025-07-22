@@ -1,4 +1,5 @@
 {
+	"$schema": "https://schemas.wp.org/trunk/wp-env.json",
 	"core": "https://wordpress.org/latest.zip",
 	"phpVersion": "8.0",
 	"plugins": ["."],
