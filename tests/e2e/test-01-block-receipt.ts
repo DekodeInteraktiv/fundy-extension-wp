@@ -13,14 +13,16 @@ test.describe('Donation receipt block', () => {
 		);
 	});
 
-	test('Can be added by using "/donation receipt"', async ({
+	test('Can be added by using "/donation" shortcut', async ({
 		editor,
 		page,
 	}) => {
 		await editor.canvas
 			.locator('role=button[name="Add default block"i]')
 			.click();
-		await page.keyboard.type('/donation receipt');
+		await page.keyboard.type('/donation');
+		await page.waitForTimeout(250);
+		await page.keyboard.press('ArrowDown');
 		await page.keyboard.press('Enter');
 		expect(await editor.getEditedPostContent()).toBe(
 			'<!-- wp:fundy/donation-receipt /-->',

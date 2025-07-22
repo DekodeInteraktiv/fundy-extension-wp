@@ -13,11 +13,15 @@ test.describe('Donation form block', () => {
 		);
 	});
 
-	test('Can be added by using "/donation form"', async ({ editor, page }) => {
+	test('Can be added by using "/donation" shortcut', async ({
+		editor,
+		page,
+	}) => {
 		await editor.canvas
 			.locator('role=button[name="Add default block"i]')
 			.click();
-		await page.keyboard.type('/donation form');
+		await page.keyboard.type('/donation');
+		await page.waitForTimeout(250);
 		await page.keyboard.press('Enter');
 		expect(await editor.getEditedPostContent()).toBe(
 			'<!-- wp:fundy/donation-form /-->',
