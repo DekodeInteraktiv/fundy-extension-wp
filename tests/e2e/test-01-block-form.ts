@@ -33,7 +33,10 @@ test.describe('Donation form block', () => {
 
 		const formSelector = editor.canvas.getByLabel('Select a Form');
 		await expect(formSelector).toBeVisible();
-		await formSelector.selectOption('Test - symbolic-all-positives');
+		await formSelector.selectOption(
+			process.env.FUNDY_TEST_FORM_TITLE ||
+				'Test - symbolic-all-positives',
+		);
 
 		expect(await editor.getEditedPostContent()).toBe(
 			'<!-- wp:fundy/donation-form {"formId":110} /-->',
@@ -44,7 +47,10 @@ test.describe('Donation form block', () => {
 		await editor.insertBlock({ name: 'fundy/donation-form' });
 
 		const formSelector = editor.canvas.getByLabel('Select a Form');
-		await formSelector.selectOption('Test - symbolic-all-positives');
+		await formSelector.selectOption(
+			process.env.FUNDY_TEST_FORM_TITLE ||
+				'Test - symbolic-all-positives',
+		);
 
 		const button = editor.canvas.getByRole('button', {
 			name: 'Add Parameter',
@@ -74,7 +80,10 @@ test.describe('Donation form block', () => {
 		await editor.insertBlock({ name: 'fundy/donation-form' });
 
 		const formSelector = editor.canvas.getByLabel('Select a Form');
-		await formSelector.selectOption('Test - symbolic-all-positives');
+		await formSelector.selectOption(
+			process.env.FUNDY_TEST_FORM_TITLE ||
+				'Test - symbolic-all-positives',
+		);
 		await editor.publishPost();
 
 		const postId = page.url().match(/post=(\d+)/)[1];

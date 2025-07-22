@@ -22,9 +22,7 @@ test.describe('Settings page', () => {
 
 		await expect(apiKeyInput).toBeVisible();
 
-		await apiKeyInput.fill(
-			'1|WFPx4T2FyzCowdjwIJNmHsk3DoffzwjRp4SWUWGZc5c0f850',
-		);
+		await apiKeyInput.fill(process.env.FUNDY_API_KEY || 'abc');
 
 		const saveButton = page.getByRole('button', { name: 'Save' });
 		await expect(saveButton).toBeVisible();
@@ -34,7 +32,7 @@ test.describe('Settings page', () => {
 		await expect(page.getByText('Settings saved.')).toBeVisible();
 
 		await expect(apiKeyInput).toHaveValue(
-			'1|WFPx4T2FyzCowdjwIJNmHsk3DoffzwjRp4SWUWGZc5c0f850',
+			process.env.FUNDY_API_KEY || 'abc',
 		);
 	});
 
