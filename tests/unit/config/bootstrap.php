@@ -15,6 +15,8 @@ if ( ! $_tests_dir ) {
 $_phpunit_polyfills_path = getenv( 'WP_TESTS_PHPUNIT_POLYFILLS_PATH' );
 if ( false !== $_phpunit_polyfills_path ) {
 	define( 'WP_TESTS_PHPUNIT_POLYFILLS_PATH', $_phpunit_polyfills_path );
+} else {
+	define( 'WP_TESTS_PHPUNIT_POLYFILLS_PATH', dirname( dirname( dirname( dirname( __FILE__ ) ) ) ) . '/vendor/yoast/phpunit-polyfills/phpunitpolyfills-autoload.php' );
 }
 
 if ( ! file_exists( "{$_tests_dir}/includes/functions.php" ) ) {
