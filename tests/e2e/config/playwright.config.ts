@@ -4,10 +4,6 @@
 import os from 'os';
 import { fileURLToPath } from 'url';
 import { defineConfig, devices } from '@playwright/test';
-import dotenv from 'dotenv';
-import path from 'path';
-
-dotenv.config({ path: path.resolve(__dirname, '..', '..', '..', '.env') });
 
 /**
  * WordPress dependencies
@@ -24,11 +20,6 @@ const config = defineConfig({
 	globalSetup: fileURLToPath(
 		new URL('./global-setup.js', 'file:' + __filename).href,
 	),
-	use: {
-		...baseConfig.use,
-		FUNDY_API_KEY: process.env.FUNDY_API_KEY,
-		FUNDY_TEST_FORM_TITLE: process.env.FUNDY_TEST_FORM_TITLE,
-	},
 	projects: [
 		{
 			name: 'chromium',

@@ -12,6 +12,12 @@
 	},
 	"env": {
 		"tests": {
+			"config": {
+				"WP_DEBUG": true,
+				"WP_DEBUG_LOG": "/tmp/wp-errors.log",
+				"WP_DEBUG_DISPLAY": false,
+				"SCRIPT_DEBUG": true
+			},
 			"mappings": {
 				"wp-content/plugins/fundy-extension-wp": ".",
 				"wp-content/themes/twentytwentyone": "https://downloads.wordpress.org/theme/twentytwentyone.2.1.zip"

@@ -22,7 +22,7 @@ test.describe('Settings page', () => {
 
 		await expect(apiKeyInput).toBeVisible();
 
-		await apiKeyInput.fill(process.env.FUNDY_API_KEY || 'abc');
+		await apiKeyInput.fill('api_key_abc_123#');
 
 		const saveButton = page.getByRole('button', { name: 'Save' });
 		await expect(saveButton).toBeVisible();
@@ -31,9 +31,7 @@ test.describe('Settings page', () => {
 
 		await expect(page.getByText('Settings saved.')).toBeVisible();
 
-		await expect(apiKeyInput).toHaveValue(
-			process.env.FUNDY_API_KEY || 'abc',
-		);
+		await expect(apiKeyInput).toHaveValue('api_key_abc_123#');
 	});
 
 	test('Can edit and save script environment', async ({ admin, page }) => {

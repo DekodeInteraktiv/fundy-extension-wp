@@ -1,7 +1,9 @@
 import { test, expect } from '@wordpress/e2e-test-utils-playwright';
+import { mockAjaxRequests } from './utils/mock';
 
 test.describe('Donation form block', () => {
 	test.beforeEach(async ({ admin, editor, page }) => {
+		mockAjaxRequests(page);
 		await admin.createNewPost();
 	});
 
@@ -9,7 +11,7 @@ test.describe('Donation form block', () => {
 		await editor.insertBlock({ name: 'fundy/donation-form' });
 
 		expect(await editor.getEditedPostContent()).toBe(
-			'<!-- wp:fundy/donation-form /-->',
+			'<!-- wp:fundy/donation-form {"formId":100} /-->',
 		);
 	});
 
@@ -24,7 +26,7 @@ test.describe('Donation form block', () => {
 		await page.waitForTimeout(250);
 		await page.keyboard.press('Enter');
 		expect(await editor.getEditedPostContent()).toBe(
-			'<!-- wp:fundy/donation-form /-->',
+			'<!-- wp:fundy/donation-form {"formId":100} /-->',
 		);
 	});
 
@@ -33,13 +35,10 @@ test.describe('Donation form block', () => {
 
 		const formSelector = editor.canvas.getByLabel('Select a Form');
 		await expect(formSelector).toBeVisible();
-		await formSelector.selectOption(
-			process.env.FUNDY_TEST_FORM_TITLE ||
-				'Test - symbolic-all-positives',
-		);
+		await formSelector.selectOption('Test - basic-all-positives');
 
 		expect(await editor.getEditedPostContent()).toBe(
-			'<!-- wp:fundy/donation-form {"formId":110} /-->',
+			'<!-- wp:fundy/donation-form {"formId":100} /-->',
 		);
 	});
 
@@ -47,10 +46,7 @@ test.describe('Donation form block', () => {
 		await editor.insertBlock({ name: 'fundy/donation-form' });
 
 		const formSelector = editor.canvas.getByLabel('Select a Form');
-		await formSelector.selectOption(
-			process.env.FUNDY_TEST_FORM_TITLE ||
-				'Test - symbolic-all-positives',
-		);
+		await formSelector.selectOption('Test - basic-all-positives');
 
 		const button = editor.canvas.getByRole('button', {
 			name: 'Add Parameter',
@@ -69,7 +65,7 @@ test.describe('Donation form block', () => {
 		await valueField.fill('parameter_value');
 
 		expect(await editor.getEditedPostContent()).toBe(
-			'<!-- wp:fundy/donation-form {"formId":110,"urlParams":[{"key":"parameter_key","value":"parameter_value"}]} /-->',
+			'<!-- wp:fundy/donation-form {"formId":100,"urlParams":[{"key":"parameter_key","value":"parameter_value"}]} /-->',
 		);
 	});
 
@@ -80,10 +76,7 @@ test.describe('Donation form block', () => {
 		await editor.insertBlock({ name: 'fundy/donation-form' });
 
 		const formSelector = editor.canvas.getByLabel('Select a Form');
-		await formSelector.selectOption(
-			process.env.FUNDY_TEST_FORM_TITLE ||
-				'Test - symbolic-all-positives',
-		);
+		await formSelector.selectOption('Test - basic-all-positives');
 		await editor.publishPost();
 
 		const postId = page.url().match(/post=(\d+)/)[1];
@@ -93,7 +86,7 @@ test.describe('Donation form block', () => {
 			await page.goto(frontendUrl, { timeout: 5000 });
 		});
 
-		const form = page.locator('.fundraising-form[data-form-id="110"]');
+		const form = page.locator('.fundraising-form[data-form-id="100"]');
 		await expect(form).toBeVisible();
 	});
 });
