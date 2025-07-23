@@ -68,8 +68,6 @@ npm run build
 ### End-to-end testing (Playwright)
 E2E tests live in the `tests/e2e` folder.
 
-Some of those tests rely on environment variables (like API key or test form title). Copy the `.env.example` file, create a `.env` file and fill out the variables values accordingly.
-
 ```
 npm run test:e2e
 ```
