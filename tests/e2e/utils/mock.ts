@@ -1,3 +1,5 @@
+import { type Page } from '@playwright/test';
+
 async function mockAjaxRequests(page: Page) {
 	await page.route('**/*/api/v1/organization/forms', async (route) => {
 		await route.fulfill({
