@@ -1,6 +1,11 @@
 import { request } from '@playwright/test';
 import { ExtendedRequestUtils } from '../utils/requestUtils';
 
+/**
+ * Global setup for Playwright tests.
+ *
+ * @see https://github.com/WordPress/gutenberg/tree/trunk/test/e2e/specs
+ */
 async function globalSetup(config) {
 	const { storageState, baseURL } = config.projects[0].use;
 	const storageStatePath =
