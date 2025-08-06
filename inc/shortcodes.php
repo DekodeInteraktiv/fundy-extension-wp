@@ -56,6 +56,7 @@ function render_fundy_form_shortcode( array $atts ): string {
 	}
 
 	\wp_enqueue_script( 'fundy-form-script' );
+	\wp_enqueue_style( 'fundy-form-style' );
 
 	return \sprintf( '
 		<div class="fundy-form-wrapper">
