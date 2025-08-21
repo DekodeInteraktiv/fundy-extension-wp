@@ -6,7 +6,7 @@
  * Version:           2.2.1
  * Author:            Dekode Interaktiv
  * Author URI:        https://dekode.no
- * Text Domain:       prompress
+ * Text Domain:       fundy
  * License:           GPL v3
  * License URI:       http://www.gnu.org/licenses/gpl-3.0.txt
  * Domain Path:       /languages
