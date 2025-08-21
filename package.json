@@ -8,20 +8,20 @@
 		"yarn": "Please use npm"
 	},
 	"devDependencies": {
-		"@playwright/test": "^1.54.1",
-		"@wordpress/dom-ready": "~4.25.0",
-		"@wordpress/e2e-test-utils-playwright": "^1.26.0",
-		"@wordpress/element": "~6.25.0",
-		"@wordpress/env": "~10.25.0",
-		"@wordpress/eslint-plugin": "~22.11.0",
-		"@wordpress/scripts": "^30.19.0",
-		"@wordpress/stylelint-config": "~23.17.0",
-		"eslint-plugin-prettier": "~5.5.0",
+		"@playwright/test": "~1.55.0",
+		"@wordpress/dom-ready": "~4.29.0",
+		"@wordpress/e2e-test-utils-playwright": "~1.29.0",
+		"@wordpress/element": "~6.29.0",
+		"@wordpress/env": "~10.29.0",
+		"@wordpress/eslint-plugin": "~22.15.0",
+		"@wordpress/scripts": "~30.22.0",
+		"@wordpress/stylelint-config": "~23.21.0",
+		"eslint-plugin-prettier": "~5.5.4",
 		"husky": "~9.1.7",
-		"lint-staged": "~16.1.2",
-		"prettier": "~3.5.3",
+		"lint-staged": "~16.1.5",
+		"prettier": "~3.6.2",
 		"stylelint-order": "~7.0.0",
-		"typescript": "^5.8.3"
+		"typescript": "~5.9.2"
 	},
 	"scripts": {
 		"prepare": "husky install",
