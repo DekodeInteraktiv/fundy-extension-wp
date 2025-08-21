@@ -62,3 +62,26 @@ You can then build the project with:
 ```bash
 npm run build
 ```
+
+## Tests
+
+### End-to-end testing (Playwright)
+E2E tests live in the `tests/e2e` folder.
+
+```
+npm run test:e2e
+```
+Run the above command to run the tests and get a report in your console.
+
+```
+npm run test:e2e:debug
+```
+Run the above command to launch the Playwright UI to manually run and debug the tests individually.
+
+### Unit testing (PHPUnit)
+Unit tests live in the `tests/unit` folder.
+
+```
+npm run test:php
+```
+Run the above command to run the tests and get a report in your console.

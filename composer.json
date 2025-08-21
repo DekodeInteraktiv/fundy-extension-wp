@@ -18,11 +18,19 @@
 	},
 	"require-dev": {
 		"dekode/coding-standards": "~6.2.0",
-		"wp-cli/i18n-command": "~2.6.5"
+		"phpunit/phpunit": "9.6.x-dev",
+		"wp-cli/i18n-command": "~2.6.5",
+		"wp-phpunit/wp-phpunit": "dev-master",
+		"yoast/phpunit-polyfills": "^4.0@dev"
 	},
 	"scripts": {
 		"lint": "./vendor/bin/phpcs .",
 		"make-pot": "./vendor/bin/wp i18n make-pot . languages/fundy.pot --exclude=\".github,.cache,node_modules,vendor,tests\" --slug=fundy",
 		"make-json": "./vendor/bin/wp i18n make-json languages --no-purge"
+	},
+	"autoload-dev": {
+		"classmap": [
+			"tests/unit"
+		]
 	}
 }
