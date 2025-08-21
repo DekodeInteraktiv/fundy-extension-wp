@@ -36,6 +36,17 @@ For local development you can edit this constant in the `.wp-env.json` file and 
 * `fundy/enqueue/form_styles` (bool) - Whether to enqueue the Fundy form styles. Default is true.
 * `fundy/base_url` (string) - Used to modify the base API URL.
 
+## Shortcode
+
+If you do not have access to the Fundy block, you can render any Fundy form using the following shortcode:
+
+```[fundy_form id='13']```
+
+Where the `id` attribute indicates the form ID to render.
+
+You can also define extra parameters to be passed to the frontend by using the `params` attribute, passing a serialized JSON object as a value:
+
+```[fundy_form id='13' params='{"utm_source":123,"other_parameter":"some value"}]```
 
 ## Setup
 
