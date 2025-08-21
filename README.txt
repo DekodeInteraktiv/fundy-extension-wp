@@ -1,7 +1,7 @@
-=== Fundy ===
+=== Fundy by Dekode ===
 Contributors: PeterBooker
 Tags: fundraising, donations, forms
-Requires at least: 6.6
+Requires at least: 6.4
 Requires PHP: 8.1
 Tested up to: 6.8
 Stable tag: 2.2.1
