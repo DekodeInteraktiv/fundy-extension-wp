@@ -27,6 +27,7 @@
 		"prepare": "husky install",
 		"build": "wp-scripts build",
 		"dev": "wp-scripts start",
+		"plugin-zip": "wp-scripts plugin-zip --root-folder='fundy'",
 		"lint": "npm run lint:js && npm run lint:css && npm run lint:format",
 		"lint:js": "wp-scripts lint-js",
 		"lint:css": "wp-scripts lint-style --allow-empty-input",
@@ -46,5 +47,17 @@
 			"wp-scripts lint-js",
 			"prettier --check ."
 		]
-	}
+	},
+	"files": [
+		"build",
+		"inc",
+		"src",
+		"plugin.php",
+		"uninstall.php",
+		"composer.json",
+		"package.json",
+		"LICENSE",
+		"README.txt",
+		"CHANGELOG.txt"
+	]
 }
