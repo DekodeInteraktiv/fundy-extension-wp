@@ -45,14 +45,6 @@ if ( ! \defined( 'FUNDY_CORE_URL' ) ) {
 }
 
 /**
- * Load plugin text domain.
- */
-function load_textdomain(): void {
-	\load_plugin_textdomain( 'fundy', false, FUNDY_PLUGIN_DIR . '/languages' );
-}
-\add_action( 'init', __NAMESPACE__ . '\\load_textdomain' );
-
-/**
  * Check for required PHP version.
  *
  * @return bool
