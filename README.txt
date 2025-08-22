@@ -38,5 +38,5 @@ Yes, this plugin requires a [Fundy](https://intro.fundy.cloud) subscription to u
 
 == Changelog ==
 
-= 1.0.0 (2025-08-01) =
-* Initial project code, MVP release.
+= 2.2.1 (2025-08-22) =
+* Initial WordPress.org release.
