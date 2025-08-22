@@ -1,10 +1,17 @@
 <?php
 /**
- * Plugin Name: Fundy by Dekode
- * Description: Integrates with Fundy, making it easy to add donation forms to your website.
- * URL: https://fundy.cloud
- * Version: 2.2.1
- * Update URI: false
+ * Plugin Name:       Fundy by Dekode
+ * Plugin URI:        https://github.com/DekodeInteraktiv/fundy-extension-wp/
+ * Description:       Integrates with Fundy, making it easy to add donation forms to your website.
+ * Version:           2.2.1
+ * Author:            Dekode Interaktiv
+ * Author URI:        https://dekode.no
+ * Text Domain:       fundy
+ * License:           GPL v3
+ * License URI:       http://www.gnu.org/licenses/gpl-3.0.txt
+ * Domain Path:       /languages
+ * Requires at least: 6.4
+ * Requires PHP:      8.1
  *
  * @package fundy
  */
@@ -36,14 +43,6 @@ if ( ! \defined( 'FUNDY_CORE_URL' ) ) {
 		\define( 'FUNDY_CORE_URL', 'https://fundy.cloud/core' );
 	}
 }
-
-/**
- * Load plugin text domain.
- */
-function load_textdomain(): void {
-	\load_plugin_textdomain( 'fundy', false, FUNDY_PLUGIN_DIR . '/languages' );
-}
-\add_action( 'init', __NAMESPACE__ . '\\load_textdomain' );
 
 /**
  * Check for required PHP version.

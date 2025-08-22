@@ -1,8 +1,11 @@
 {
 	"$schema": "https://schemas.wp.org/trunk/wp-env.json",
 	"core": "https://wordpress.org/latest.zip",
-	"phpVersion": "8.0",
-	"plugins": ["."],
+	"phpVersion": "8.1",
+	"plugins": [
+		".",
+		"https://downloads.wordpress.org/plugin/plugin-check.zip"
+	],
 	"config": {
 		"WP_DEBUG": true,
 		"SCRIPT_DEBUG": true,

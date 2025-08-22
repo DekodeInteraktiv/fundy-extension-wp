@@ -84,8 +84,7 @@ function save_network_settings(): void {
 
 	// Verify the nonce.
 	\check_admin_referer( 'fundy_network_settings_group-options' );
-	$raw_input = $_POST['fundy_network_options'] ?? [];
-	$sanitized = sanitize_network_options( (array) $raw_input );
+	$sanitized = sanitize_network_options( (array) \wp_unslash( $_POST['fundy_network_options'] ?? [] ) );
 	\update_site_option( 'fundy_network_options', $sanitized );
 
 	\wp_safe_redirect(
@@ -177,7 +176,7 @@ function render_page(): void {
 	?>
 	<div class="wrap">
 		<h1><?php \esc_html_e( 'Fundy Settings', 'fundy' ); ?></h1>
-		<form action="<?php echo \add_query_arg( 'action', 'fundy_network_settings_group', 'edit.php' ) ?>" method="post">
+		<form action="<?php echo \esc_attr( \add_query_arg( 'action', 'fundy_network_settings_group', 'edit.php' ) ); ?>" method="post">
 			<?php
 			\settings_fields( 'fundy_network_settings_group' );
 

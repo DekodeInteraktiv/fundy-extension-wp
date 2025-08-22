@@ -1,27 +1,14 @@
 # Fundy Extension for WordPress
 
-Provides a WordPress integration for displaying various fundraising related content, like donation forms and receipts.
+A WordPress plugin for displaying various fundraising related content, like donation forms and receipts. It requires a Fundy subscription to use, learn more about [Fundy](https://intro.fundy.cloud).
 
 ## Repositories
 
-The fundy platform has many components in different repositories:
-
-- [fundy-core](https://github.com/DekodeInteraktiv/fundy-core)
-- [fundy-surge](https://github.com/DekodeInteraktiv/fundy-surge)
-- [fundy-interface](https://github.com/DekodeInteraktiv/fundy-interface)
-- [fundy-forms](https://github.com/DekodeInteraktiv/fundy-forms)
-- [fundy-extension-wp](https://github.com/DekodeInteraktiv/fundy-extension-wp)
-- [fundy-worker-schema](https://github.com/DekodeInteraktiv/fundy-worker-schema)
-- [fundy-client-styling](https://github.com/DekodeInteraktiv/fundy-client-styling)
-
-## Made by
-
-- Peter Booker <peter.booker@dekode.no>
-- Stian Øveråsen <stian.overasen@dekode.no>
+The fundy platform has many components in different (private) repositories - [full list](https://github.com/search?q=topic%3Afundy+org%3ADekodeInteraktiv+fork%3Atrue&type=repositories):
 
 ## Compatibility
 
-This plugin needs to be compatible with as wide a range of WordPress versions as possible. It is currently working with WordPress 6.0 to 6.7.
+This plugin needs to be compatible with as wide a range of WordPress versions as possible. It currently requires WordPress 6.4.
 
 Compatibility should be kept in mind while developing new features.
 
@@ -66,22 +53,27 @@ npm run build
 ## Tests
 
 ### End-to-end testing (Playwright)
+
 E2E tests live in the `tests/e2e` folder.
 
-```
+```bash
 npm run test:e2e
 ```
+
 Run the above command to run the tests and get a report in your console.
 
-```
+```bash
 npm run test:e2e:debug
 ```
+
 Run the above command to launch the Playwright UI to manually run and debug the tests individually.
 
 ### Unit testing (PHPUnit)
+
 Unit tests live in the `tests/unit` folder.
 
-```
+```bash
 npm run test:php
 ```
+
 Run the above command to run the tests and get a report in your console.
