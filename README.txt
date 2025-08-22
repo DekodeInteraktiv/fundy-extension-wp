@@ -1,5 +1,4 @@
 === Fundy by Dekode ===
-Contributors: PeterBooker
 Tags: fundraising, donations, forms
 Requires at least: 6.4
 Requires PHP: 8.1
