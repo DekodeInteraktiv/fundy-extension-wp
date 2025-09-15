@@ -2,12 +2,12 @@
 /**
  * Settings Page.
  *
- * @package fundy
+ * @package dekode-fundraising
  */
 
 declare( strict_types = 1 );
 
-namespace Dekode\Fundy\SettingsPage;
+namespace Dekode\Fundraising\SettingsPage;
 
 if ( ! \defined( 'ABSPATH' ) ) {
 	exit;
@@ -26,8 +26,8 @@ if (\is_blog_admin()) {
  */
 function register_page(): void {
 	\add_options_page(
-		\__( 'Fundy Settings', 'fundy' ),
-		\__( 'Fundy', 'fundy' ),
+		\__( 'Dekode Fundraising Settings', 'dekode-fundraising' ),
+		\__( 'Dekode Fundraising', 'dekode-fundraising' ),
 		'manage_options',
 		'fundy_settings_page',
 		__NAMESPACE__ . '\\render_page',
@@ -53,7 +53,7 @@ function register_settings(): void {
 
 	\add_settings_section(
 		'fundy_settings_section',
-		\__( 'General Configuration', 'fundy' ),
+		\__( 'General Configuration', 'dekode-fundraising' ),
 		__NAMESPACE__ . '\\section_callback',
 		'fundy_settings_page',
 	);
@@ -61,7 +61,7 @@ function register_settings(): void {
 	if ( \is_multisite() ) {
 		\add_settings_field(
 			'fundy_override_network',
-			\__( 'Override Network Settings', 'fundy' ),
+			\__( 'Override Network Settings', 'dekode-fundraising' ),
 			__NAMESPACE__ . '\\override_network_callback',
 			'fundy_settings_page',
 			'fundy_settings_section'
@@ -70,7 +70,7 @@ function register_settings(): void {
 
 	\add_settings_field(
 		'fundy_api_key',
-		\__( 'API Key', 'fundy' ),
+		\__( 'API Key', 'dekode-fundraising' ),
 		__NAMESPACE__ . '\\api_key_callback',
 		'fundy_settings_page',
 		'fundy_settings_section'
@@ -78,7 +78,7 @@ function register_settings(): void {
 
 	\add_settings_field(
 		'fundy_script_env',
-		\__( 'Script Environment', 'fundy' ),
+		\__( 'Script Environment', 'dekode-fundraising' ),
 		__NAMESPACE__ . '\\script_env_callback',
 		'fundy_settings_page',
 		'fundy_settings_section'
@@ -118,7 +118,7 @@ function sanitize_options( array|null $input ): array {
  * The settings section callback function.
  */
 function section_callback(): void {
-	echo '<p>' . \esc_html__( 'If you are unsure about the settings here please talk to your Fundy contact.', 'fundy' ) . '</p>';
+	echo '<p>' . \esc_html__( 'If you are unsure about the settings here please talk to your Dekode Fundraising contact.', 'dekode-fundraising' ) . '</p>';
 }
 
 /**
@@ -135,7 +135,7 @@ function override_network_callback(): void {
 			value="yes"
 			<?php \checked( $override, 'yes' ); ?>
 		/>
-		<?php \esc_html_e( 'Override network settings?', 'fundy' ); ?>
+		<?php \esc_html_e( 'Override network settings?', 'dekode-fundraising' ); ?>
 	</label>
 	<?php
 }
@@ -150,7 +150,7 @@ function api_key_callback(): void {
 	<input
 		type="text"
 		name="fundy_options[api_key]"
-		placeholder="<?php \esc_attr_e( 'Enter your API key', 'fundy' ); ?>"
+		placeholder="<?php \esc_attr_e( 'Enter your API key', 'dekode-fundraising' ); ?>"
 		value="<?php echo \esc_attr( $api_key ); ?>"
 		class="regular-text"
 		<?php \disabled( ( \is_multisite() && empty( $options['override_network'] ) ) ); ?>
@@ -174,7 +174,7 @@ function script_env_callback(): void {
 				<?php \checked( $script_env, 'dev' ); ?>
 				<?php \disabled( ( \is_multisite() && empty( $options['override_network'] ) ) ); ?>
 			/>
-			<?php \esc_html_e( 'Development', 'fundy' ); ?>
+			<?php \esc_html_e( 'Development', 'dekode-fundraising' ); ?>
 		</label>
 		<br>
 		<label>
@@ -185,7 +185,7 @@ function script_env_callback(): void {
 				<?php \checked( $script_env, 'prod' ); ?>
 				<?php \disabled( ( \is_multisite() && empty( $options['override_network'] ) ) ); ?>
 			/>
-			<?php \esc_html_e( 'Production', 'fundy' ); ?>
+			<?php \esc_html_e( 'Production', 'dekode-fundraising' ); ?>
 		</label>
 	</fieldset>
 	<?php
@@ -201,14 +201,14 @@ function render_page(): void {
 
 	?>
 	<div class="wrap">
-		<h1><?php \esc_html_e( 'Fundy Settings', 'fundy' ); ?></h1>
+		<h1><?php \esc_html_e( 'Dekode Fundraising Settings', 'dekode-fundraising' ); ?></h1>
 		<form action="options.php" method="post">
 			<?php
 			\settings_fields( 'fundy_settings_group' );
 
 			\do_settings_sections( 'fundy_settings_page' );
 
-			\submit_button( \__( 'Save', 'fundy' ) );
+			\submit_button( \__( 'Save', 'dekode-fundraising' ) );
 			?>
 		</form>
 	</div>

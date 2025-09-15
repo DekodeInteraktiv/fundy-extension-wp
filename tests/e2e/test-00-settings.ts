@@ -7,7 +7,7 @@ test.describe('Settings page', () => {
 		);
 
 		await expect(
-			page.getByRole('heading', { name: 'Fundy Settings' }),
+			page.getByRole('heading', { name: 'Dekode Fundraising Settings' }),
 		).toBeVisible();
 	});
 

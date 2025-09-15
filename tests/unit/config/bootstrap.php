@@ -2,7 +2,7 @@
 /**
  * PHPUnit bootstrap file.
  *
- * @package Fundy_Extension_Wp
+ * @package dekode-fundraising
  */
 
 $_tests_dir = getenv( 'WP_TESTS_DIR' );

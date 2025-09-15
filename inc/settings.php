@@ -2,12 +2,12 @@
 /**
  * Settings.
  *
- * @package fundy
+ * @package dekode-fundraising
  */
 
 declare( strict_types = 1 );
 
-namespace Dekode\Fundy\Settings;
+namespace Dekode\Fundraising\Settings;
 
 /**
  * Retrieve the API key.

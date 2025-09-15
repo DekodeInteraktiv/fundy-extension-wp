@@ -13,15 +13,15 @@ export default function Edit() {
 			<table>
 				<tbody>
 					<tr>
-						<td>{__('Name', 'fundy')}</td>
+						<td>{__('Name', 'dekode-fundraising')}</td>
 						<td>John Smith</td>
 					</tr>
 					<tr>
-						<td>{__('Date', 'fundy')}</td>
+						<td>{__('Date', 'dekode-fundraising')}</td>
 						<td>name@email.no</td>
 					</tr>
 					<tr>
-						<td>{__('Total amount', 'fundy')}</td>
+						<td>{__('Total amount', 'dekode-fundraising')}</td>
 						<td>400 kr</td>
 					</tr>
 				</tbody>

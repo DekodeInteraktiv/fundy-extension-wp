@@ -2,14 +2,14 @@
 /**
  * Donation Receipt.
  *
- * @package fundy
+ * @package dekode-fundraising
  */
 
 declare( strict_types = 1 );
 
-namespace Dekode\Fundy\Blocks\DonationReceipt;
+namespace Dekode\Fundraising\Blocks\DonationReceipt;
 
-use function Dekode\Fundy\get_base_url;
+use function Dekode\Fundraising\get_base_url;
 
 /**
  * Hooks.
@@ -26,8 +26,8 @@ function register_block(): void {
 		'render_callback' => __NAMESPACE__ . '\\render_block',
 	] );
 
-	\wp_set_script_translations( 'fundy-donation-receipt-editor-script', 'fundy', \FUNDY_PLUGIN_DIR . '/languages' );
-	\wp_set_script_translations( 'fundy-donation-receipt-script', 'fundy', \FUNDY_PLUGIN_DIR . '/languages' );
+	\wp_set_script_translations( 'fundy-donation-receipt-editor-script', 'dekode-fundraising', \FUNDY_PLUGIN_DIR . '/languages' );
+	\wp_set_script_translations( 'fundy-donation-receipt-script', 'dekode-fundraising', \FUNDY_PLUGIN_DIR . '/languages' );
 
 	if (! \is_admin() ) {
 		\wp_localize_script(

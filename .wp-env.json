@@ -22,7 +22,7 @@
 				"SCRIPT_DEBUG": true
 			},
 			"mappings": {
-				"wp-content/plugins/fundy-extension-wp": ".",
+				"wp-content/plugins/dekode-fundraising": ".",
 				"wp-content/themes/twentytwentyone": "https://downloads.wordpress.org/theme/twentytwentyone.2.1.zip"
 			}
 		}

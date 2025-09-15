@@ -1,23 +1,23 @@
 <?php
 /**
- * Plugin Name:       Fundy by Dekode
+ * Plugin Name:       Dekode Fundraising
  * Plugin URI:        https://github.com/DekodeInteraktiv/fundy-extension-wp/
- * Description:       Integrates with Fundy, making it easy to add donation forms to your website.
+ * Description:       Integrates with Dekode Fundraising, making it easy to add donation forms to your website.
  * Version:           2.2.1
  * Author:            Dekode Interaktiv
  * Author URI:        https://dekode.no
- * Text Domain:       fundy
+ * Text Domain:       dekode-fundraising
  * License:           GPL v3
  * License URI:       http://www.gnu.org/licenses/gpl-3.0.txt
  * Requires at least: 6.4
  * Requires PHP:      8.1
  *
- * @package fundy
+ * @package dekode-fundraising
  */
 
 declare( strict_types = 1 );
 
-namespace Dekode\Fundy;
+namespace Dekode\Fundraising;
 
 if ( ! \defined( 'ABSPATH' ) ) {
 	die();
@@ -30,7 +30,7 @@ if ( ! \defined( 'ABSPATH' ) ) {
 \define( 'FUNDY_MIN_WP_VERSION', '6.0' );
 
 /**
- * Define the Fundy Core URL.
+ * Define the Core URL.
  *
  * Use existing constant if available, if not check for environment
  * variable and if not default to production URL.
@@ -76,7 +76,7 @@ function requirements_error_notice() {
 	if ( ! php_version_check() ) {
 		$notices[] = \sprintf(
 			/* translators: placeholder 1 is minimum required PHP version, placeholder 2 is installed PHP version. */
-			\esc_html__( 'Fundy plugin requires PHP %1$s or higher. You are still on %2$s.', 'fundy' ),
+			\esc_html__( 'Dekode Fundraising plugin requires PHP %1$s or higher. You are still on %2$s.', 'dekode-fundraising' ),
 			\esc_html( FUNDY_MIN_PHP_VERSION ),
 			\esc_html( PHP_VERSION )
 		);
@@ -85,7 +85,7 @@ function requirements_error_notice() {
 	if ( ! wp_version_check() ) {
 		$notices[] = \sprintf(
 			/* translators: placeholder 1 is minimum required WordPress version, placeholder 2 is installed WordPress version. */
-			\esc_html__( 'Fundy plugin requires at least WordPress in version %1$s, You are on %2$s.', 'fundy' ),
+			\esc_html__( 'Dekode Fundraising plugin requires at least WordPress in version %1$s, You are on %2$s.', 'dekode-fundraising' ),
 			\esc_html( FUNDY_MIN_WP_VERSION ),
 			\esc_html( $GLOBALS['wp_version'] )
 		);

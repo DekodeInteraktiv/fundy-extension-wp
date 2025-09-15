@@ -2,14 +2,14 @@
 /**
  * Assets.
  *
- * @package fundy
+ * @package dekode-fundraising
  */
 
 declare( strict_types = 1 );
 
-namespace Dekode\Fundy\Assets;
+namespace Dekode\Fundraising\Assets;
 
-use function Dekode\Fundy\Settings\get_script_env;
+use function Dekode\Fundraising\Settings\get_script_env;
 
 if ( ! \defined( 'ABSPATH' ) ) {
 	die();
