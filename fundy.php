@@ -9,7 +9,6 @@
  * Text Domain:       fundy
  * License:           GPL v3
  * License URI:       http://www.gnu.org/licenses/gpl-3.0.txt
- * Domain Path:       /languages
  * Requires at least: 6.4
  * Requires PHP:      8.1
  *
