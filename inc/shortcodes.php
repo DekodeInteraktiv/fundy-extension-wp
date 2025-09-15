@@ -2,14 +2,14 @@
 /**
  * Shortcodes.
  *
- * @package fundy
+ * @package dekode-fundraising
  */
 
 declare( strict_types = 1 );
 
-namespace Dekode\Fundy\Shortcodes;
+namespace Dekode\Fundraising\Shortcodes;
 
-use function Dekode\Fundy\get_base_url;
+use function Dekode\Fundraising\get_base_url;
 
 /**
  * Hooks.
@@ -24,7 +24,7 @@ function register_shortcodes(): void {
 }
 
 /**
- * Render the Fundy form shortcode.
+ * Render the Dekode Fundraising form shortcode.
  *
  * @param array $atts Shortcode attributes.
  * @return string

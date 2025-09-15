@@ -1,13 +1,13 @@
 <?php
 /**
- * Fundy Network Settings.
+ * Dekode Fundraising Network Settings.
  *
- * @package fundy
+ * @package dekode-fundraising
  */
 
 declare( strict_types = 1 );
 
-namespace Dekode\Fundy\SettingsPageNetwork;
+namespace Dekode\Fundraising\SettingsPageNetwork;
 
 if ( ! \defined( 'ABSPATH' ) ) {
 	exit;
@@ -25,8 +25,8 @@ if ( \is_multisite() ) {
 function register_page(): void {
 	\add_submenu_page(
 		'settings.php',
-		\__( 'Fundy Settings', 'fundy' ),
-		\__( 'Fundy', 'fundy' ),
+		\__( 'Dekode Fundraising Settings', 'dekode-fundraising' ),
+		\__( 'Dekode Fundraising', 'dekode-fundraising' ),
 		'manage_network_options',
 		'fundy_network_settings_page',
 		__NAMESPACE__ . '\\render_page'
@@ -52,14 +52,14 @@ function register_settings(): void {
 
 	\add_settings_section(
 		'fundy_network_settings_section',
-		\__( 'General Configuration', 'fundy' ),
+		\__( 'General Configuration', 'dekode-fundraising' ),
 		__NAMESPACE__ . '\\settings_section_callback',
 		'fundy_network_settings_page',
 	);
 
 	\add_settings_field(
 		'fundy_api_key',
-		\__( 'API Key', 'fundy' ),
+		\__( 'API Key', 'dekode-fundraising' ),
 		__NAMESPACE__ . '\\api_key_callback',
 		'fundy_network_settings_page',
 		'fundy_network_settings_section',
@@ -67,7 +67,7 @@ function register_settings(): void {
 
 	\add_settings_field(
 		'fundy_script_env',
-		\__( 'Script Environment', 'fundy' ),
+		\__( 'Script Environment', 'dekode-fundraising' ),
 		__NAMESPACE__ . '\\script_env_callback',
 		'fundy_network_settings_page',
 		'fundy_network_settings_section',
@@ -79,7 +79,7 @@ function register_settings(): void {
  */
 function save_network_settings(): void {
 	if ( ! \current_user_can( 'manage_network_options' ) ) {
-		\wp_die( \esc_html__( 'Insufficient permissions.', 'fundy' ) );
+		\wp_die( \esc_html__( 'Insufficient permissions.', 'dekode-fundraising' ) );
 	}
 
 	// Verify the nonce.
@@ -117,7 +117,7 @@ function sanitize_network_options( array $input ): array {
  * Callback for our settings section description.
  */
 function settings_section_callback(): void {
-	echo '<p>' . \esc_html__( 'If you are unsure about the settings here please talk to your Fundy contact.', 'fundy' ) . '</p>';
+	echo '<p>' . \esc_html__( 'If you are unsure about the settings here please talk to your Dekode Fundraising contact.', 'dekode-fundraising' ) . '</p>';
 }
 
 /**
@@ -151,7 +151,7 @@ function script_env_callback(): void {
 				value="dev"
 				<?php \checked( $script_env, 'dev' ); ?>
 			/>
-			<?php \esc_html_e( 'Development', 'fundy' ); ?>
+			<?php \esc_html_e( 'Development', 'dekode-fundraising' ); ?>
 		</label><br/>
 		<label>
 			<input
@@ -160,7 +160,7 @@ function script_env_callback(): void {
 				value="prod"
 				<?php \checked( $script_env, 'prod' ); ?>
 			/>
-			<?php \esc_html_e( 'Production', 'fundy' ); ?>
+			<?php \esc_html_e( 'Production', 'dekode-fundraising' ); ?>
 		</label>
 	</fieldset>
 	<?php
@@ -175,14 +175,14 @@ function render_page(): void {
 	}
 	?>
 	<div class="wrap">
-		<h1><?php \esc_html_e( 'Fundy Settings', 'fundy' ); ?></h1>
+		<h1><?php \esc_html_e( 'Dekode Fundraising Settings', 'dekode-fundraising' ); ?></h1>
 		<form action="<?php echo \esc_attr( \add_query_arg( 'action', 'fundy_network_settings_group', 'edit.php' ) ); ?>" method="post">
 			<?php
 			\settings_fields( 'fundy_network_settings_group' );
 
 			\do_settings_sections( 'fundy_network_settings_page' );
 
-			\submit_button( \__( 'Save', 'fundy' ) );
+			\submit_button( \__( 'Save', 'dekode-fundraising' ) );
 			?>
 		</form>
 	</div>

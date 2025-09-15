@@ -77,7 +77,7 @@ const Receipt = () => {
 				<p>
 					{__(
 						'Unfortunately, we were unable to load the details for the donation at this moment; the link may have expired.',
-						'fundy',
+						'dekode-fundraising',
 					)}
 				</p>
 			</Fragment>
@@ -92,13 +92,13 @@ const Receipt = () => {
 						<Fragment>
 							{donation.company_name && (
 								<tr>
-									<td>{__('Company name', 'fundy')}</td>
+									<td>{__('Company name', 'dekode-fundraising')}</td>
 									<td>{donation.company_name}</td>
 								</tr>
 							)}
 							{donation.first_name && (
 								<tr>
-									<td>{__('Contact person', 'fundy')}</td>
+									<td>{__('Contact person', 'dekode-fundraising')}</td>
 									<td>
 										{donation.first_name +
 											' ' +
@@ -108,7 +108,7 @@ const Receipt = () => {
 							)}
 							{donation.created_at && (
 								<tr>
-									<td>{__('Date', 'fundy')}</td>
+									<td>{__('Date', 'dekode-fundraising')}</td>
 									<td>
 										{formatDateTime(donation.created_at)}
 									</td>
@@ -116,16 +116,16 @@ const Receipt = () => {
 							)}
 							{donation.amount && (
 								<tr>
-									<td>{__('Total amount', 'fundy')}</td>
+									<td>{__('Total amount', 'dekode-fundraising')}</td>
 									<td>{donation.amount}</td>
 								</tr>
 							)}
 							{donation.invoice_url && (
 								<tr>
-									<td>{__('Invoice', 'fundy')}</td>
+									<td>{__('Invoice', 'dekode-fundraising')}</td>
 									<td>
 										<a href={donation.invoice_url}>
-											{__('Download invoice', 'fundy')}{' '}
+											{__('Download invoice', 'dekode-fundraising')}{' '}
 											&#8658;
 										</a>
 									</td>
@@ -136,7 +136,7 @@ const Receipt = () => {
 						<Fragment>
 							{donation.first_name && (
 								<tr>
-									<td>{__('Name', 'fundy')}</td>
+									<td>{__('Name', 'dekode-fundraising')}</td>
 									<td>
 										{donation.first_name +
 											' ' +
@@ -146,7 +146,7 @@ const Receipt = () => {
 							)}
 							{donation.created_at && (
 								<tr>
-									<td>{__('Date', 'fundy')}</td>
+									<td>{__('Date', 'dekode-fundraising')}</td>
 									<td>
 										{formatDateTime(donation.created_at)}
 									</td>
@@ -154,7 +154,7 @@ const Receipt = () => {
 							)}
 							{donation.amount && (
 								<tr>
-									<td>{__('Total amount', 'fundy')}</td>
+									<td>{__('Total amount', 'dekode-fundraising')}</td>
 									<td>{donation.amount}</td>
 								</tr>
 							)}

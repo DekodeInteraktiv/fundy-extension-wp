@@ -91,7 +91,7 @@ export default function Edit({
 				<Placeholder
 					instructions={__(
 						'Please set an API Token on the plugin settings page.',
-						'fundy',
+						'dekode-fundraising',
 					)}
 				/>
 			</div>
@@ -123,9 +123,9 @@ export default function Edit({
 
 	return (
 		<div {...useBlockProps()}>
-			<Placeholder label={__('Fundy Form', 'fundy')} isColumnLayout>
+			<Placeholder label={__('Dekode Fundraising Form', 'dekode-fundraising')} isColumnLayout>
 				<SelectControl
-					label={__('Select a Form', 'fundy')}
+					label={__('Select a Form', 'dekode-fundraising')}
 					value={formId}
 					className="fundy-form"
 					options={forms || [{ label: '', value: '' }]}
@@ -138,24 +138,24 @@ export default function Edit({
 				{!hasForms && (
 					<p>
 						{__(
-							'No forms found. Please create a Form on your Fundy account first.',
-							'fundy',
+							'No forms found. Please create a Form on your Dekode Fundraising account first.',
+							'dekode-fundraising',
 						)}
 					</p>
 				)}
 
-				{!isLoaded && <p>{__('Loading…', 'fundy')}</p>}
+				{!isLoaded && <p>{__('Loading…', 'dekode-fundraising')}</p>}
 				{error && <p>{'Error: ' + error}</p>}
 
 				<div className="fundy-form-params">
-					<h4>{__('Default URL Parameters (Optional)', 'fundy')}</h4>
+					<h4>{__('Default URL Parameters (Optional)', 'dekode-fundraising')}</h4>
 
 					<div style={{ marginTop: '1em' }}>
 						{urlParams.map((param, index) => (
 							<Flex key={`param-${index}`}>
 								<FlexBlock>
 									<TextControl
-										label={__('Key', 'fundy')}
+										label={__('Key', 'dekode-fundraising')}
 										value={param.key}
 										onChange={(val) =>
 											updateParam(index, 'key', val)
@@ -164,7 +164,7 @@ export default function Edit({
 								</FlexBlock>
 								<FlexBlock>
 									<TextControl
-										label={__('Value', 'fundy')}
+										label={__('Value', 'dekode-fundraising')}
 										value={param.value}
 										onChange={(val) =>
 											updateParam(index, 'value', val)
@@ -177,13 +177,13 @@ export default function Edit({
 										onClick={() => removeParam(index)}
 										style={{ marginTop: '14px' }}
 									>
-										{__('Remove', 'fundy')}
+										{__('Remove', 'dekode-fundraising')}
 									</Button>
 								</FlexItem>
 							</Flex>
 						))}
 						<Button variant="link" onClick={addParam}>
-							{__('Add Parameter', 'fundy')}
+							{__('Add Parameter', 'dekode-fundraising')}
 						</Button>
 					</div>
 				</div>

@@ -2,14 +2,14 @@
 /**
  * Head.
  *
- * @package fundy
+ * @package dekode-fundraising
  */
 
 declare( strict_types = 1 );
 
-namespace Dekode\Fundy\Head;
+namespace Dekode\Fundraising\Head;
 
-use function Dekode\Fundy\get_base_url;
+use function Dekode\Fundraising\get_base_url;
 
 if ( ! \defined( 'ABSPATH' ) ) {
 	die();

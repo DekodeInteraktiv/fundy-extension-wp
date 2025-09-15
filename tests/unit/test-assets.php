@@ -1,9 +1,9 @@
 <?php
 
-use function Dekode\Fundy\Assets\register_assets;
+use function Dekode\Fundraising\Assets\register_assets;
 
 /**
- * Test related to Fundy assets on the frontend.
+ * Test related to Dekode Fundraising assets on the frontend.
  */
 class TestAssets extends WP_UnitTestCase {
 	/**
