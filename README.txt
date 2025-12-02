@@ -3,7 +3,7 @@ Tags: fundraising, donations, forms
 Requires at least: 6.4
 Requires PHP: 8.1
 Tested up to: 6.8
-Stable tag: 2.2.1
+Stable tag: 2.3.0
 License: GPLv3 or later
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
@@ -47,3 +47,6 @@ Yes, this plugin requires a [Dekode Fundraising](https://intro.fundy.cloud) subs
 
 = 2.2.1 (2025-08-22) =
 * Initial WordPress.org release.
+
+= 2.3.0 (2025-12-02) =
+* Reintroduce translation files.
