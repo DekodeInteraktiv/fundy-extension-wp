@@ -1,0 +1,190 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/dekode-"
+"fundraising\n"
+"POT-Creation-Date: 2025-12-02T15:15:59+00:00\n"
+"PO-Revision-Date: 2025-12-02 15:24+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: nb_NO\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 3.8\n"
+"X-Poedit-Basepath: .\n"
+
+#. Plugin Name of the plugin
+#: dekode-fundraising.php inc/settings-page-network.php:29
+#: inc/settings-page.php:30
+msgid "Dekode Fundraising"
+msgstr "Dekode Fundraising"
+
+#. Plugin URI of the plugin
+#: dekode-fundraising.php
+msgid "https://github.com/DekodeInteraktiv/fundy-extension-wp/"
+msgstr "https://github.com/DekodeInteraktiv/fundy-extension-wp/"
+
+#. Description of the plugin
+#: dekode-fundraising.php
+msgid ""
+"Integrates with Dekode Fundraising, making it easy to add donation forms to "
+"your website."
+msgstr ""
+
+#. Author of the plugin
+#: dekode-fundraising.php
+msgid "Dekode Interaktiv"
+msgstr ""
+
+#. Author URI of the plugin
+#: dekode-fundraising.php
+msgid "https://dekode.no"
+msgstr ""
+
+#. translators: placeholder 1 is minimum required PHP version, placeholder 2 is installed PHP version.
+#: dekode-fundraising.php:80
+#, php-format
+msgid ""
+"Dekode Fundraising plugin requires PHP %1$s or higher. You are still on %2$s."
+msgstr ""
+
+#. translators: placeholder 1 is minimum required WordPress version, placeholder 2 is installed WordPress version.
+#: dekode-fundraising.php:89
+#, php-format
+msgid ""
+"Dekode Fundraising plugin requires at least WordPress in version %1$s, You "
+"are on %2$s."
+msgstr ""
+
+#: inc/settings-page-network.php:28 inc/settings-page-network.php:178
+#: inc/settings-page.php:29 inc/settings-page.php:204
+msgid "Dekode Fundraising Settings"
+msgstr ""
+
+#: inc/settings-page-network.php:55 inc/settings-page.php:56
+msgid "General Configuration"
+msgstr ""
+
+#: inc/settings-page-network.php:62 inc/settings-page.php:73
+msgid "API Key"
+msgstr ""
+
+#: inc/settings-page-network.php:70 inc/settings-page.php:81
+msgid "Script Environment"
+msgstr ""
+
+#: inc/settings-page-network.php:82
+msgid "Insufficient permissions."
+msgstr ""
+
+#: inc/settings-page-network.php:120 inc/settings-page.php:121
+msgid ""
+"If you are unsure about the settings here please talk to your Dekode "
+"Fundraising contact."
+msgstr ""
+
+#: inc/settings-page-network.php:154 inc/settings-page.php:177
+msgid "Development"
+msgstr ""
+
+#: inc/settings-page-network.php:163 inc/settings-page.php:188
+msgid "Production"
+msgstr ""
+
+#: inc/settings-page-network.php:185 inc/settings-page.php:211
+msgid "Save"
+msgstr "Lagre"
+
+#: inc/settings-page.php:64
+msgid "Override Network Settings"
+msgstr ""
+
+#: inc/settings-page.php:138
+msgid "Override network settings?"
+msgstr ""
+
+#: inc/settings-page.php:153
+msgid "Enter your API key"
+msgstr ""
+
+#: build/blocks/donation-form/editor.js:1
+msgid "Please set an API Token on the plugin settings page."
+msgstr ""
+
+#: build/blocks/donation-form/editor.js:1
+msgid "Dekode Fundraising Form"
+msgstr "Dekode Fundraising-skjema"
+
+#: build/blocks/donation-form/editor.js:1
+msgid "Select a Form"
+msgstr "Velg et skjema"
+
+#: build/blocks/donation-form/editor.js:1
+msgid ""
+"No forms found. Please create a Form on your Dekode Fundraising account "
+"first."
+msgstr "Ingen skjemaer funnet. Opprett først et skjema på Fundy-kontoen din."
+
+#: build/blocks/donation-form/editor.js:1
+msgid "Loading…"
+msgstr "Laster…"
+
+#: build/blocks/donation-form/editor.js:1
+msgid "Default URL Parameters (Optional)"
+msgstr "Standard-URL-parametere (valgfritt)"
+
+#: build/blocks/donation-form/editor.js:1
+msgid "Key"
+msgstr "Nøkkel"
+
+#: build/blocks/donation-form/editor.js:1
+msgid "Value"
+msgstr "Verdi"
+
+#: build/blocks/donation-form/editor.js:1
+msgid "Remove"
+msgstr "Fjern"
+
+#: build/blocks/donation-form/editor.js:1
+msgid "Add Parameter"
+msgstr "Legg til parameter"
+
+#: build/blocks/donation-receipt/editor.js:1
+#: build/blocks/donation-receipt/frontend.js:1
+msgid "Name"
+msgstr "Navn"
+
+#: build/blocks/donation-receipt/editor.js:1
+#: build/blocks/donation-receipt/frontend.js:1
+msgid "Date"
+msgstr "Dato"
+
+#: build/blocks/donation-receipt/editor.js:1
+#: build/blocks/donation-receipt/frontend.js:1
+msgid "Total amount"
+msgstr "Beløp"
+
+#: build/blocks/donation-receipt/frontend.js:1
+msgid ""
+"Unfortunately, we were unable to load the details for the donation at this "
+"moment; the link may have expired."
+msgstr ""
+"Detaljene for donasjonen fikk vi dessverre ikke lastet inn akkurat nå, mulig "
+"lenken har gått ut på tid."
+
+#: build/blocks/donation-receipt/frontend.js:1
+msgid "Company name"
+msgstr "Firmanavn"
+
+#: build/blocks/donation-receipt/frontend.js:1
+msgid "Contact person"
+msgstr "Kontaktperson"
+
+#: build/blocks/donation-receipt/frontend.js:1
+msgid "Invoice"
+msgstr "Faktura"
+
+#: build/blocks/donation-receipt/frontend.js:1
+msgid "Download invoice"
+msgstr "Last ned faktura"
