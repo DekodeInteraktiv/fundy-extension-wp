@@ -52,6 +52,7 @@
 		"build",
 		"inc",
 		"src",
+		"languages",
 		"dekode-fundraising.php",
 		"uninstall.php",
 		"composer.json",

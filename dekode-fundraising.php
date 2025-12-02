@@ -7,6 +7,7 @@
  * Author:            Dekode Interaktiv
  * Author URI:        https://dekode.no
  * Text Domain:       dekode-fundraising
+ * Domain Path:       /languages
  * License:           GPL v3
  * License URI:       http://www.gnu.org/licenses/gpl-3.0.txt
  * Requires at least: 6.4
@@ -100,7 +101,7 @@ function requirements_error_notice() {
  * Get the API base URL.
  */
 function get_base_url(): string {
-	return untrailingslashit( apply_filters( 'fundy/base_url', FUNDY_CORE_URL ) );
+	return \untrailingslashit( \apply_filters( 'fundy/base_url', FUNDY_CORE_URL ) );
 }
 
 /**
@@ -110,6 +111,14 @@ if ( ! php_version_check() || ! wp_version_check() ) {
 	\add_action( 'admin_notices', __NAMESPACE__ . '\\requirements_error_notice' );
 	return;
 }
+
+/**
+ * Load plugin text domain.
+ */
+function load_textdomain(): void {
+	\load_plugin_textdomain( 'dekode-fundraising', false, FUNDY_PLUGIN_DIR . '/languages' );
+}
+\add_action( 'init', __NAMESPACE__ . '\\load_textdomain' );
 
 require_once FUNDY_PLUGIN_DIR . 'inc/settings.php';
 require_once FUNDY_PLUGIN_DIR . 'inc/settings-page.php';
