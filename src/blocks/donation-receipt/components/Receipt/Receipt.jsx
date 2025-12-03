@@ -167,11 +167,31 @@ const Receipt = () => {
 };
 
 /**
- * Format the donation datetime for display.
+ * Format a datetime value as a date string in the user's locale.
+ *
+ * @param {string|Date|null|undefined} dateTime
+ *
+ * @returns {string} Formatted date or empty string if invalid.
  */
-function formatDateTime(dateTime) {
-	const date = new Date(dateTime);
-	return date.toLocaleDateString();
+export function formatDateTime(dateTime) {
+	if (!dateTime) return 'unknown';
+
+	const date = dateTime instanceof Date ? dateTime : new Date(dateTime);
+
+	if (Number.isNaN(date.getTime())) {
+		return 'unknown';
+	}
+
+	const locales =
+		typeof navigator !== 'undefined'
+		? navigator.languages || navigator.language
+		: undefined;
+
+	return date.toLocaleDateString(locales, {
+		year:  'numeric',
+		month: 'numeric',
+		day:   'numeric',
+	});
 }
 
 /**
