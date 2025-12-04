@@ -2,14 +2,14 @@
 # This file is distributed under the GPL v3.
 msgid ""
 msgstr ""
-"Project-Id-Version: Dekode Fundraising 2.2.1\n"
+"Project-Id-Version: Dekode Fundraising 2.3.0\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/dekode-fundraising\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2025-12-02T15:15:59+00:00\n"
+"POT-Creation-Date: 2025-12-04T12:57:20+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.13.0-alpha\n"
 "X-Domain: dekode-fundraising\n"
@@ -111,77 +111,102 @@ msgstr ""
 msgid "Enter your API key"
 msgstr ""
 
-#: build/blocks/donation-form/editor.js:1
+#: build/blocks/donation-form/editor.js:128
+#: build/blocks/donation-form/editor.js:92
 msgid "Please set an API Token on the plugin settings page."
 msgstr ""
 
-#: build/blocks/donation-form/editor.js:1
+#: build/blocks/donation-form/editor.js:163
+#: build/blocks/donation-form/editor.js:126
 msgid "Dekode Fundraising Form"
 msgstr ""
 
-#: build/blocks/donation-form/editor.js:1
+#: build/blocks/donation-form/editor.js:166
+#: build/blocks/donation-form/editor.js:128
 msgid "Select a Form"
 msgstr ""
 
-#: build/blocks/donation-form/editor.js:1
+#: build/blocks/donation-form/editor.js:178
+#: build/blocks/donation-form/editor.js:140
 msgid "No forms found. Please create a Form on your Dekode Fundraising account first."
 msgstr ""
 
-#: build/blocks/donation-form/editor.js:1
+#: build/blocks/donation-form/editor.js:180
+#: build/blocks/donation-form/editor.js:147
 msgid "Loading…"
 msgstr ""
 
-#: build/blocks/donation-form/editor.js:1
+#: build/blocks/donation-form/editor.js:186
+#: build/blocks/donation-form/editor.js:151
 msgid "Default URL Parameters (Optional)"
 msgstr ""
 
-#: build/blocks/donation-form/editor.js:1
+#: build/blocks/donation-form/editor.js:194
+#: build/blocks/donation-form/editor.js:158
 msgid "Key"
 msgstr ""
 
-#: build/blocks/donation-form/editor.js:1
+#: build/blocks/donation-form/editor.js:200
+#: build/blocks/donation-form/editor.js:167
 msgid "Value"
 msgstr ""
 
-#: build/blocks/donation-form/editor.js:1
+#: build/blocks/donation-form/editor.js:211
+#: build/blocks/donation-form/editor.js:180
 msgid "Remove"
 msgstr ""
 
-#: build/blocks/donation-form/editor.js:1
+#: build/blocks/donation-form/editor.js:217
+#: build/blocks/donation-form/editor.js:186
 msgid "Add Parameter"
 msgstr ""
 
-#: build/blocks/donation-receipt/editor.js:1
-#: build/blocks/donation-receipt/frontend.js:1
+#: build/blocks/donation-receipt/editor.js:48
+#: build/blocks/donation-receipt/frontend.js:170
+#: build/blocks/donation-receipt/editor.js:16
+#: build/blocks/donation-receipt/frontend.js:165
 msgid "Name"
 msgstr ""
 
-#: build/blocks/donation-receipt/editor.js:1
-#: build/blocks/donation-receipt/frontend.js:1
+#: build/blocks/donation-receipt/editor.js:54
+#: build/blocks/donation-receipt/frontend.js:147
+#: build/blocks/donation-receipt/frontend.js:176
+#: build/blocks/donation-receipt/editor.js:20
+#: build/blocks/donation-receipt/frontend.js:137
+#: build/blocks/donation-receipt/frontend.js:175
 msgid "Date"
 msgstr ""
 
-#: build/blocks/donation-receipt/editor.js:1
-#: build/blocks/donation-receipt/frontend.js:1
+#: build/blocks/donation-receipt/editor.js:60
+#: build/blocks/donation-receipt/frontend.js:153
+#: build/blocks/donation-receipt/frontend.js:182
+#: build/blocks/donation-receipt/editor.js:24
+#: build/blocks/donation-receipt/frontend.js:145
+#: build/blocks/donation-receipt/frontend.js:183
 msgid "Total amount"
 msgstr ""
 
-#: build/blocks/donation-receipt/frontend.js:1
+#: build/blocks/donation-receipt/frontend.js:125
+#: build/blocks/donation-receipt/frontend.js:104
 msgid "Unfortunately, we were unable to load the details for the donation at this moment; the link may have expired."
 msgstr ""
 
-#: build/blocks/donation-receipt/frontend.js:1
+#: build/blocks/donation-receipt/frontend.js:135
+#: build/blocks/donation-receipt/frontend.js:121
 msgid "Company name"
 msgstr ""
 
-#: build/blocks/donation-receipt/frontend.js:1
+#: build/blocks/donation-receipt/frontend.js:141
+#: build/blocks/donation-receipt/frontend.js:127
 msgid "Contact person"
 msgstr ""
 
-#: build/blocks/donation-receipt/frontend.js:1
+#: build/blocks/donation-receipt/frontend.js:159
+#: build/blocks/donation-receipt/frontend.js:151
 msgid "Invoice"
 msgstr ""
 
-#: build/blocks/donation-receipt/frontend.js:1
+#: build/blocks/donation-receipt/frontend.js:163
+#: build/blocks/donation-receipt/frontend.js:154
 msgid "Download invoice"
 msgstr ""
