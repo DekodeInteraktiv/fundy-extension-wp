@@ -3,7 +3,7 @@
  * Plugin Name:       Dekode Fundraising
  * Plugin URI:        https://github.com/DekodeInteraktiv/fundy-extension-wp/
  * Description:       Integrates with Dekode Fundraising, making it easy to add donation forms to your website.
- * Version:           2.3.1
+ * Version:           2.3.2
  * Author:            Dekode Interaktiv
  * Author URI:        https://dekode.no
  * Text Domain:       dekode-fundraising
@@ -24,7 +24,7 @@ if ( ! \defined( 'ABSPATH' ) ) {
 	die();
 }
 
-\define( 'FUNDY_VERSION', '2.3.1' );
+\define( 'FUNDY_VERSION', '2.3.2' );
 \define( 'FUNDY_PLUGIN_URL', \plugin_dir_url( __FILE__ ) );
 \define( 'FUNDY_PLUGIN_DIR', \plugin_dir_path( __FILE__ ) );
 \define( 'FUNDY_MIN_PHP_VERSION', '8.0' );
