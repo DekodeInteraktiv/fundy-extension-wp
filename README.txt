@@ -3,7 +3,7 @@ Tags: fundraising, donations, forms
 Requires at least: 6.4
 Requires PHP: 8.1
 Tested up to: 6.8
-Stable tag: 2.3.1
+Stable tag: 2.3.2
 License: GPLv3 or later
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
@@ -44,6 +44,9 @@ Yes, this plugin requires a [Dekode Fundraising](https://intro.fundy.cloud) subs
 2. Example of the frontend form.
 
 == Changelog ==
+
+= 2.3.2 (2025-12-04) =
+* Remove receipt link icon.
 
 = 2.3.1 (2025-12-04) =
 * Bundle languages dir in zip.
