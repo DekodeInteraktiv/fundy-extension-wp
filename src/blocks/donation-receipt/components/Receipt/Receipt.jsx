@@ -125,8 +125,7 @@ const Receipt = () => {
 									<td>{__('Invoice', 'dekode-fundraising')}</td>
 									<td>
 										<a href={donation.invoice_url}>
-											{__('Download invoice', 'dekode-fundraising')}{' '}
-											&#8658;
+											{__('Download invoice', 'dekode-fundraising')}
 										</a>
 									</td>
 								</tr>
