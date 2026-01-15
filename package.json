@@ -3,25 +3,25 @@
 	"version": "1.0.0",
 	"private": true,
 	"engines": {
-		"node": "22",
+		"node": "24",
 		"npm": ">=10",
 		"yarn": "Please use npm"
 	},
 	"devDependencies": {
 		"@playwright/test": "~1.57.0",
-		"@wordpress/dom-ready": "~4.36.0",
-		"@wordpress/e2e-test-utils-playwright": "~1.31.0",
-		"@wordpress/element": "~6.36.0",
-		"@wordpress/env": "~10.31.0",
-		"@wordpress/eslint-plugin": "~22.15.0",
-		"@wordpress/scripts": "~31.1.0",
-		"@wordpress/stylelint-config": "~23.23.0",
-		"eslint-plugin-prettier": "~5.5.4",
+		"@wordpress/dom-ready": "~4.37.0",
+		"@wordpress/e2e-test-utils-playwright": "~1.37.0",
+		"@wordpress/element": "~6.37.0",
+		"@wordpress/env": "~10.37.0",
+		"@wordpress/eslint-plugin": "~23.0.0",
+		"@wordpress/scripts": "~31.2.0",
+		"@wordpress/stylelint-config": "~23.29.0",
+		"eslint-plugin-prettier": "~5.5.5",
 		"husky": "~9.1.7",
-		"lint-staged": "~16.1.5",
+		"lint-staged": "~16.2.7",
 		"prettier": "~3.6.2",
-		"stylelint-order": "~7.0.0",
-		"typescript": "~5.9.2"
+		"stylelint-order": "~7.0.1",
+		"typescript": "~5.9.3"
 	},
 	"scripts": {
 		"prepare": "husky install",
