@@ -9,6 +9,14 @@ declare( strict_types = 1 );
 
 namespace Dekode\Fundraising\SettingsPage;
 
+use function Dekode\Fundraising\Settings\get_conversion_script_env;
+use function Dekode\Fundraising\Settings\get_debug_enabled;
+use function Dekode\Fundraising\Settings\get_disable_data_layer_event;
+use function Dekode\Fundraising\Settings\get_forms_script_env;
+use function Dekode\Fundraising\Settings\get_tracking_script_enabled;
+use function Dekode\Fundraising\Settings\get_tracking_script_env;
+use function Dekode\Fundraising\Settings\normalize_script_env;
+
 if ( ! \defined( 'ABSPATH' ) ) {
 	exit;
 }
@@ -157,10 +165,10 @@ function sanitize_options( array|null $input ): array {
 		? \sanitize_text_field( $input['api_key'] )
 		: '';
 
-	$sanitized['forms_script'] = \Dekode\Fundraising\Settings\normalize_script_env( (string) ( $input['forms_script'] ?? '' ), 'prod' );
-	$sanitized['conversion_script'] = \Dekode\Fundraising\Settings\normalize_script_env( (string) ( $input['conversion_script'] ?? '' ), 'prod' );
+	$sanitized['forms_script'] = normalize_script_env( (string) ( $input['forms_script'] ?? '' ), 'prod' );
+	$sanitized['conversion_script'] = normalize_script_env( (string) ( $input['conversion_script'] ?? '' ), 'prod' );
 	$sanitized['tracking_enabled'] = ! empty( $input['tracking_enabled'] ) ? 'yes' : '';
-	$sanitized['tracking_script'] = \Dekode\Fundraising\Settings\normalize_script_env( (string) ( $input['tracking_script'] ?? '' ), 'prod' );
+	$sanitized['tracking_script'] = normalize_script_env( (string) ( $input['tracking_script'] ?? '' ), 'prod' );
 	$sanitized['disable_data_layer_event'] = ! empty( $input['disable_data_layer_event'] ) ? 'yes' : '';
 	$sanitized['debug'] = ! empty( $input['debug'] ) ? 'yes' : '';
 
@@ -223,7 +231,7 @@ function api_key_callback(): void {
  */
 function forms_script_callback(): void {
 	$options = \get_option( 'fundy_options', [] );
-	$env     = \Dekode\Fundraising\Settings\get_forms_script_env();
+	$env     = get_forms_script_env();
 	?>
 	<fieldset>
 		<label>
@@ -256,7 +264,7 @@ function forms_script_callback(): void {
  */
 function conversion_script_callback(): void {
 	$options = \get_option( 'fundy_options', [] );
-	$env     = \Dekode\Fundraising\Settings\get_conversion_script_env();
+	$env     = get_conversion_script_env();
 	?>
 	<fieldset>
 		<label>
@@ -289,8 +297,8 @@ function conversion_script_callback(): void {
  */
 function tracking_script_callback(): void {
 	$options = \get_option( 'fundy_options', [] );
-	$enabled = \Dekode\Fundraising\Settings\get_tracking_script_enabled();
-	$env     = \Dekode\Fundraising\Settings\get_tracking_script_env();
+	$enabled = get_tracking_script_enabled();
+	$env     = get_tracking_script_env();
 	?>
 	<p>
 		<label>
@@ -335,7 +343,7 @@ function tracking_script_callback(): void {
  */
 function disable_data_layer_event_callback(): void {
 	$options = \get_option( 'fundy_options', [] );
-	$enabled = \Dekode\Fundraising\Settings\get_disable_data_layer_event();
+	$enabled = get_disable_data_layer_event();
 	?>
 	<label>
 		<input
@@ -356,7 +364,7 @@ function disable_data_layer_event_callback(): void {
  */
 function debug_callback(): void {
 	$options = \get_option( 'fundy_options', [] );
-	$enabled = \Dekode\Fundraising\Settings\get_debug_enabled();
+	$enabled = get_debug_enabled();
 	?>
 	<label>
 		<input
@@ -368,7 +376,6 @@ function debug_callback(): void {
 		/>
 		<?php \esc_html_e( 'Enable', 'dekode-fundraising' ); ?>
 	</label>
-	<p class="description"><?php \esc_html_e( 'Adds debug output to FundyConfig.enableDebugMode.', 'dekode-fundraising' ); ?></p>
 	<?php
 }
 

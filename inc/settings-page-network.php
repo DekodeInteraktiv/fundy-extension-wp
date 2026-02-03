@@ -9,6 +9,8 @@ declare( strict_types = 1 );
 
 namespace Dekode\Fundraising\SettingsPageNetwork;
 
+use function Dekode\Fundraising\Settings\normalize_script_env;
+
 if ( ! \defined( 'ABSPATH' ) ) {
 	exit;
 }
@@ -151,10 +153,10 @@ function sanitize_network_options( array $input ): array {
 		? \sanitize_text_field( $input['api_key'] )
 		: '';
 
-	$sanitized['forms_script'] = \Dekode\Fundraising\Settings\normalize_script_env( (string) ( $input['forms_script'] ?? '' ), 'prod' );
-	$sanitized['conversion_script'] = \Dekode\Fundraising\Settings\normalize_script_env( (string) ( $input['conversion_script'] ?? '' ), 'prod' );
+	$sanitized['forms_script'] = normalize_script_env( (string) ( $input['forms_script'] ?? '' ), 'prod' );
+	$sanitized['conversion_script'] = normalize_script_env( (string) ( $input['conversion_script'] ?? '' ), 'prod' );
 	$sanitized['tracking_enabled'] = ! empty( $input['tracking_enabled'] ) ? 'yes' : '';
-	$sanitized['tracking_script'] = \Dekode\Fundraising\Settings\normalize_script_env( (string) ( $input['tracking_script'] ?? '' ), 'prod' );
+	$sanitized['tracking_script'] = normalize_script_env( (string) ( $input['tracking_script'] ?? '' ), 'prod' );
 	$sanitized['disable_data_layer_event'] = ! empty( $input['disable_data_layer_event'] ) ? 'yes' : '';
 	$sanitized['debug'] = ! empty( $input['debug'] ) ? 'yes' : '';
 
@@ -196,7 +198,7 @@ function api_key_callback(): void {
  */
 function forms_script_callback(): void {
 	$options = \get_network_option( null, 'fundy_network_options', [] );
-	$env     = \Dekode\Fundraising\Settings\normalize_script_env( (string) ( $options['forms_script'] ?? '' ), 'prod' );
+	$env     = normalize_script_env( (string) ( $options['forms_script'] ?? '' ), 'prod' );
 	?>
 	<fieldset>
 		<label>
@@ -226,7 +228,7 @@ function forms_script_callback(): void {
  */
 function conversion_script_callback(): void {
 	$options = \get_network_option( null, 'fundy_network_options', [] );
-	$env     = \Dekode\Fundraising\Settings\normalize_script_env( (string) ( $options['conversion_script'] ?? '' ), 'prod' );
+	$env     = normalize_script_env( (string) ( $options['conversion_script'] ?? '' ), 'prod' );
 	?>
 	<fieldset>
 		<label>
@@ -257,7 +259,7 @@ function conversion_script_callback(): void {
 function tracking_script_callback(): void {
 	$options = \get_network_option( null, 'fundy_network_options', [] );
 	$enabled = ! empty( $options['tracking_enabled'] );
-	$env     = \Dekode\Fundraising\Settings\normalize_script_env( (string) ( $options['tracking_script'] ?? '' ), 'prod' );
+	$env     = normalize_script_env( (string) ( $options['tracking_script'] ?? '' ), 'prod' );
 	?>
 	<p>
 		<label>
@@ -329,7 +331,6 @@ function debug_callback(): void {
 		/>
 		<?php \esc_html_e( 'Enable', 'dekode-fundraising' ); ?>
 	</label>
-	<p class="description"><?php \esc_html_e( 'Adds debug output to FundyConfig.enableDebugMode.', 'dekode-fundraising' ); ?></p>
 	<?php
 }
 
