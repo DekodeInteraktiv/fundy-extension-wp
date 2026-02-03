@@ -177,6 +177,13 @@ function get_disable_data_layer_event(): bool {
 }
 
 /**
+ * Retrieve the debug config value.
+ */
+function get_debug_enabled(): bool {
+	return ! empty( get_setting_value( 'debug', '' ) );
+}
+
+/**
  * Retrieve the render script environment ('dev' or 'prod').
  */
 function get_script_env(): string {

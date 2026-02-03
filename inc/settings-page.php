@@ -51,14 +51,22 @@ function register_settings(): void {
 				'tracking_enabled'         => '',
 				'tracking_script'          => 'prod',
 				'disable_data_layer_event' => '',
+				'debug'                    => '',
 			],
 		]
 	);
 
 	\add_settings_section(
 		'fundy_settings_section',
-		\__( 'General Configuration', 'dekode-fundraising' ),
+		\__( 'General', 'dekode-fundraising' ),
 		__NAMESPACE__ . '\\section_callback',
+		'fundy_settings_page',
+	);
+
+	\add_settings_section(
+		'fundy_settings_section_advanced',
+		\__( 'Advanced', 'dekode-fundraising' ),
+		__NAMESPACE__ . '\\advanced_section_callback',
 		'fundy_settings_page',
 	);
 
@@ -112,6 +120,14 @@ function register_settings(): void {
 		'fundy_settings_section'
 	);
 
+	\add_settings_field(
+		'fundy_debug',
+		\__( 'Debug Mode', 'dekode-fundraising' ),
+		__NAMESPACE__ . '\\debug_callback',
+		'fundy_settings_page',
+		'fundy_settings_section_advanced'
+	);
+
 }
 
 /**
@@ -132,6 +148,7 @@ function sanitize_options( array|null $input ): array {
 		$sanitized['tracking_enabled'] = '';
 		$sanitized['tracking_script'] = '';
 		$sanitized['disable_data_layer_event'] = '';
+		$sanitized['debug'] = '';
 
 		return $sanitized;
 	}
@@ -145,6 +162,7 @@ function sanitize_options( array|null $input ): array {
 	$sanitized['tracking_enabled'] = ! empty( $input['tracking_enabled'] ) ? 'yes' : '';
 	$sanitized['tracking_script'] = \Dekode\Fundraising\Settings\normalize_script_env( (string) ( $input['tracking_script'] ?? '' ), 'prod' );
 	$sanitized['disable_data_layer_event'] = ! empty( $input['disable_data_layer_event'] ) ? 'yes' : '';
+	$sanitized['debug'] = ! empty( $input['debug'] ) ? 'yes' : '';
 
 	return $sanitized;
 }
@@ -154,6 +172,13 @@ function sanitize_options( array|null $input ): array {
  */
 function section_callback(): void {
 	echo '<p>' . \esc_html__( 'If you are unsure about the settings here please talk to your Dekode Fundraising contact.', 'dekode-fundraising' ) . '</p>';
+}
+
+/**
+ * Advanced settings section callback.
+ */
+function advanced_section_callback(): void {
+	echo '<p>' . \esc_html__( 'Advanced settings for troubleshooting and diagnostics.', 'dekode-fundraising' ) . '</p>';
 }
 
 /**
@@ -323,6 +348,26 @@ function disable_data_layer_event_callback(): void {
 		<?php \esc_html_e( 'Disable', 'dekode-fundraising' ); ?>
 	</label>
 	<p class="description"><?php \esc_html_e( 'Prevents pushing conversion events to the dataLayer.', 'dekode-fundraising' ); ?></p>
+	<?php
+}
+
+/**
+ * Field callback for the Debug setting.
+ */
+function debug_callback(): void {
+	$options = \get_option( 'fundy_options', [] );
+	$enabled = \Dekode\Fundraising\Settings\get_debug_enabled();
+	?>
+	<label>
+		<input
+			type="checkbox"
+			name="fundy_options[debug]"
+			value="yes"
+			<?php \checked( $enabled, true ); ?>
+			<?php \disabled( ( \is_multisite() && empty( $options['override_network'] ) ) ); ?>
+		/>
+		<?php \esc_html_e( 'Enable', 'dekode-fundraising' ); ?>
+	</label>
 	<?php
 }
 

@@ -10,6 +10,7 @@ declare( strict_types = 1 );
 namespace Dekode\Fundraising\Assets;
 
 use function Dekode\Fundraising\Settings\get_conversion_script_env;
+use function Dekode\Fundraising\Settings\get_debug_enabled;
 use function Dekode\Fundraising\Settings\get_disable_data_layer_event;
 use function Dekode\Fundraising\Settings\get_forms_script_env;
 use function Dekode\Fundraising\Settings\get_tracking_script_enabled;
@@ -89,7 +90,7 @@ function output_fundy_config(): void {
 		'coreBaseUrl'           => \apply_filters( 'fundy/config/core_base_url', \FUNDY_CORE_URL ),
 		'surgeBaseUrl'          => \apply_filters( 'fundy/config/surge_base_url', \FUNDY_SURGE_URL ),
 		'disableDataLayerEvent' => \apply_filters( 'fundy/config/disable_data_layer_event', get_disable_data_layer_event() ),
-		'debug'                 => \apply_filters( 'fundy/config/debug', false ),
+		'debug'                 => \apply_filters( 'fundy/config/debug', get_debug_enabled() ),
 	];
 
 	/**
