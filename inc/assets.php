@@ -86,11 +86,14 @@ function register_tracking_script(): void {
  * @return void
  */
 function output_fundy_config(): void {
+	$enable_debug_mode = \apply_filters( 'fundy/config/debug', get_debug_enabled() );
+	$enable_debug_mode = \apply_filters( 'fundy/config/enable_debug_mode', $enable_debug_mode );
+
 	$config = [
 		'coreBaseUrl'           => \apply_filters( 'fundy/config/core_base_url', \FUNDY_CORE_URL ),
 		'surgeBaseUrl'          => \apply_filters( 'fundy/config/surge_base_url', \FUNDY_SURGE_URL ),
 		'disableDataLayerEvent' => \apply_filters( 'fundy/config/disable_data_layer_event', get_disable_data_layer_event() ),
-		'debug'                 => \apply_filters( 'fundy/config/debug', get_debug_enabled() ),
+		'enableDebugMode'       => $enable_debug_mode,
 	];
 
 	/**

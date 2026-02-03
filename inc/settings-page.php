@@ -368,6 +368,7 @@ function debug_callback(): void {
 		/>
 		<?php \esc_html_e( 'Enable', 'dekode-fundraising' ); ?>
 	</label>
+	<p class="description"><?php \esc_html_e( 'Adds debug output to FundyConfig.enableDebugMode.', 'dekode-fundraising' ); ?></p>
 	<?php
 }
 
