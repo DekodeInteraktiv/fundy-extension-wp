@@ -125,23 +125,6 @@ function get_forms_script_env(): string {
 }
 
 /**
- * Check if the conversion script is enabled.
- */
-function get_conversion_script_enabled(): bool {
-	[ $enabled, $exists ] = get_setting_value_with_presence( 'conversion_enabled', '' );
-
-	if ( ! $exists ) {
-		$legacy = get_setting_value( 'conversion_script', '' );
-		if ( 'none' === $legacy ) {
-			return false;
-		}
-		return true;
-	}
-
-	return ! empty( $enabled );
-}
-
-/**
  * Retrieve the conversion script environment ('dev' or 'prod').
  */
 function get_conversion_script_env(): string {
@@ -184,13 +167,6 @@ function get_tracking_script_env(): string {
 	}
 
 	return 'prod';
-}
-
-/**
- * Retrieve the debug config value.
- */
-function get_debug_enabled(): bool {
-	return ! empty( get_setting_value( 'debug', '' ) );
 }
 
 /**

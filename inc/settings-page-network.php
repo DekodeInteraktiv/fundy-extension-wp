@@ -46,11 +46,9 @@ function register_settings(): void {
 			'default'           => [
 				'api_key'                  => '',
 				'forms_script'             => 'prod',
-				'conversion_enabled'       => 'yes',
 				'conversion_script'        => 'prod',
 				'tracking_enabled'         => '',
 				'tracking_script'          => 'prod',
-				'debug'                    => '',
 				'disable_data_layer_event' => '',
 			],
 		]
@@ -88,6 +86,14 @@ function register_settings(): void {
 	);
 
 	\add_settings_field(
+		'fundy_disable_data_layer_event',
+		\__( 'Data Layer Event', 'dekode-fundraising' ),
+		__NAMESPACE__ . '\\disable_data_layer_event_callback',
+		'fundy_network_settings_page',
+		'fundy_network_settings_section',
+	);
+
+	\add_settings_field(
 		'fundy_tracking_script',
 		\__( 'Tracking Script', 'dekode-fundraising' ),
 		__NAMESPACE__ . '\\tracking_script_callback',
@@ -95,21 +101,6 @@ function register_settings(): void {
 		'fundy_network_settings_section',
 	);
 
-	\add_settings_field(
-		'fundy_debug',
-		\__( 'Debug Mode', 'dekode-fundraising' ),
-		__NAMESPACE__ . '\\debug_callback',
-		'fundy_network_settings_page',
-		'fundy_network_settings_section',
-	);
-
-	\add_settings_field(
-		'fundy_disable_data_layer_event',
-		\__( 'Disable Data Layer Event', 'dekode-fundraising' ),
-		__NAMESPACE__ . '\\disable_data_layer_event_callback',
-		'fundy_network_settings_page',
-		'fundy_network_settings_section',
-	);
 }
 
 /**
@@ -145,11 +136,9 @@ function sanitize_network_options( array $input ): array {
 		: '';
 
 	$sanitized['forms_script'] = \Dekode\Fundraising\Settings\normalize_script_env( (string) ( $input['forms_script'] ?? '' ), 'prod' );
-	$sanitized['conversion_enabled'] = ! empty( $input['conversion_enabled'] ) ? 'yes' : '';
 	$sanitized['conversion_script'] = \Dekode\Fundraising\Settings\normalize_script_env( (string) ( $input['conversion_script'] ?? '' ), 'prod' );
 	$sanitized['tracking_enabled'] = ! empty( $input['tracking_enabled'] ) ? 'yes' : '';
 	$sanitized['tracking_script'] = \Dekode\Fundraising\Settings\normalize_script_env( (string) ( $input['tracking_script'] ?? '' ), 'prod' );
-	$sanitized['debug'] = ! empty( $input['debug'] ) ? 'yes' : '';
 	$sanitized['disable_data_layer_event'] = ! empty( $input['disable_data_layer_event'] ) ? 'yes' : '';
 
 	return $sanitized;
@@ -213,20 +202,8 @@ function forms_script_callback(): void {
  */
 function conversion_script_callback(): void {
 	$options = \get_network_option( null, 'fundy_network_options', [] );
-	$enabled = \array_key_exists( 'conversion_enabled', $options ) ? ! empty( $options['conversion_enabled'] ) : true;
 	$env     = \Dekode\Fundraising\Settings\normalize_script_env( (string) ( $options['conversion_script'] ?? '' ), 'prod' );
 	?>
-	<p>
-		<label>
-			<input
-				type="checkbox"
-				name="fundy_network_options[conversion_enabled]"
-				value="yes"
-				<?php \checked( $enabled, true ); ?>
-			/>
-			<?php \esc_html_e( 'Enable Conversion Script', 'dekode-fundraising' ); ?>
-		</label>
-	</p>
 	<fieldset>
 		<label>
 			<input
@@ -266,7 +243,7 @@ function tracking_script_callback(): void {
 				value="yes"
 				<?php \checked( $enabled, true ); ?>
 			/>
-			<?php \esc_html_e( 'Enable Tracking Script', 'dekode-fundraising' ); ?>
+			<?php \esc_html_e( 'Enable', 'dekode-fundraising' ); ?>
 		</label>
 	</p>
 	<fieldset>
@@ -293,25 +270,6 @@ function tracking_script_callback(): void {
 }
 
 /**
- * Field callback for the Debug setting.
- */
-function debug_callback(): void {
-	$options = \get_network_option( null, 'fundy_network_options', [] );
-	$enabled = ! empty( $options['debug'] );
-	?>
-	<label>
-		<input
-			type="checkbox"
-			name="fundy_network_options[debug]"
-			value="yes"
-			<?php \checked( $enabled, true ); ?>
-		/>
-		<?php \esc_html_e( 'Enable debug mode', 'dekode-fundraising' ); ?>
-	</label>
-	<?php
-}
-
-/**
  * Field callback for the disableDataLayerEvent setting.
  */
 function disable_data_layer_event_callback(): void {
@@ -325,8 +283,9 @@ function disable_data_layer_event_callback(): void {
 			value="yes"
 			<?php \checked( $enabled, true ); ?>
 		/>
-		<?php \esc_html_e( 'Disable Data Layer event', 'dekode-fundraising' ); ?>
+		<?php \esc_html_e( 'Disable', 'dekode-fundraising' ); ?>
 	</label>
+	<p class="description"><?php \esc_html_e( 'Prevents pushing conversion events to the dataLayer.', 'dekode-fundraising' ); ?></p>
 	<?php
 }
 

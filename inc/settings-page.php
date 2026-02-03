@@ -47,11 +47,9 @@ function register_settings(): void {
 			'default'           => [
 				'api_key'                  => '',
 				'forms_script'             => 'prod',
-				'conversion_enabled'       => 'yes',
 				'conversion_script'        => 'prod',
 				'tracking_enabled'         => '',
 				'tracking_script'          => 'prod',
-				'debug'                    => '',
 				'disable_data_layer_event' => '',
 			],
 		]
@@ -99,6 +97,14 @@ function register_settings(): void {
 	);
 
 	\add_settings_field(
+		'fundy_disable_data_layer_event',
+		\__( 'Data Layer Event', 'dekode-fundraising' ),
+		__NAMESPACE__ . '\\disable_data_layer_event_callback',
+		'fundy_settings_page',
+		'fundy_settings_section'
+	);
+
+	\add_settings_field(
 		'fundy_tracking_script',
 		\__( 'Tracking Script', 'dekode-fundraising' ),
 		__NAMESPACE__ . '\\tracking_script_callback',
@@ -106,21 +112,6 @@ function register_settings(): void {
 		'fundy_settings_section'
 	);
 
-	\add_settings_field(
-		'fundy_debug',
-		\__( 'Debug Mode', 'dekode-fundraising' ),
-		__NAMESPACE__ . '\\debug_callback',
-		'fundy_settings_page',
-		'fundy_settings_section'
-	);
-
-	\add_settings_field(
-		'fundy_disable_data_layer_event',
-		\__( 'Disable Data Layer Event', 'dekode-fundraising' ),
-		__NAMESPACE__ . '\\disable_data_layer_event_callback',
-		'fundy_settings_page',
-		'fundy_settings_section'
-	);
 }
 
 /**
@@ -137,11 +128,9 @@ function sanitize_options( array|null $input ): array {
 	if (\is_multisite() && 'yes' !== $sanitized['override_network']) {
 		$sanitized['api_key'] = '';
 		$sanitized['forms_script'] = '';
-		$sanitized['conversion_enabled'] = '';
 		$sanitized['conversion_script'] = '';
 		$sanitized['tracking_enabled'] = '';
 		$sanitized['tracking_script'] = '';
-		$sanitized['debug'] = '';
 		$sanitized['disable_data_layer_event'] = '';
 
 		return $sanitized;
@@ -152,11 +141,9 @@ function sanitize_options( array|null $input ): array {
 		: '';
 
 	$sanitized['forms_script'] = \Dekode\Fundraising\Settings\normalize_script_env( (string) ( $input['forms_script'] ?? '' ), 'prod' );
-	$sanitized['conversion_enabled'] = ! empty( $input['conversion_enabled'] ) ? 'yes' : '';
 	$sanitized['conversion_script'] = \Dekode\Fundraising\Settings\normalize_script_env( (string) ( $input['conversion_script'] ?? '' ), 'prod' );
 	$sanitized['tracking_enabled'] = ! empty( $input['tracking_enabled'] ) ? 'yes' : '';
 	$sanitized['tracking_script'] = \Dekode\Fundraising\Settings\normalize_script_env( (string) ( $input['tracking_script'] ?? '' ), 'prod' );
-	$sanitized['debug'] = ! empty( $input['debug'] ) ? 'yes' : '';
 	$sanitized['disable_data_layer_event'] = ! empty( $input['disable_data_layer_event'] ) ? 'yes' : '';
 
 	return $sanitized;
@@ -244,26 +231,8 @@ function forms_script_callback(): void {
  */
 function conversion_script_callback(): void {
 	$options = \get_option( 'fundy_options', [] );
-	if ( ! \is_array( $options ) ) {
-		$options = [];
-	}
-	$enabled = \array_key_exists( 'conversion_enabled', $options )
-		? ! empty( $options['conversion_enabled'] )
-		: \Dekode\Fundraising\Settings\get_conversion_script_enabled();
 	$env     = \Dekode\Fundraising\Settings\get_conversion_script_env();
 	?>
-	<p>
-		<label>
-			<input
-				type="checkbox"
-				name="fundy_options[conversion_enabled]"
-				value="yes"
-				<?php \checked( $enabled, true ); ?>
-				<?php \disabled( ( \is_multisite() && empty( $options['override_network'] ) ) ); ?>
-			/>
-			<?php \esc_html_e( 'Enable Conversion Script', 'dekode-fundraising' ); ?>
-		</label>
-	</p>
 	<fieldset>
 		<label>
 			<input
@@ -307,7 +276,7 @@ function tracking_script_callback(): void {
 				<?php \checked( $enabled, true ); ?>
 				<?php \disabled( ( \is_multisite() && empty( $options['override_network'] ) ) ); ?>
 			/>
-			<?php \esc_html_e( 'Enable Tracking Script', 'dekode-fundraising' ); ?>
+			<?php \esc_html_e( 'Enable', 'dekode-fundraising' ); ?>
 		</label>
 	</p>
 	<fieldset>
@@ -337,26 +306,6 @@ function tracking_script_callback(): void {
 }
 
 /**
- * Field callback for the Debug setting.
- */
-function debug_callback(): void {
-	$options = \get_option( 'fundy_options', [] );
-	$enabled = \Dekode\Fundraising\Settings\get_debug_enabled();
-	?>
-	<label>
-		<input
-			type="checkbox"
-			name="fundy_options[debug]"
-			value="yes"
-			<?php \checked( $enabled, true ); ?>
-			<?php \disabled( ( \is_multisite() && empty( $options['override_network'] ) ) ); ?>
-		/>
-		<?php \esc_html_e( 'Enable debug mode', 'dekode-fundraising' ); ?>
-	</label>
-	<?php
-}
-
-/**
  * Field callback for the disableDataLayerEvent setting.
  */
 function disable_data_layer_event_callback(): void {
@@ -371,8 +320,9 @@ function disable_data_layer_event_callback(): void {
 			<?php \checked( $enabled, true ); ?>
 			<?php \disabled( ( \is_multisite() && empty( $options['override_network'] ) ) ); ?>
 		/>
-		<?php \esc_html_e( 'Disable Data Layer event', 'dekode-fundraising' ); ?>
+		<?php \esc_html_e( 'Disable', 'dekode-fundraising' ); ?>
 	</label>
+	<p class="description"><?php \esc_html_e( 'Prevents pushing conversion events to the dataLayer.', 'dekode-fundraising' ); ?></p>
 	<?php
 }
 
