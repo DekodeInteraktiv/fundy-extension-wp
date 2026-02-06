@@ -25,6 +25,11 @@ if ( ! \defined( 'ABSPATH' ) ) {
  */
 \add_action( 'wp_enqueue_scripts', __NAMESPACE__ . '\\register_assets' );
 
+/**
+ * Register all assets.
+ *
+ * @return void
+ */
 function register_assets(): void {
 	register_fundy_config();
 	register_form_assets();
@@ -83,6 +88,11 @@ function build_fundy_config(): array {
 	return \apply_filters( 'fundy/config', $config );
 }
 
+/**
+ * Register form scripts and styles.
+ *
+ * @return void
+ */
 function register_form_assets(): void {
 	$env    = get_forms_script_env();
 	$suffix = ( 'prod' === $env ) ? 'latest' : 'development';
@@ -96,6 +106,11 @@ function register_form_assets(): void {
 	}
 }
 
+/**
+ * Register the conversion script.
+ *
+ * @return void
+ */
 function register_conversion_script(): void {
 	if ( ! \apply_filters( 'fundy/enable/conversion_script', true ) ) {
 		return;
@@ -112,6 +127,11 @@ function register_conversion_script(): void {
 	\wp_enqueue_script( 'fundy-conversion-script' );
 }
 
+/**
+ * Register the tracking script.
+ *
+ * @return void
+ */
 function register_tracking_script(): void {
 	if ( ! get_tracking_script_enabled() ) {
 		return;
@@ -127,4 +147,3 @@ function register_tracking_script(): void {
 
 	\wp_enqueue_script( 'fundy-tracking-script' );
 }
-
