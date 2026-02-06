@@ -50,7 +50,7 @@ function register_fundy_config(): void {
 
 	\wp_add_inline_script(
 		'fundy-config',
-		'window.FundyConfig = ' . \wp_json_encode( $config, \JSON_HEX_TAG | \JSON_HEX_AMP ) . ';'
+		'window.FundyConfig = ' . \wp_json_encode( $config, \JSON_HEX_TAG | \JSON_HEX_AMP | \JSON_UNESCAPED_SLASHES ) . ';'
 	);
 
 	// Always enqueue the config script.
