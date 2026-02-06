@@ -45,6 +45,20 @@ if ( ! \defined( 'FUNDY_CORE_URL' ) ) {
 }
 
 /**
+ * Define the Surge URL.
+ *
+ * Use existing constant if available, if not check for environment
+ * variable and if not default to production URL.
+ */
+if ( ! \defined( 'FUNDY_SURGE_URL' ) ) {
+	if ( \function_exists( 'env' ) && ! empty( \env( 'FUNDY_SURGE_URL' ) ) ) {
+		\define( 'FUNDY_SURGE_URL', \env( 'FUNDY_SURGE_URL' ) );
+	} else {
+		\define( 'FUNDY_SURGE_URL', 'https://fundy.cloud/surge' );
+	}
+}
+
+/**
  * Check for required PHP version.
  *
  * @return bool

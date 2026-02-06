@@ -9,6 +9,8 @@ declare( strict_types = 1 );
 
 namespace Dekode\Fundraising\SettingsPageNetwork;
 
+use function Dekode\Fundraising\Settings\normalize_script_env;
+
 if ( ! \defined( 'ABSPATH' ) ) {
 	exit;
 }
@@ -44,16 +46,28 @@ function register_settings(): void {
 			'type'              => 'array',
 			'sanitize_callback' => __NAMESPACE__ . '\\sanitize_network_options',
 			'default'           => [
-				'api_key'    => '',
-				'script_env' => 'prod',
+				'api_key'                  => '',
+				'forms_script'             => 'prod',
+				'conversion_script'        => 'prod',
+				'tracking_enabled'         => '',
+				'tracking_script'          => 'prod',
+				'disable_data_layer_event' => '',
+				'debug'                    => '',
 			],
 		]
 	);
 
 	\add_settings_section(
 		'fundy_network_settings_section',
-		\__( 'General Configuration', 'dekode-fundraising' ),
+		\__( 'General', 'dekode-fundraising' ),
 		__NAMESPACE__ . '\\settings_section_callback',
+		'fundy_network_settings_page',
+	);
+
+	\add_settings_section(
+		'fundy_network_settings_section_advanced',
+		\__( 'Advanced', 'dekode-fundraising' ),
+		__NAMESPACE__ . '\\advanced_settings_section_callback',
 		'fundy_network_settings_page',
 	);
 
@@ -66,12 +80,45 @@ function register_settings(): void {
 	);
 
 	\add_settings_field(
-		'fundy_script_env',
-		\__( 'Script Environment', 'dekode-fundraising' ),
-		__NAMESPACE__ . '\\script_env_callback',
+		'fundy_forms_script',
+		\__( 'Forms Script', 'dekode-fundraising' ),
+		__NAMESPACE__ . '\\forms_script_callback',
 		'fundy_network_settings_page',
 		'fundy_network_settings_section',
 	);
+
+	\add_settings_field(
+		'fundy_conversion_script',
+		\__( 'Conversion Script', 'dekode-fundraising' ),
+		__NAMESPACE__ . '\\conversion_script_callback',
+		'fundy_network_settings_page',
+		'fundy_network_settings_section',
+	);
+
+	\add_settings_field(
+		'fundy_disable_data_layer_event',
+		\__( 'Data Layer Event', 'dekode-fundraising' ),
+		__NAMESPACE__ . '\\disable_data_layer_event_callback',
+		'fundy_network_settings_page',
+		'fundy_network_settings_section',
+	);
+
+	\add_settings_field(
+		'fundy_tracking_script',
+		\__( 'Tracking Script', 'dekode-fundraising' ),
+		__NAMESPACE__ . '\\tracking_script_callback',
+		'fundy_network_settings_page',
+		'fundy_network_settings_section',
+	);
+
+	\add_settings_field(
+		'fundy_debug',
+		\__( 'Debug Mode', 'dekode-fundraising' ),
+		__NAMESPACE__ . '\\debug_callback',
+		'fundy_network_settings_page',
+		'fundy_network_settings_section_advanced',
+	);
+
 }
 
 /**
@@ -106,9 +153,12 @@ function sanitize_network_options( array $input ): array {
 		? \sanitize_text_field( $input['api_key'] )
 		: '';
 
-	$sanitized['script_env'] = ( isset( $input['script_env'] ) && 'dev' === $input['script_env'] )
-		? 'dev'
-		: 'prod';
+	$sanitized['forms_script'] = normalize_script_env( (string) ( $input['forms_script'] ?? '' ), 'prod' );
+	$sanitized['conversion_script'] = normalize_script_env( (string) ( $input['conversion_script'] ?? '' ), 'prod' );
+	$sanitized['tracking_enabled'] = ! empty( $input['tracking_enabled'] ) ? 'yes' : '';
+	$sanitized['tracking_script'] = normalize_script_env( (string) ( $input['tracking_script'] ?? '' ), 'prod' );
+	$sanitized['disable_data_layer_event'] = ! empty( $input['disable_data_layer_event'] ) ? 'yes' : '';
+	$sanitized['debug'] = ! empty( $input['debug'] ) ? 'yes' : '';
 
 	return $sanitized;
 }
@@ -118,6 +168,13 @@ function sanitize_network_options( array $input ): array {
  */
 function settings_section_callback(): void {
 	echo '<p>' . \esc_html__( 'If you are unsure about the settings here please talk to your Dekode Fundraising contact.', 'dekode-fundraising' ) . '</p>';
+}
+
+/**
+ * Advanced settings section callback.
+ */
+function advanced_settings_section_callback(): void {
+	echo '<p>' . \esc_html__( 'Advanced settings for troubleshooting and diagnostics.', 'dekode-fundraising' ) . '</p>';
 }
 
 /**
@@ -137,32 +194,143 @@ function api_key_callback(): void {
 }
 
 /**
- * Field callback for the Script Environment.
+ * Field callback for the Fundy Forms script.
  */
-function script_env_callback(): void {
-	$options    = \get_network_option( null, 'fundy_network_options', [] );
-	$script_env = $options['script_env'] ?? 'prod';
+function forms_script_callback(): void {
+	$options = \get_network_option( null, 'fundy_network_options', [] );
+	$env     = normalize_script_env( (string) ( $options['forms_script'] ?? '' ), 'prod' );
 	?>
 	<fieldset>
 		<label>
 			<input
 				type="radio"
-				name="fundy_network_options[script_env]"
+				name="fundy_network_options[forms_script]"
 				value="dev"
-				<?php \checked( $script_env, 'dev' ); ?>
+				<?php \checked( $env, 'dev' ); ?>
 			/>
 			<?php \esc_html_e( 'Development', 'dekode-fundraising' ); ?>
 		</label><br/>
 		<label>
 			<input
 				type="radio"
-				name="fundy_network_options[script_env]"
+				name="fundy_network_options[forms_script]"
 				value="prod"
-				<?php \checked( $script_env, 'prod' ); ?>
+				<?php \checked( $env, 'prod' ); ?>
 			/>
 			<?php \esc_html_e( 'Production', 'dekode-fundraising' ); ?>
 		</label>
 	</fieldset>
+	<?php
+}
+
+/**
+ * Field callback for the Fundy Conversion script.
+ */
+function conversion_script_callback(): void {
+	$options = \get_network_option( null, 'fundy_network_options', [] );
+	$env     = normalize_script_env( (string) ( $options['conversion_script'] ?? '' ), 'prod' );
+	?>
+	<fieldset>
+		<label>
+			<input
+				type="radio"
+				name="fundy_network_options[conversion_script]"
+				value="dev"
+				<?php \checked( $env, 'dev' ); ?>
+			/>
+			<?php \esc_html_e( 'Development', 'dekode-fundraising' ); ?>
+		</label><br/>
+		<label>
+			<input
+				type="radio"
+				name="fundy_network_options[conversion_script]"
+				value="prod"
+				<?php \checked( $env, 'prod' ); ?>
+			/>
+			<?php \esc_html_e( 'Production', 'dekode-fundraising' ); ?>
+		</label>
+	</fieldset>
+	<?php
+}
+
+/**
+ * Field callback for the Tracking script.
+ */
+function tracking_script_callback(): void {
+	$options = \get_network_option( null, 'fundy_network_options', [] );
+	$enabled = ! empty( $options['tracking_enabled'] );
+	$env     = normalize_script_env( (string) ( $options['tracking_script'] ?? '' ), 'prod' );
+	?>
+	<p>
+		<label>
+			<input
+				type="checkbox"
+				name="fundy_network_options[tracking_enabled]"
+				value="yes"
+				<?php \checked( $enabled, true ); ?>
+			/>
+			<?php \esc_html_e( 'Enable', 'dekode-fundraising' ); ?>
+		</label>
+	</p>
+	<fieldset>
+		<label>
+			<input
+				type="radio"
+				name="fundy_network_options[tracking_script]"
+				value="dev"
+				<?php \checked( $env, 'dev' ); ?>
+			/>
+			<?php \esc_html_e( 'Development', 'dekode-fundraising' ); ?>
+		</label><br/>
+		<label>
+			<input
+				type="radio"
+				name="fundy_network_options[tracking_script]"
+				value="prod"
+				<?php \checked( $env, 'prod' ); ?>
+			/>
+			<?php \esc_html_e( 'Production', 'dekode-fundraising' ); ?>
+		</label>
+	</fieldset>
+	<?php
+}
+
+/**
+ * Field callback for the disableDataLayerEvent setting.
+ */
+function disable_data_layer_event_callback(): void {
+	$options = \get_network_option( null, 'fundy_network_options', [] );
+	$enabled = ! empty( $options['disable_data_layer_event'] );
+	?>
+	<label>
+		<input
+			type="checkbox"
+			name="fundy_network_options[disable_data_layer_event]"
+			value="yes"
+			<?php \checked( $enabled, true ); ?>
+		/>
+		<?php \esc_html_e( 'Disable', 'dekode-fundraising' ); ?>
+	</label>
+	<p class="description"><?php \esc_html_e( 'Prevents pushing conversion events to the dataLayer.', 'dekode-fundraising' ); ?></p>
+	<?php
+}
+
+/**
+ * Field callback for the Debug setting.
+ */
+function debug_callback(): void {
+	$options = \get_network_option( null, 'fundy_network_options', [] );
+	$enabled = ! empty( $options['debug'] );
+	?>
+	<label>
+		<input
+			type="checkbox"
+			name="fundy_network_options[debug]"
+			value="yes"
+			<?php \checked( $enabled, true ); ?>
+		/>
+		<?php \esc_html_e( 'Enable', 'dekode-fundraising' ); ?>
+	</label>
 	<?php
 }
 
