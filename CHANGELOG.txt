@@ -1,3 +1,8 @@
+= 2.4.0 (2026-02-06) =
+* Enhancement- Added support for the new conversion and tracking scripts.
+* Enhancement- Asset build dependency updates.
+* Bugfix- Reverted `@wordpress/scripts` to `27.9.0`, to keep compatibility with WP 6.4 and up.
+
 = 2.3.2 (2025-12-17) =
 * Remove receipt link icon.
 

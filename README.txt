@@ -3,7 +3,7 @@ Tags: fundraising, donations, forms
 Requires at least: 6.4
 Requires PHP: 8.1
 Tested up to: 6.8
-Stable tag: 2.3.2
+Stable tag: 2.4.0
 License: GPLv3 or later
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
@@ -44,6 +44,11 @@ Yes, this plugin requires a [Dekode Fundraising](https://intro.fundy.cloud) subs
 2. Example of the frontend form.
 
 == Changelog ==
+
+= 2.4.0 (2026-02-06) =
+* Enhancement- Added support for the new conversion and tracking scripts.
+* Enhancement- Asset build dependency updates.
+* Bugfix- Reverted `@wordpress/scripts` to `27.9.0`, to keep compatibility with WP 6.4 and up.
 
 = 2.3.2 (2025-12-04) =
 * Remove receipt link icon.
