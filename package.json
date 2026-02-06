@@ -14,7 +14,7 @@
 		"@wordpress/element": "~6.37.0",
 		"@wordpress/env": "~10.37.0",
 		"@wordpress/eslint-plugin": "~23.0.0",
-		"@wordpress/scripts": "~31.2.0",
+		"@wordpress/scripts": "~27.9.0",
 		"@wordpress/stylelint-config": "~23.29.0",
 		"eslint-plugin-prettier": "~5.5.5",
 		"husky": "~9.1.7",
