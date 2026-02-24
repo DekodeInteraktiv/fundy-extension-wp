@@ -1,3 +1,6 @@
+= 2.4.1 (2026-02-24) =
+* Maintenance- Dependency updates.
+
 = 2.4.0 (2026-02-06) =
 * Enhancement- Added support for the new conversion and tracking scripts.
 * Enhancement- Asset build dependency updates.
