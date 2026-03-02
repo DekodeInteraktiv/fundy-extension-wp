@@ -35,8 +35,10 @@ This service is provided by "Dekode Fundraising": [privacy policy](https://fundy
 == Frequently Asked Questions ==
 
 = Do I need a Dekode Fundraising account? =
-
 Yes, this plugin requires a [Dekode Fundraising](https://intro.fundy.cloud) subscription to use.
+
+= Where do I report security bugs found in this plugin? =
+Please report security bugs found in the source code of the Dekode Fundraising plugin through the [Patchstack Vulnerability Disclosure Program](https://patchstack.com/database/vdp/2f0c31ce-5a97-4435-a232-3555e1ba2fc8). The Patchstack team will assist you with verification, CVE assignment, and notify the developers of this plugin.
 
 == Screenshots ==
 
