@@ -22,6 +22,7 @@ For local development you can edit this constant in the `.wp-env.json` file and 
 
 * `fundy/enqueue/form_styles` (bool) - Whether to enqueue the Dekode Fundraising form styles. Default is true.
 * `fundy/base_url` (string) - Used to modify the base API URL.
+* `fundy/shadow_css_url` (string) - URL for the Shadow DOM base CSS file. Default is `https://assets.fundy.cloud/fundy-forms.shadow.css`.
 
 ## Shortcode
 
