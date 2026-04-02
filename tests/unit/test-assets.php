@@ -1,6 +1,7 @@
 <?php
 
 use function Dekode\Fundraising\Assets\register_assets;
+use function Dekode\Fundraising\Assets\shadow_style_preload_tag;
 
 /**
  * Test related to Dekode Fundraising assets on the frontend.
@@ -17,6 +18,8 @@ class TestAssets extends WP_UnitTestCase {
 		\wp_dequeue_script( 'fundy-form-script' );
 		\wp_deregister_style( 'fundy-form-style' );
 		\wp_dequeue_style( 'fundy-form-style' );
+		\wp_deregister_style( 'fundy-form-shadow-style' );
+		\wp_dequeue_style( 'fundy-form-shadow-style' );
 		\wp_deregister_script( 'fundy-conversion-script' );
 		\wp_dequeue_script( 'fundy-conversion-script' );
 		\wp_deregister_script( 'fundy-tracking-script' );
@@ -126,5 +129,38 @@ class TestAssets extends WP_UnitTestCase {
 		$script = $wp_scripts->registered['fundy-tracking-script'];
 		$this->assertContains( 'fundy-config', $script->deps );
 		\delete_option( 'fundy_options' );
+	}
+
+	public function test_that_shadow_style_is_registered() {
+		register_assets();
+		\do_action( 'wp_enqueue_scripts' );
+
+		$this->assertTrue( \wp_style_is( 'fundy-form-shadow-style', 'registered' ) );
+	}
+
+	public function test_that_shadow_style_url_points_to_shadow_css() {
+		register_assets();
+		\do_action( 'wp_enqueue_scripts' );
+
+		global $wp_styles;
+		$style = $wp_styles->registered['fundy-form-shadow-style'];
+		$this->assertStringContainsString( 'fundy-forms.shadow.css', $style->src );
+	}
+
+	public function test_that_shadow_style_tag_is_converted_to_preload() {
+		$input = '<link rel="stylesheet" id="fundy-form-shadow-style-css" href="https://assets.fundy.cloud/fundy-forms.shadow.css" media="all">';
+		$output = shadow_style_preload_tag( $input, 'fundy-form-shadow-style', 'https://assets.fundy.cloud/fundy-forms.shadow.css', 'all' );
+
+		$this->assertStringContainsString( 'rel="preload"', $output );
+		$this->assertStringContainsString( 'as="style"', $output );
+		$this->assertStringContainsString( 'crossorigin="anonymous"', $output );
+		$this->assertStringNotContainsString( 'rel="stylesheet"', $output );
+	}
+
+	public function test_that_preload_filter_does_not_affect_other_handles() {
+		$input = '<link rel="stylesheet" id="fundy-form-style-css" href="https://assets.fundy.cloud/fundy-forms.latest.css" media="all">';
+		$output = shadow_style_preload_tag( $input, 'fundy-form-style', 'https://assets.fundy.cloud/fundy-forms.latest.css', 'all' );
+
+		$this->assertSame( $input, $output );
 	}
 }
