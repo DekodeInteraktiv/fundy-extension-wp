@@ -24,6 +24,7 @@ if ( ! \defined( 'ABSPATH' ) ) {
  * Hooks
  */
 \add_action( 'wp_enqueue_scripts', __NAMESPACE__ . '\\register_assets' );
+\add_filter( 'style_loader_tag', __NAMESPACE__ . '\\shadow_style_preload_tag', 10, 4 );
 
 /**
  * Register all assets.
@@ -104,6 +105,48 @@ function register_form_assets(): void {
 	if ( \apply_filters( 'fundy/enqueue/form_styles', true ) && ! \wp_style_is( 'fundy-form-style', 'registered' ) ) {
 		\wp_register_style( 'fundy-form-style', "https://assets.fundy.cloud/fundy-forms.{$suffix}.css", [], null, 'all' );
 	}
+
+	if ( ! \wp_style_is( 'fundy-form-shadow-style', 'registered' ) ) {
+		\wp_register_style( 'fundy-form-shadow-style', get_shadow_css_url(), [], null, 'all' );
+	}
+}
+
+/**
+ * Get the CDN URL for the Shadow DOM base CSS.
+ *
+ * The shadow CSS is environment-independent (no dev/prod split) because
+ * it contains only styles — no debug logging or behavioural differences.
+ *
+ * @return string Full CDN URL for fundy-forms.shadow.css.
+ */
+function get_shadow_css_url(): string {
+	return (string) \apply_filters( 'fundy/shadow_css_url', 'https://assets.fundy.cloud/fundy-forms.shadow.css' );
+}
+
+/**
+ * Convert the shadow style <link> from stylesheet to preload.
+ *
+ * The shadow CSS must not be applied as a regular stylesheet — it contains
+ * :host selectors meant only for Shadow DOM. The preload tells the browser
+ * to download it early so it's in the HTTP cache when the JS fetch() needs
+ * it. The crossorigin attribute ensures the preload cache entry matches the
+ * fetch() request (both use CORS mode).
+ *
+ * @param string $html   The link tag HTML.
+ * @param string $handle The style's registered handle.
+ * @param string $href   The stylesheet's source URL.
+ * @param string $media  The stylesheet's media attribute.
+ * @return string Modified link tag.
+ */
+function shadow_style_preload_tag( string $html, string $handle, string $href, string $media ): string {
+	if ( 'fundy-form-shadow-style' !== $handle ) {
+		return $html;
+	}
+
+	return \sprintf(
+		'<link rel="preload" href="%s" as="style" crossorigin="anonymous">' . "\n",
+		\esc_url( $href )
+	);
 }
 
 /**
