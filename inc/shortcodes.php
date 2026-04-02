@@ -9,6 +9,7 @@ declare( strict_types = 1 );
 
 namespace Dekode\Fundraising\Shortcodes;
 
+use function Dekode\Fundraising\Assets\get_shadow_css_url;
 use function Dekode\Fundraising\get_base_url;
 
 /**
@@ -61,18 +62,22 @@ function render_fundy_form_shortcode( array $atts ): string {
 		\wp_enqueue_style( 'fundy-form-style' );
 	}
 
+	\wp_enqueue_style( 'fundy-form-shadow-style' );
+
 	return \sprintf( '
 		<div class="fundy-form-wrapper">
 			<div
 				class="fundy-form fundraising-form"
 				data-form-id="%s"
 				data-core-url="%s"
+				data-shadow-css-url="%s"
 				data-params="%s"
 			></div>
 		</div>
 		',
 		\esc_attr( (int) $atts['id'] ),
 		\esc_attr( get_base_url() ),
+		\esc_attr( get_shadow_css_url() ),
 		\esc_attr( $atts['params'] ),
 	);
 }

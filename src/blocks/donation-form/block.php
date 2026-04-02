@@ -9,6 +9,7 @@ declare( strict_types = 1 );
 
 namespace Dekode\Fundraising\Blocks\DonationForm;
 
+use function Dekode\Fundraising\Assets\get_shadow_css_url;
 use function Dekode\Fundraising\get_base_url;
 use function Dekode\Fundraising\Settings\get_api_key;
 
@@ -56,12 +57,15 @@ function render_block( array $attributes ): string {
 	}
 	$json_params = \wp_json_encode( $params );
 
+	\wp_enqueue_style( 'fundy-form-shadow-style' );
+
 	return \sprintf( '
 		<div %s>
 			<div
 				class="fundy-form fundraising-form"
 				data-form-id="%s"
 				data-core-url="%s"
+				data-shadow-css-url="%s"
 				data-button-classes="%s"
 				data-params="%s"
 			></div>
@@ -72,6 +76,7 @@ function render_block( array $attributes ): string {
 		] ),
 		\esc_attr( $attributes['formId'] ),
 		\esc_attr( get_base_url() ),
+		\esc_attr( get_shadow_css_url() ),
 		\esc_attr( 'wp-element-button' ),
 		\esc_attr( $json_params ),
 	);
