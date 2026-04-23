@@ -24,7 +24,8 @@ if ( ! \defined( 'ABSPATH' ) ) {
  * Hooks
  */
 \add_action( 'wp_enqueue_scripts', __NAMESPACE__ . '\\register_assets' );
-\add_filter( 'style_loader_tag', __NAMESPACE__ . '\\add_form_style_fetch_priority', 10, 2 );
+\add_filter( 'style_loader_tag', __NAMESPACE__ . '\\add_form_style_attrs', 10, 2 );
+\add_filter( 'script_loader_tag', __NAMESPACE__ . '\\add_form_script_attrs', 10, 2 );
 
 /**
  * Register all assets.
@@ -135,19 +136,47 @@ function register_form_assets(): void {
 }
 
 /**
- * Add fetchpriority="high" to the form stylesheet tag so it matches the
- * preload hint and isn't deprioritised behind other render-blocking CSS.
+ * Add fetchpriority="high" and crossorigin="anonymous" to the form stylesheet
+ * tag so it matches the preload hint (same priority and credentials mode) and
+ * isn't deprioritised behind other render-blocking CSS.
  */
-function add_form_style_fetch_priority( string $tag, string $handle ): string {
+function add_form_style_attrs( string $tag, string $handle ): string {
 	if ( 'fundy-form-style' !== $handle ) {
 		return $tag;
 	}
 
-	if ( false !== \strpos( $tag, 'fetchpriority=' ) ) {
+	$attrs = '';
+
+	if ( false === \strpos( $tag, 'fetchpriority=' ) ) {
+		$attrs .= 'fetchpriority="high" ';
+	}
+
+	if ( false === \strpos( $tag, 'crossorigin=' ) ) {
+		$attrs .= 'crossorigin="anonymous" ';
+	}
+
+	if ( '' === $attrs ) {
 		return $tag;
 	}
 
-	return \str_replace( '<link ', '<link fetchpriority="high" ', $tag );
+	return \str_replace( '<link ', '<link ' . $attrs, $tag );
+}
+
+/**
+ * Add crossorigin="anonymous" to the form script tag so its credentials mode
+ * matches the preload hint, allowing the browser to reuse the preloaded
+ * response instead of issuing a second request.
+ */
+function add_form_script_attrs( string $tag, string $handle ): string {
+	if ( 'fundy-form-script' !== $handle ) {
+		return $tag;
+	}
+
+	if ( false !== \strpos( $tag, 'crossorigin=' ) ) {
+		return $tag;
+	}
+
+	return \str_replace( '<script ', '<script crossorigin="anonymous" ', $tag );
 }
 
 /**

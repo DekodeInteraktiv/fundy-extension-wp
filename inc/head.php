@@ -57,6 +57,7 @@ function add_preload_resources( array $resources ): array {
 			'href'          => $script->src,
 			'as'            => 'script',
 			'fetchpriority' => 'high',
+			'crossorigin'   => 'anonymous',
 		];
 	}
 
@@ -67,6 +68,7 @@ function add_preload_resources( array $resources ): array {
 			'href'          => $style->src,
 			'as'            => 'style',
 			'fetchpriority' => 'high',
+			'crossorigin'   => 'anonymous',
 		];
 	}
 
