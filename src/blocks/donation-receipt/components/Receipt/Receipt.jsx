@@ -30,6 +30,7 @@ const Receipt = () => {
 				isLoaded: true,
 				isError: true,
 			});
+			return;
 		}
 
 		const params = {
