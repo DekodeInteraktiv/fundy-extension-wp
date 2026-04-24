@@ -35,18 +35,19 @@ function add_dns_prefetch( array $hints, string $relation_type ): array {
 }
 
 /**
- * Preload the form script when a form is detected on the current page.
+ * Preload the form script and stylesheet when a form is detected on the
+ * current page. Gated by the shared `fundy/load_form_assets_in_head` decision
+ * so preload and head-load stay in sync.
  *
- * The form script is enqueued lazily by the [fundy_form] shortcode, which runs
- * after wp_head. Preloading here lets the browser start fetching in parallel
- * with HTML parsing instead of waiting until the shortcode is reached.
- *
- * Detection is best-effort against the queried post's content. Sites that
- * render the form via blocks, patterns, widgets, or custom templates can
- * force preload on via the `fundy/preload/form_script` filter.
+ * The preload entries deliberately omit `crossorigin` so they match the
+ * default no-cors mode of the rendered <script> and <link> tags. If a future
+ * change adds `crossorigin` here it MUST also be added to the rendered tags
+ * (and the CDN must serve `Access-Control-Allow-Origin` on GET responses) —
+ * otherwise the credentials modes diverge and the browser fetches the
+ * resource twice.
  */
 function add_preload_resources( array $resources ): array {
-	if ( ! should_preload_form_script() ) {
+	if ( ! should_load_form_assets_in_head() ) {
 		return $resources;
 	}
 
@@ -57,7 +58,6 @@ function add_preload_resources( array $resources ): array {
 			'href'          => $script->src,
 			'as'            => 'script',
 			'fetchpriority' => 'high',
-			'crossorigin'   => 'anonymous',
 		];
 	}
 
@@ -68,20 +68,8 @@ function add_preload_resources( array $resources ): array {
 			'href'          => $style->src,
 			'as'            => 'style',
 			'fetchpriority' => 'high',
-			'crossorigin'   => 'anonymous',
 		];
 	}
 
 	return $resources;
-}
-
-/**
- * Decide whether to preload the form script on this request.
- *
- * Defers to the shared detection in the Assets namespace so preload and
- * head-load decisions stay in sync. The `fundy/preload/form_script` filter
- * still lets sites override just the preload decision if they need to.
- */
-function should_preload_form_script(): bool {
-	return (bool) \apply_filters( 'fundy/preload/form_script', should_load_form_assets_in_head() );
 }

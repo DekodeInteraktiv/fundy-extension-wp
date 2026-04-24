@@ -25,7 +25,6 @@ if ( ! \defined( 'ABSPATH' ) ) {
  */
 \add_action( 'wp_enqueue_scripts', __NAMESPACE__ . '\\register_assets' );
 \add_filter( 'style_loader_tag', __NAMESPACE__ . '\\add_form_style_attrs', 10, 2 );
-\add_filter( 'script_loader_tag', __NAMESPACE__ . '\\add_form_script_attrs', 10, 2 );
 
 /**
  * Register all assets.
@@ -136,47 +135,26 @@ function register_form_assets(): void {
 }
 
 /**
- * Add fetchpriority="high" and crossorigin="anonymous" to the form stylesheet
- * tag so it matches the preload hint (same priority and credentials mode) and
- * isn't deprioritised behind other render-blocking CSS.
+ * Add fetchpriority="high" to the form stylesheet tag so it matches the
+ * preload hint and isn't deprioritised behind other render-blocking CSS.
  */
 function add_form_style_attrs( string $tag, string $handle ): string {
 	if ( 'fundy-form-style' !== $handle ) {
 		return $tag;
 	}
 
-	$attrs = '';
-
-	if ( false === \strpos( $tag, 'fetchpriority=' ) ) {
-		$attrs .= 'fetchpriority="high" ';
-	}
-
-	if ( false === \strpos( $tag, 'crossorigin=' ) ) {
-		$attrs .= 'crossorigin="anonymous" ';
-	}
-
-	if ( '' === $attrs ) {
+	if ( false !== \strpos( $tag, 'fetchpriority=' ) ) {
 		return $tag;
 	}
 
-	return \str_replace( '<link ', '<link ' . $attrs, $tag );
-}
-
-/**
- * Add crossorigin="anonymous" to the form script tag so its credentials mode
- * matches the preload hint, allowing the browser to reuse the preloaded
- * response instead of issuing a second request.
- */
-function add_form_script_attrs( string $tag, string $handle ): string {
-	if ( 'fundy-form-script' !== $handle ) {
-		return $tag;
-	}
-
-	if ( false !== \strpos( $tag, 'crossorigin=' ) ) {
-		return $tag;
-	}
-
-	return \str_replace( '<script ', '<script crossorigin="anonymous" ', $tag );
+	// Target the <link ...> that carries href=... — avoids matching other
+	// <link markup a previous filter may have prepended.
+	return (string) \preg_replace(
+		'/<link\b([^>]*\bhref=)/',
+		'<link fetchpriority="high"$1',
+		$tag,
+		1
+	);
 }
 
 /**
@@ -186,23 +164,37 @@ function add_form_script_attrs( string $tag, string $handle ): string {
  * and the fundy/donation-form block. Sites that render the form via widgets,
  * template parts, or custom templates can force on via the
  * `fundy/load_form_assets_in_head` filter.
+ *
+ * Detection is memoised for the lifetime of the current main query because
+ * this runs on both `wp_enqueue_scripts` and `wp_preload_resources`. The
+ * cache is keyed on the WP_Query instance so it invalidates automatically
+ * when the query changes (including `go_to()` in the test suite). The filter
+ * is re-applied on every call so late-registered filters still take effect.
  */
 function should_load_form_assets_in_head(): bool {
-	$should_load = false;
+	static $detected   = null;
+	static $last_query = null;
 
-	if ( \is_singular() ) {
-		$post = \get_post();
+	$query = $GLOBALS['wp_query'] ?? null;
 
-		if ( $post ) {
-			$content = (string) $post->post_content;
+	if ( null === $detected || $query !== $last_query ) {
+		$last_query = $query;
+		$detected   = false;
 
-			if ( \has_shortcode( $content, 'fundy_form' ) || \has_block( 'fundy/donation-form', $content ) ) {
-				$should_load = true;
+		if ( \is_singular() ) {
+			$post = \get_post();
+
+			if ( $post ) {
+				$content = (string) $post->post_content;
+
+				if ( \has_shortcode( $content, 'fundy_form' ) || \has_block( 'fundy/donation-form', $content ) ) {
+					$detected = true;
+				}
 			}
 		}
 	}
 
-	return (bool) \apply_filters( 'fundy/load_form_assets_in_head', $should_load );
+	return (bool) \apply_filters( 'fundy/load_form_assets_in_head', $detected );
 }
 
 /**
