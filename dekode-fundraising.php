@@ -28,7 +28,7 @@ if ( ! \defined( 'ABSPATH' ) ) {
 \define( 'FUNDY_PLUGIN_URL', \plugin_dir_url( __FILE__ ) );
 \define( 'FUNDY_PLUGIN_DIR', \plugin_dir_path( __FILE__ ) );
 \define( 'FUNDY_MIN_PHP_VERSION', '8.0' );
-\define( 'FUNDY_MIN_WP_VERSION', '6.0' );
+\define( 'FUNDY_MIN_WP_VERSION', '6.4' );
 
 /**
  * Define the Core URL.

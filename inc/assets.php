@@ -24,6 +24,7 @@ if ( ! \defined( 'ABSPATH' ) ) {
  * Hooks
  */
 \add_action( 'wp_enqueue_scripts', __NAMESPACE__ . '\\register_assets' );
+\add_filter( 'style_loader_tag', __NAMESPACE__ . '\\add_form_style_attrs', 10, 2 );
 
 /**
  * Register all assets.
@@ -91,19 +92,109 @@ function build_fundy_config(): array {
 /**
  * Register form scripts and styles.
  *
+ * When the form is detected on the current page, the script is registered with
+ * `in_footer => false` and enqueued immediately so it is printed in <head>.
+ * The shortcode and block `viewScript` auto-enqueue act as safety nets for
+ * cases detection can't reach (widgets, template parts, etc.) — those paths
+ * fall through to the footer as before.
+ *
  * @return void
  */
 function register_form_assets(): void {
-	$env    = get_forms_script_env();
-	$suffix = ( 'prod' === $env ) ? 'latest' : 'development';
+	$env          = get_forms_script_env();
+	$suffix       = ( 'prod' === $env ) ? 'latest' : 'development';
+	$load_in_head = should_load_form_assets_in_head();
 
 	if ( ! \wp_script_is( 'fundy-form-script', 'registered' ) ) {
-		\wp_register_script( 'fundy-form-script', "https://assets.fundy.cloud/fundy-forms.{$suffix}.js", [ 'fundy-config' ], null, true );
+		\wp_register_script(
+			'fundy-form-script',
+			"https://assets.fundy.cloud/fundy-forms.{$suffix}.js",
+			[ 'fundy-config' ],
+			null,
+			[
+				'in_footer'     => ! $load_in_head,
+				'strategy'      => 'defer',
+				'fetchpriority' => 'high',
+			]
+		);
 	}
 
-	if ( \apply_filters( 'fundy/enqueue/form_styles', true ) && ! \wp_style_is( 'fundy-form-style', 'registered' ) ) {
+	$enqueue_styles = \apply_filters( 'fundy/enqueue/form_styles', true );
+
+	if ( $enqueue_styles && ! \wp_style_is( 'fundy-form-style', 'registered' ) ) {
 		\wp_register_style( 'fundy-form-style', "https://assets.fundy.cloud/fundy-forms.{$suffix}.css", [], null, 'all' );
 	}
+
+	if ( $load_in_head ) {
+		\wp_enqueue_script( 'fundy-form-script' );
+
+		if ( $enqueue_styles ) {
+			\wp_enqueue_style( 'fundy-form-style' );
+		}
+	}
+}
+
+/**
+ * Add fetchpriority="high" to the form stylesheet tag so it matches the
+ * preload hint and isn't deprioritised behind other render-blocking CSS.
+ */
+function add_form_style_attrs( string $tag, string $handle ): string {
+	if ( 'fundy-form-style' !== $handle ) {
+		return $tag;
+	}
+
+	if ( false !== \strpos( $tag, 'fetchpriority=' ) ) {
+		return $tag;
+	}
+
+	// Target the <link ...> that carries href=... — avoids matching other
+	// <link markup a previous filter may have prepended.
+	return (string) \preg_replace(
+		'/<link\b([^>]*\bhref=)/',
+		'<link fetchpriority="high"$1',
+		$tag,
+		1
+	);
+}
+
+/**
+ * Determine whether the form assets are needed on the current page.
+ *
+ * Detection checks the queried singular post for the [fundy_form] shortcode
+ * and the fundy/donation-form block. Sites that render the form via widgets,
+ * template parts, or custom templates can force on via the
+ * `fundy/load_form_assets_in_head` filter.
+ *
+ * Detection is memoised for the lifetime of the current main query because
+ * this runs on both `wp_enqueue_scripts` and `wp_preload_resources`. The
+ * cache is keyed on the WP_Query instance so it invalidates automatically
+ * when the query changes (including `go_to()` in the test suite). The filter
+ * is re-applied on every call so late-registered filters still take effect.
+ */
+function should_load_form_assets_in_head(): bool {
+	static $detected   = null;
+	static $last_query = null;
+
+	$query = $GLOBALS['wp_query'] ?? null;
+
+	if ( null === $detected || $query !== $last_query ) {
+		$last_query = $query;
+		$detected   = false;
+
+		if ( \is_singular() ) {
+			$post = \get_post();
+
+			if ( $post ) {
+				$content = (string) $post->post_content;
+
+				if ( \has_shortcode( $content, 'fundy_form' ) || \has_block( 'fundy/donation-form', $content ) ) {
+					$detected = true;
+				}
+			}
+		}
+	}
+
+	return (bool) \apply_filters( 'fundy/load_form_assets_in_head', $detected );
 }
 
 /**
@@ -121,7 +212,17 @@ function register_conversion_script(): void {
 	$src    = \apply_filters( 'fundy/conversion_script_src', "https://assets.fundy.cloud/fundy-conversion.{$suffix}.js", $env );
 
 	if ( ! \wp_script_is( 'fundy-conversion-script', 'registered' ) ) {
-		\wp_register_script( 'fundy-conversion-script', $src, [ 'fundy-config' ], null, true );
+		\wp_register_script(
+			'fundy-conversion-script',
+			$src,
+			[ 'fundy-config' ],
+			null,
+			[
+				'in_footer' => true,
+				'strategy'  => 'defer',
+				'fetchpriority' => 'low',
+			]
+		);
 	}
 
 	\wp_enqueue_script( 'fundy-conversion-script' );
@@ -139,10 +240,20 @@ function register_tracking_script(): void {
 
 	$env    = get_tracking_script_env();
 	$suffix = ( 'prod' === $env ) ? 'latest' : 'development';
-	$src    = \apply_filters( 'fundy/tracking_script_src', "https://assets.fundy.cloud/fundy-tracking.{$suffix}.js", $env );
+	$src    = \apply_filters( 'fundy/tracking_script_src', "https://assets.fundy.cloud/fundy-wake.{$suffix}.js", $env );
 
 	if ( ! \wp_script_is( 'fundy-tracking-script', 'registered' ) ) {
-		\wp_register_script( 'fundy-tracking-script', $src, [ 'fundy-config' ], null, true );
+		\wp_register_script(
+			'fundy-tracking-script',
+			$src,
+			[ 'fundy-config' ],
+			null,
+			[
+				'in_footer' => true,
+				'strategy'  => 'defer',
+				'fetchpriority' => 'low',
+			]
+		);
 	}
 
 	\wp_enqueue_script( 'fundy-tracking-script' );
