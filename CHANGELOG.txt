@@ -1,3 +1,7 @@
+= 2.5.0 (2026-04-24) =
+* Loads forms script in <head> when possible.
+* Added Patchstack VDP link.
+
 = 2.4.1 (2026-02-24) =
 * Maintenance- Dependency updates.
 
