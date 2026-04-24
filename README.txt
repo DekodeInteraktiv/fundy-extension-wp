@@ -3,7 +3,7 @@ Tags: fundraising, donations, forms
 Requires at least: 6.4
 Requires PHP: 8.1
 Tested up to: 6.8
-Stable tag: 2.4.1
+Stable tag: 2.5.0
 License: GPLv3 or later
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
@@ -46,6 +46,10 @@ Please report security bugs found in the source code of the Dekode Fundraising p
 2. Example of the frontend form.
 
 == Changelog ==
+
+= 2.5.0 (2026-04-24) =
+* Loads forms script in <head> when possible.
+* Added Patchstack VDP link.
 
 = 2.4.1 (2026-02-24) =
 * Maintenance- Dependency updates.
