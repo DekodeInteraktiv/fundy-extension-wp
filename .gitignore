@@ -20,3 +20,7 @@ composer.lock
 /artifacts/
 
 .phpunit.result.cache
+
+# Local Claude Code config — track only the skills symlink
+/.claude/*
+!/.claude/skills
