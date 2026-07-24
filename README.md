@@ -22,6 +22,7 @@ For local development you can edit this constant in the `.wp-env.json` file and 
 
 * `fundy/enqueue/form_styles` (bool) - Whether to enqueue the Dekode Fundraising form styles. Default is true.
 * `fundy/base_url` (string) - Used to modify the base API URL.
+* `fundy/config/custom_css_url` (string) - Override the custom stylesheet URL injected into Dekode Fundraising forms (the `customCssUrl` key of `window.FundyConfig`). Defaults to the "Custom CSS URL" plugin setting; an empty value omits the key.
 
 ## Shortcode
 
@@ -34,6 +35,10 @@ Where the `id` attribute indicates the form ID to render.
 You can also define extra parameters to be passed to the frontend by using the `params` attribute, passing a serialized JSON object as a value:
 
 ```[fundy_form id='13' params='{"utm_source":123,"other_parameter":"some value"}]```
+
+You can select a styling variation for the form with the `variation` attribute, matching the `is-style-*` block styles available on the Donation Form block:
+
+```[fundy_form id='13' variation='compact']```
 
 ## Setup
 

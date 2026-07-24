@@ -10,12 +10,14 @@ declare( strict_types = 1 );
 namespace Dekode\Fundraising\SettingsPage;
 
 use function Dekode\Fundraising\Settings\get_conversion_script_env;
+use function Dekode\Fundraising\Settings\get_custom_css_url;
 use function Dekode\Fundraising\Settings\get_debug_enabled;
 use function Dekode\Fundraising\Settings\get_disable_data_layer_event;
 use function Dekode\Fundraising\Settings\get_forms_script_env;
 use function Dekode\Fundraising\Settings\get_tracking_script_enabled;
 use function Dekode\Fundraising\Settings\get_tracking_script_env;
 use function Dekode\Fundraising\Settings\normalize_script_env;
+use function Dekode\Fundraising\Settings\sanitize_custom_css_url;
 
 if ( ! \defined( 'ABSPATH' ) ) {
 	exit;
@@ -60,6 +62,7 @@ function register_settings(): void {
 				'tracking_script'          => 'prod',
 				'disable_data_layer_event' => '',
 				'debug'                    => '',
+				'custom_css_url'           => '',
 			],
 		]
 	);
@@ -136,6 +139,14 @@ function register_settings(): void {
 		'fundy_settings_section_advanced'
 	);
 
+	\add_settings_field(
+		'fundy_custom_css_url',
+		\__( 'Custom CSS URL', 'dekode-fundraising' ),
+		__NAMESPACE__ . '\\custom_css_url_callback',
+		'fundy_settings_page',
+		'fundy_settings_section_advanced'
+	);
+
 }
 
 /**
@@ -157,6 +168,7 @@ function sanitize_options( array|null $input ): array {
 		$sanitized['tracking_script'] = '';
 		$sanitized['disable_data_layer_event'] = '';
 		$sanitized['debug'] = '';
+		$sanitized['custom_css_url'] = '';
 
 		return $sanitized;
 	}
@@ -171,6 +183,7 @@ function sanitize_options( array|null $input ): array {
 	$sanitized['tracking_script'] = normalize_script_env( (string) ( $input['tracking_script'] ?? '' ), 'prod' );
 	$sanitized['disable_data_layer_event'] = ! empty( $input['disable_data_layer_event'] ) ? 'yes' : '';
 	$sanitized['debug'] = ! empty( $input['debug'] ) ? 'yes' : '';
+	$sanitized['custom_css_url'] = sanitize_custom_css_url( (string) ( $input['custom_css_url'] ?? '' ) );
 
 	return $sanitized;
 }
@@ -376,6 +389,25 @@ function debug_callback(): void {
 		/>
 		<?php \esc_html_e( 'Enable', 'dekode-fundraising' ); ?>
 	</label>
+	<?php
+}
+
+/**
+ * Field callback for the Custom CSS URL setting.
+ */
+function custom_css_url_callback(): void {
+	$options = \get_option( 'fundy_options', [] );
+	$url     = get_custom_css_url();
+	?>
+	<input
+		type="url"
+		name="fundy_options[custom_css_url]"
+		placeholder="<?php echo \esc_attr( 'https://domain.com/file.css' ); ?>"
+		value="<?php echo \esc_attr( $url ); ?>"
+		class="regular-text code"
+		<?php \disabled( ( \is_multisite() && empty( $options['override_network'] ) ) ); ?>
+	/>
+	<p class="description"><?php \esc_html_e( 'URL of a custom stylesheet injected into Fundy forms.', 'dekode-fundraising' ); ?></p>
 	<?php
 }
 

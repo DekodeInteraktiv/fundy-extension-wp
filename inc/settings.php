@@ -99,6 +99,35 @@ function normalize_script_env( string $value, string $default = 'prod' ): string
 }
 
 /**
+ * Sanitize a custom CSS URL.
+ *
+ * Only https is allowed, except plain http for localhost hosts: the styling
+ * dev loop serves from localhost, which browsers exempt from mixed-content
+ * blocking. Anything else collapses to '' (feature off).
+ */
+function sanitize_custom_css_url( string $value ): string {
+	$value = \esc_url_raw( \trim( $value ), [ 'http', 'https' ] );
+
+	if ( '' === $value ) {
+		return '';
+	}
+
+	$scheme = \wp_parse_url( $value, \PHP_URL_SCHEME );
+
+	if ( 'https' === $scheme ) {
+		return $value;
+	}
+
+	$host = \strtolower( (string) \wp_parse_url( $value, \PHP_URL_HOST ) );
+
+	if ( 'http' === $scheme && \in_array( $host, [ 'localhost', '127.0.0.1' ], true ) ) {
+		return $value;
+	}
+
+	return '';
+}
+
+/**
  * Retrieve the API key.
  */
 function get_api_key(): string {
@@ -181,6 +210,15 @@ function get_disable_data_layer_event(): bool {
  */
 function get_debug_enabled(): bool {
 	return ! empty( get_setting_value( 'debug', '' ) );
+}
+
+/**
+ * Retrieve the custom CSS URL for Fundy forms ('' = feature off).
+ */
+function get_custom_css_url(): string {
+	// Re-sanitized on read so values written outside the settings screens
+	// (wp-cli, importers) can't bypass the scheme allowlist.
+	return sanitize_custom_css_url( (string) get_setting_value( 'custom_css_url', '' ) );
 }
 
 /**

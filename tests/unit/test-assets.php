@@ -1,5 +1,6 @@
 <?php
 
+use function Dekode\Fundraising\Assets\build_fundy_config;
 use function Dekode\Fundraising\Assets\register_assets;
 use function Dekode\Fundraising\Assets\should_load_form_assets_in_head;
 
@@ -64,6 +65,33 @@ class TestAssets extends WP_UnitTestCase {
 
 		$script = $wp_scripts->registered['fundy-config'];
 		$this->assertNotEmpty( $script->extra['after'] ?? $script->extra['before'] ?? [] );
+	}
+
+	public function test_config_omits_custom_css_url_by_default() {
+		$config = build_fundy_config();
+
+		$this->assertArrayNotHasKey( 'customCssUrl', $config );
+	}
+
+	public function test_config_includes_custom_css_url_when_set() {
+		\update_option( 'fundy_options', [ 'custom_css_url' => 'https://assets.fundy.cloud/styles/production/acme/default.css' ] );
+
+		$config = build_fundy_config();
+
+		$this->assertSame( 'https://assets.fundy.cloud/styles/production/acme/default.css', $config['customCssUrl'] ?? null );
+		\delete_option( 'fundy_options' );
+	}
+
+	public function test_config_custom_css_url_filter_overrides() {
+		$override = static function () {
+			return 'https://example.test/theme.css';
+		};
+		\add_filter( 'fundy/config/custom_css_url', $override );
+
+		$config = build_fundy_config();
+
+		$this->assertSame( 'https://example.test/theme.css', $config['customCssUrl'] ?? null );
+		\remove_filter( 'fundy/config/custom_css_url', $override );
 	}
 
 	public function test_that_form_script_depends_on_fundy_config() {

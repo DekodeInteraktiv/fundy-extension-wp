@@ -56,6 +56,17 @@ function render_block( array $attributes ): string {
 	}
 	$json_params = \wp_json_encode( $params );
 
+	// Block styles registered by themes land in className as is-style-*.
+	// data-variation carries the chosen style across the shadow boundary so
+	// theme CSS can target .variation-<name> inside the shadow root. The
+	// lookahead makes non-slug style names (e.g. is-style-myFancy) drop the
+	// attribute entirely instead of truncating to their lowercase prefix.
+	$variation_attr = '';
+
+	if ( \preg_match( '/(?:^|\s)is-style-([a-z0-9-]+)(?=\s|$)/', (string) ( $attributes['className'] ?? '' ), $matches ) ) {
+		$variation_attr = \sprintf( ' data-variation="%s"', \esc_attr( $matches[1] ) );
+	}
+
 	return \sprintf( '
 		<div %s>
 			<div
@@ -63,7 +74,7 @@ function render_block( array $attributes ): string {
 				data-form-id="%s"
 				data-core-url="%s"
 				data-button-classes="%s"
-				data-params="%s"
+				data-params="%s"%s
 			></div>
 		</div>
 		',
@@ -74,5 +85,6 @@ function render_block( array $attributes ): string {
 		\esc_attr( get_base_url() ),
 		\esc_attr( 'wp-element-button' ),
 		\esc_attr( $json_params ),
+		$variation_attr,
 	);
 }
