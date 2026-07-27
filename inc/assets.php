@@ -10,6 +10,7 @@ declare( strict_types = 1 );
 namespace Dekode\Fundraising\Assets;
 
 use function Dekode\Fundraising\Settings\get_conversion_script_env;
+use function Dekode\Fundraising\Settings\get_custom_css_url;
 use function Dekode\Fundraising\Settings\get_debug_enabled;
 use function Dekode\Fundraising\Settings\get_disable_data_layer_event;
 use function Dekode\Fundraising\Settings\get_forms_script_env;
@@ -80,6 +81,12 @@ function build_fundy_config(): array {
 		'disableDataLayerEvent' => \apply_filters( 'fundy/config/disable_data_layer_event', get_disable_data_layer_event() ),
 		'enableDebugMode'       => $enable_debug_mode,
 	];
+
+	$custom_css_url = \apply_filters( 'fundy/config/custom_css_url', get_custom_css_url() );
+
+	if ( ! empty( $custom_css_url ) ) {
+		$config['customCssUrl'] = $custom_css_url;
+	}
 
 	/**
 	 * Filter the entire FundyConfig array.

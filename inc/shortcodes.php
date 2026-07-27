@@ -32,8 +32,9 @@ function register_shortcodes(): void {
 function render_fundy_form_shortcode( array $atts ): string {
 	$atts = \shortcode_atts(
 		[
-			'id'     => '',
-			'params' => '',
+			'id'        => '',
+			'params'    => '',
+			'variation' => '',
 		],
 		$atts,
 		'fundy_form'
@@ -55,8 +56,22 @@ function render_fundy_form_shortcode( array $atts ): string {
 		}
 	}
 
+	// Shortcode parity with the block's is-style-* pass-through: only slugs
+	// matching the block-style class shape are forwarded across the shadow
+	// boundary as data-variation.
+	$variation_attr = '';
+	$variation      = \strtolower( \trim( (string) $atts['variation'] ) );
+
+	if ( \preg_match( '/^[a-z0-9-]+$/', $variation ) ) {
+		$variation_attr = \sprintf( ' data-variation="%s"', \esc_attr( $variation ) );
+	}
+
 	\wp_enqueue_script( 'fundy-form-script' );
 
+	// The host-page base stylesheet becomes redundant once the shadow-root
+	// forms bundle ships (it loads base CSS inside the shadow root). Keep it
+	// until the forms cutover completes, then remove this path — see
+	// plans/custom-styling/client-migration.md in the workspace root.
 	if ( \apply_filters( 'fundy/enqueue/form_styles', true ) ) {
 		\wp_enqueue_style( 'fundy-form-style' );
 	}
@@ -67,12 +82,13 @@ function render_fundy_form_shortcode( array $atts ): string {
 				class="fundy-form fundraising-form"
 				data-form-id="%s"
 				data-core-url="%s"
-				data-params="%s"
+				data-params="%s"%s
 			></div>
 		</div>
 		',
 		\esc_attr( (int) $atts['id'] ),
 		\esc_attr( get_base_url() ),
 		\esc_attr( $atts['params'] ),
+		$variation_attr,
 	);
 }
