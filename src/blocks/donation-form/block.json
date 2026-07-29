@@ -5,13 +5,15 @@
 	"title": "Fundy Form",
 	"description": "Displays a donation/petition form.",
 	"category": "widgets",
-	"textdomain": "fundy",
+	"keywords": ["donation", "fundraising", "petition", "fundy", "form"],
+	"textdomain": "dekode-fundraising",
 	"icon": "clipboard",
+	"example": {},
 	"supports": {
 		"html": false,
 		"color": {
 			"background": true,
-			"text": true
+			"text": false
 		},
 		"spacing": {
 			"margin": true,

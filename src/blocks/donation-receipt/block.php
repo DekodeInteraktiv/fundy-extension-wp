@@ -26,8 +26,8 @@ function register_block(): void {
 		'render_callback' => __NAMESPACE__ . '\\render_block',
 	] );
 
-	\wp_set_script_translations( 'fundy-donation-receipt-editor-script', 'dekode-fundraising', \FUNDY_PLUGIN_DIR . '/languages' );
-	\wp_set_script_translations( 'fundy-donation-receipt-script', 'dekode-fundraising', \FUNDY_PLUGIN_DIR . '/languages' );
+	\wp_set_script_translations( 'fundy-donation-receipt-editor-script', 'dekode-fundraising', \FUNDY_PLUGIN_DIR . 'languages' );
+	\wp_set_script_translations( 'fundy-donation-receipt-script', 'dekode-fundraising', \FUNDY_PLUGIN_DIR . 'languages' );
 
 	if (! \is_admin() ) {
 		\wp_localize_script(

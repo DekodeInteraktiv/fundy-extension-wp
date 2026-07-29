@@ -130,11 +130,12 @@ if ( ! php_version_check() || ! wp_version_check() ) {
  * Load plugin text domain.
  */
 function load_textdomain(): void {
-	\load_plugin_textdomain( 'dekode-fundraising', false, FUNDY_PLUGIN_DIR . '/languages' );
+	\load_plugin_textdomain( 'dekode-fundraising', false, FUNDY_PLUGIN_DIR . 'languages' );
 }
 \add_action( 'init', __NAMESPACE__ . '\\load_textdomain' );
 
 require_once FUNDY_PLUGIN_DIR . 'inc/settings.php';
+require_once FUNDY_PLUGIN_DIR . 'inc/rest.php';
 require_once FUNDY_PLUGIN_DIR . 'inc/settings-page.php';
 require_once FUNDY_PLUGIN_DIR . 'inc/settings-page-network.php';
 require_once FUNDY_PLUGIN_DIR . 'inc/shortcodes.php';

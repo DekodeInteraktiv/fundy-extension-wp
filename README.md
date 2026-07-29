@@ -23,6 +23,7 @@ For local development you can edit this constant in the `.wp-env.json` file and 
 * `fundy/enqueue/form_styles` (bool) - Whether to enqueue the Dekode Fundraising form styles. Default is true.
 * `fundy/base_url` (string) - Used to modify the base API URL.
 * `fundy/config/custom_css_url` (string) - Override the custom stylesheet URL injected into Dekode Fundraising forms (the `customCssUrl` key of `window.FundyConfig`). Defaults to the "Custom CSS URL" plugin setting; an empty value omits the key.
+* `fundy/load_form_assets_in_head` (bool) - Force (or prevent) loading the form script/style in `<head>` with preload hints. Defaults to automatic detection on singular pages.
 
 ## Shortcode
 
@@ -39,6 +40,15 @@ You can also define extra parameters to be passed to the frontend by using the `
 You can select a styling variation for the form with the `variation` attribute, matching the `is-style-*` block styles available on the Donation Form block:
 
 ```[fundy_form id='13' variation='compact']```
+
+Note: URL parameter keys are restricted to letters, digits, `_` and `-` (max 64 characters); values are capped at 500 characters. Entries outside those limits are dropped at render time.
+
+## Notes & accepted trade-offs
+
+* **Remote bundles without SRI.** The `fundy-forms`, `fundy-conversion`, and `fundy-tracking` scripts load from `assets.fundy.cloud` under rolling tags (`*.latest.js`), so Subresource Integrity hashes are impossible by design. This is an accepted supply-chain trade-off: the CDN origin is treated as trusted, the same way the Fundy API itself is.
+* **Head-load detection gap.** Early (in-`<head>`) loading of the form assets relies on `has_block()` / `has_shortcode()` against the raw post content, which cannot see forms inside synced patterns or reusable blocks (`core/block` references). Those pages fall back to the standard footer `viewScript` path — the form still renders, just without the preload fast path. Use the `fundy/load_form_assets_in_head` filter to force the fast path for such pages.
+* **Block color supports style the wrapper only.** The form itself renders inside a shadow root with its own styles, so block *background* color shows behind the form; text color would not reach inside the form and is therefore not offered.
+* **Forms REST proxy.** The block editor lists available forms via `GET /wp-json/fundy/v1/forms` (users with `edit_posts`), which calls the Fundy API server-side. The organization API token never leaves PHP.
 
 ## Setup
 

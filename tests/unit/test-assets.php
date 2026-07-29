@@ -295,4 +295,43 @@ class TestAssets extends WP_UnitTestCase {
 
 		$this->assertSame( $tag, $filtered );
 	}
+
+	public function test_form_script_tag_gains_high_fetchpriority() {
+		$tag = "<script src='https://assets.fundy.cloud/fundy-forms.latest.js' id='fundy-form-script-js' defer data-wp-strategy='defer'></script>\n";
+
+		$filtered = \apply_filters( 'script_loader_tag', $tag, 'fundy-form-script', 'https://assets.fundy.cloud/fundy-forms.latest.js' );
+
+		$this->assertStringContainsString( 'fetchpriority="high"', $filtered );
+	}
+
+	public function test_conversion_and_tracking_script_tags_gain_low_fetchpriority() {
+		foreach ( [ 'fundy-conversion-script', 'fundy-tracking-script' ] as $handle ) {
+			$tag = "<script src='https://assets.fundy.cloud/x.js' id='{$handle}-js' defer></script>\n";
+
+			$filtered = \apply_filters( 'script_loader_tag', $tag, $handle, 'https://assets.fundy.cloud/x.js' );
+
+			$this->assertStringContainsString( 'fetchpriority="low"', $filtered );
+		}
+	}
+
+	public function test_form_script_tag_fetchpriority_is_idempotent() {
+		$tag      = "<script fetchpriority=\"high\" src='https://assets.fundy.cloud/x.js'></script>\n";
+		$filtered = \apply_filters( 'script_loader_tag', $tag, 'fundy-form-script', 'https://assets.fundy.cloud/x.js' );
+
+		$this->assertSame( 1, \substr_count( $filtered, 'fetchpriority=' ) );
+	}
+
+	public function test_other_script_handles_are_untouched() {
+		$tag      = "<script src='https://example.test/other.js' id='other-js'></script>\n";
+		$filtered = \apply_filters( 'script_loader_tag', $tag, 'some-other-handle', 'https://example.test/other.js' );
+
+		$this->assertSame( $tag, $filtered );
+	}
+
+	public function test_form_script_inline_fragment_is_untouched() {
+		$tag      = "<script id='fundy-form-script-js-before'>window.x = 1;</script>\n";
+		$filtered = \apply_filters( 'script_loader_tag', $tag, 'fundy-form-script', '' );
+
+		$this->assertStringNotContainsString( 'fetchpriority=', $filtered );
+	}
 }

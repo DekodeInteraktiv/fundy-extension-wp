@@ -85,4 +85,97 @@ class TestDonationFormBlock extends WP_UnitTestCase {
 
 		$this->assertStringNotContainsString( 'data-variation', $html );
 	}
+
+	public function test_returns_empty_string_without_form_id() {
+		$this->assertSame( '', $this->render_donation_form( [
+			'formId'    => 0,
+			'urlParams' => [],
+		] ) );
+	}
+
+	public function test_data_button_classes_is_not_emitted() {
+		$html = $this->render_donation_form( [
+			'formId'    => 1,
+			'urlParams' => [],
+		] );
+
+		$this->assertStringNotContainsString( 'data-button-classes', $html );
+	}
+
+	public function test_fallback_content_is_present() {
+		$html = $this->render_donation_form( [
+			'formId'    => 1,
+			'urlParams' => [],
+		] );
+
+		$this->assertStringContainsString( '<noscript>', $html );
+		$this->assertStringContainsString( 'Donation form loading', $html );
+	}
+
+	/**
+	 * Pull the data-params JSON back out of the rendered attribute.
+	 */
+	private function extract_params( string $html ): array {
+		$this->assertSame( 1, \preg_match( '/data-params="([^"]*)"/', $html, $matches ) );
+
+		$decoded = \json_decode( \html_entity_decode( $matches[1], ENT_QUOTES ), true );
+
+		return \is_array( $decoded ) ? $decoded : [];
+	}
+
+	public function test_valid_url_params_are_rendered() {
+		$html = $this->render_donation_form( [
+			'formId'    => 1,
+			'urlParams' => [
+				[
+					'key'   => 'utm_source',
+					'value' => 'newsletter',
+				],
+			],
+		] );
+
+		$this->assertSame( [ 'utm_source' => 'newsletter' ], $this->extract_params( $html ) );
+	}
+
+	public function test_invalid_url_param_keys_are_dropped() {
+		$html = $this->render_donation_form( [
+			'formId'    => 1,
+			'urlParams' => [
+				[
+					'key'   => 'has space',
+					'value' => 'x',
+				],
+				[
+					'key'   => '<script>',
+					'value' => 'x',
+				],
+				[
+					'key'   => \str_repeat( 'a', 65 ),
+					'value' => 'x',
+				],
+				[
+					'key'   => 'valid-key',
+					'value' => 'kept',
+				],
+			],
+		] );
+
+		$this->assertSame( [ 'valid-key' => 'kept' ], $this->extract_params( $html ) );
+	}
+
+	public function test_url_param_values_are_length_capped() {
+		$html = $this->render_donation_form( [
+			'formId'    => 1,
+			'urlParams' => [
+				[
+					'key'   => 'long',
+					'value' => \str_repeat( 'v', 600 ),
+				],
+			],
+		] );
+
+		$params = $this->extract_params( $html );
+
+		$this->assertSame( 500, \strlen( $params['long'] ) );
+	}
 }

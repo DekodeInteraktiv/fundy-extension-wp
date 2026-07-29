@@ -52,7 +52,7 @@ const config = defineConfig({
 	],
 	webServer: {
 		...baseConfig.webServer,
-		command: 'npm run env:start',
+		command: 'npm run wp-env start',
 	},
 });
 

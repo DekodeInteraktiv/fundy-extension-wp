@@ -5,13 +5,13 @@
 	"title": "Donation Receipt",
 	"description": "Displays a donation receipt on a thank you page.",
 	"category": "widgets",
-	"textdomain": "fundy",
+	"textdomain": "dekode-fundraising",
 	"icon": "clipboard",
 	"supports": {
 		"html": false,
 		"color": {
 			"background": true,
-			"text": true
+			"text": false
 		},
 		"spacing": {
 			"margin": true,

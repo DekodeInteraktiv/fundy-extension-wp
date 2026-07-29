@@ -32,7 +32,7 @@ async function globalSetup(config) {
 		await requestUtils.deactivatePlugin(slug);
 	}
 
-	await requestUtils.activatePlugin('fundy-extension-wp/plugin');
+	await requestUtils.activatePlugin('fundy-extension-wp/dekode-fundraising');
 
 	await requestContext.dispose();
 }

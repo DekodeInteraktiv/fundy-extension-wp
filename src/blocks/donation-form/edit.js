@@ -1,104 +1,161 @@
 /**
  * WordPress dependencies
  */
+import { speak } from '@wordpress/a11y';
+import apiFetch from '@wordpress/api-fetch';
 import { useBlockProps } from '@wordpress/block-editor';
-import { useReducer, useEffect } from '@wordpress/element';
+import { useEffect, useRef, useState } from '@wordpress/element';
 import {
 	Button,
 	Flex,
 	FlexBlock,
 	FlexItem,
+	Notice,
 	Placeholder,
 	SelectControl,
+	Spinner,
 	TextControl,
 } from '@wordpress/components';
-import { __ } from '@wordpress/i18n';
+import { __, sprintf } from '@wordpress/i18n';
 
 /**
- * Render the content generation block.
+ * Module-level cache so every block instance in an editor session shares a
+ * single forms request. Reset on failure so a later mount can retry.
+ */
+let formsRequest = null;
+
+function fetchForms() {
+	if (!formsRequest) {
+		formsRequest = apiFetch({ path: '/fundy/v1/forms' }).catch((error) => {
+			formsRequest = null;
+			throw error;
+		});
+	}
+
+	return formsRequest;
+}
+
+/**
+ * Render the donation form block editor UI.
  */
 export default function Edit({
 	attributes: { formId, urlParams = [] },
 	setAttributes,
 }) {
-	const [state, setState] = useReducer((s, a) => ({ ...s, ...a }), {
-		isInitialized: false,
-		isLoaded: false,
-		apiToken: window.fundySettings.apiToken ?? '',
-		baseURL: window.fundySettings.baseURL ?? '',
-		forms: false,
-		error: null,
-	});
+	const blockProps = useBlockProps();
+	const hasApiToken = !!window.fundySettings?.hasApiToken;
+	const settingsUrl = window.fundySettings?.settingsUrl ?? '';
 
-	const { isInitialized, isLoaded, apiToken, baseURL, forms, error } = state;
+	// null = still loading; [] = loaded, none found.
+	const [forms, setForms] = useState(null);
+	const [error, setError] = useState(null);
 
-	// Initialize
+	// Stable per-row keys for the urlParams repeater, so removing a middle
+	// row doesn't re-associate DOM/focus with the wrong row. Attributes only
+	// store {key, value}; identity lives here for the session.
+	const rowIds = useRef([]);
+	const nextRowId = useRef(0);
+
+	while (rowIds.current.length < urlParams.length) {
+		rowIds.current.push(`param-${nextRowId.current++}`);
+	}
+
+	if (rowIds.current.length > urlParams.length) {
+		rowIds.current = rowIds.current.slice(0, urlParams.length);
+	}
+
 	useEffect(() => {
-		if (false === isInitialized && apiToken && baseURL) {
-			setState({ isInitialized: true });
+		if (!hasApiToken) {
+			return undefined;
 		}
-	}, [isInitialized, apiToken, baseURL]);
 
-	// Fetch forms
-	useEffect(() => {
-		if (baseURL && apiToken) {
-			fetch(`${baseURL}/api/v1/organization/forms`, {
-				method: 'GET',
-				headers: {
-					'Content-Type': 'application/json',
-					Authorization: 'Bearer ' + apiToken,
-				},
-			})
-				.then((response) => {
-					if (!response.ok) {
-						throw new Error('Network response was not ok.');
-					}
-					return response.json();
-				})
-				.then((data) => {
-					const options = data.map((form) => ({
-						value: form.id,
+		let cancelled = false;
+
+		fetchForms()
+			.then((data) => {
+				if (cancelled) {
+					return;
+				}
+
+				setForms(
+					data.map((form) => ({
+						value: String(form.id),
 						label: form.name,
-					}));
+					})),
+				);
+				setError(null);
+			})
+			.catch((err) => {
+				if (cancelled) {
+					return;
+				}
 
-					setState({
-						isLoaded: true,
-						forms: options,
-						error: null,
-					});
+				const message =
+					err?.message ||
+					__('Unable to load forms.', 'dekode-fundraising');
 
-					// If no form is saved, set first form as selected.
-					if (!formId && options.length) {
-						setAttributes({
-							formId: parseInt(options[0].value, 10),
-						});
-					}
-				})
-				.catch((err) => {
-					setState({
-						error:
-							'There has been a problem with your fetch operation: ' +
-							err,
-					});
-				});
-		}
-	}, [baseURL, apiToken, formId, setAttributes]);
+				setError(message);
+				speak(message, 'assertive');
+			});
 
-	/* eslint-disable react-hooks/rules-of-hooks */
-	if (!apiToken) {
+		return () => {
+			cancelled = true;
+		};
+	}, [hasApiToken]);
+
+	if (!hasApiToken) {
 		return (
-			<div {...useBlockProps()}>
+			<div {...blockProps}>
 				<Placeholder
-					instructions={__(
-						'Please set an API Token on the plugin settings page.',
-						'dekode-fundraising',
+					label={__('Fundy Form', 'dekode-fundraising')}
+					instructions={
+						settingsUrl
+							? __(
+									'Set an API token on the plugin settings page to select a form.',
+									'dekode-fundraising',
+								)
+							: __(
+									'An API token is required. Ask a site administrator to configure the Dekode Fundraising plugin.',
+									'dekode-fundraising',
+								)
+					}
+				>
+					{settingsUrl && (
+						<Button variant="primary" href={settingsUrl}>
+							{__('Open settings', 'dekode-fundraising')}
+						</Button>
 					)}
-				/>
+				</Placeholder>
 			</div>
 		);
 	}
 
-	const hasForms = forms && forms.length > 0;
+	const isLoaded = null !== forms;
+	const hasForms = isLoaded && forms.length > 0;
+	const isStale =
+		isLoaded &&
+		formId > 0 &&
+		!forms.some((form) => Number(form.value) === formId);
+
+	const formOptions = [
+		{
+			label: __('— Select a form —', 'dekode-fundraising'),
+			value: '0',
+			disabled: true,
+		},
+		...(forms ?? []),
+	];
+
+	if (isStale) {
+		formOptions.push({
+			label: sprintf(
+				/* translators: %d: saved form ID. */
+				__('Form ID %d (missing)', 'dekode-fundraising'),
+				formId,
+			),
+			value: String(formId),
+		});
+	}
 
 	/**
 	 * Repeater handlers
@@ -117,42 +174,83 @@ export default function Edit({
 	};
 
 	const removeParam = (index) => {
+		rowIds.current = rowIds.current.filter((_, i) => i !== index);
 		const updated = urlParams.filter((_, i) => i !== index);
 		setAttributes({ urlParams: updated });
 	};
 
 	return (
-		<div {...useBlockProps()}>
-			<Placeholder label={__('Dekode Fundraising Form', 'dekode-fundraising')} isColumnLayout>
+		<div {...blockProps} aria-busy={!isLoaded && !error}>
+			<Placeholder
+				label={__('Fundy Form', 'dekode-fundraising')}
+				isColumnLayout
+			>
 				<SelectControl
 					label={__('Select a Form', 'dekode-fundraising')}
-					value={formId}
-					className="fundy-form"
-					options={forms || [{ label: '', value: '' }]}
+					value={String(formId)}
+					options={formOptions}
 					onChange={(value) =>
 						setAttributes({ formId: parseInt(value, 10) })
 					}
-					disabled={!isLoaded}
+					__nextHasNoMarginBottom
+					__next40pxDefaultSize
 				/>
 
-				{!hasForms && (
-					<p>
+				{!isLoaded && !error && (
+					<Flex justify="flex-start">
+						<Spinner />
+						<span>
+							{__('Loading forms…', 'dekode-fundraising')}
+						</span>
+					</Flex>
+				)}
+
+				{isLoaded && !hasForms && (
+					<Notice status="warning" isDismissible={false}>
 						{__(
 							'No forms found. Please create a Form on your Dekode Fundraising account first.',
 							'dekode-fundraising',
 						)}
-					</p>
+					</Notice>
 				)}
 
-				{!isLoaded && <p>{__('Loading…', 'dekode-fundraising')}</p>}
-				{error && <p>{'Error: ' + error}</p>}
+				{isStale && (
+					<Notice status="warning" isDismissible={false}>
+						{sprintf(
+							/* translators: %d: saved form ID. */
+							__(
+								'The selected form (ID %d) no longer exists in your Fundy account. Please choose another form.',
+								'dekode-fundraising',
+							),
+							formId,
+						)}
+					</Notice>
+				)}
 
-				<div className="fundy-form-params">
-					<h4>{__('Default URL Parameters (Optional)', 'dekode-fundraising')}</h4>
+				{error && (
+					<Notice status="error" isDismissible={false}>
+						{sprintf(
+							/* translators: %s: error message. */
+							__(
+								'Could not load forms: %s',
+								'dekode-fundraising',
+							),
+							error,
+						)}
+					</Notice>
+				)}
+
+				<fieldset className="fundy-form-params">
+					<legend>
+						{__(
+							'Default URL Parameters (Optional)',
+							'dekode-fundraising',
+						)}
+					</legend>
 
 					<div style={{ marginTop: '1em' }}>
 						{urlParams.map((param, index) => (
-							<Flex key={`param-${index}`}>
+							<Flex key={rowIds.current[index]}>
 								<FlexBlock>
 									<TextControl
 										label={__('Key', 'dekode-fundraising')}
@@ -160,22 +258,48 @@ export default function Edit({
 										onChange={(val) =>
 											updateParam(index, 'key', val)
 										}
+										__nextHasNoMarginBottom
+										__next40pxDefaultSize
 									/>
 								</FlexBlock>
 								<FlexBlock>
 									<TextControl
-										label={__('Value', 'dekode-fundraising')}
+										label={__(
+											'Value',
+											'dekode-fundraising',
+										)}
 										value={param.value}
 										onChange={(val) =>
 											updateParam(index, 'value', val)
 										}
+										__nextHasNoMarginBottom
+										__next40pxDefaultSize
 									/>
 								</FlexBlock>
 								<FlexItem>
 									<Button
 										isDestructive
 										onClick={() => removeParam(index)}
-										style={{ marginTop: '14px' }}
+										style={{ marginTop: '24px' }}
+										aria-label={
+											param.key
+												? sprintf(
+														/* translators: %s: parameter key. */
+														__(
+															'Remove parameter "%s"',
+															'dekode-fundraising',
+														),
+														param.key,
+													)
+												: sprintf(
+														/* translators: %d: row number. */
+														__(
+															'Remove parameter %d',
+															'dekode-fundraising',
+														),
+														index + 1,
+													)
+										}
 									>
 										{__('Remove', 'dekode-fundraising')}
 									</Button>
@@ -186,9 +310,8 @@ export default function Edit({
 							{__('Add Parameter', 'dekode-fundraising')}
 						</Button>
 					</div>
-				</div>
+				</fieldset>
 			</Placeholder>
 		</div>
 	);
-	/* eslint-enable react-hooks/rules-of-hooks */
 }

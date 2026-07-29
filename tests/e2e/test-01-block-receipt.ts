@@ -21,9 +21,9 @@ test.describe('Donation receipt block', () => {
 			.locator('role=button[name="Add default block"i]')
 			.click();
 		await page.keyboard.type('/donation');
-		await page.waitForTimeout(250);
-		await page.keyboard.press('ArrowDown');
-		await page.keyboard.press('Enter');
+		// Select the block by name — the autocompleter's result order is not
+		// part of the contract.
+		await page.getByRole('option', { name: 'Donation Receipt' }).click();
 		expect(await editor.getEditedPostContent()).toBe(
 			'<!-- wp:fundy/donation-receipt /-->',
 		);
