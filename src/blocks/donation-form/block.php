@@ -29,8 +29,7 @@ function register_block(): void {
 
 	\wp_set_script_translations( 'fundy-donation-form-editor-script', 'dekode-fundraising', \FUNDY_PLUGIN_DIR . 'languages' );
 
-	// The API token must never reach the browser — the editor lists forms
-	// through the fundy/v1/forms REST proxy (inc/rest.php), so only the
+	// The API token must never reach the browser so only the
 	// token's existence is exposed here.
 	$settings = [
 		'hasApiToken' => '' !== get_api_key(),
@@ -58,8 +57,6 @@ function render_block( array $attributes ): string {
 
 	$params = [];
 
-	// Free-form author input that ends up as URL query parameters in the
-	// forms runtime - hence the conservative key shape and length caps.
 	foreach ( (array) ( $attributes['urlParams'] ?? [] ) as $p ) {
 		if ( ! \is_array( $p ) || empty( $p['key'] ) || ! \is_string( $p['key'] ) ) {
 			continue;
@@ -72,8 +69,6 @@ function render_block( array $attributes ): string {
 		$params[ $p['key'] ] = \mb_substr( (string) ( $p['value'] ?? '' ), 0, 500 );
 	}
 
-	// The runtime treats '[]' as "no params" already (its data-params parse
-	// ignores non-object JSON), so it is the safe shape when encoding fails.
 	$json_params = \wp_json_encode( $params );
 
 	if ( false === $json_params ) {
@@ -101,7 +96,7 @@ function render_block( array $attributes ): string {
 				data-form-id="%2$s"
 				data-core-url="%3$s"
 				data-params="%4$s"%5$s
-			><span style="position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0;">%6$s</span><noscript>%7$s</noscript></div>
+			><noscript>%6$s</noscript></div>
 		</div>
 		',
 		\get_block_wrapper_attributes( [
@@ -111,7 +106,6 @@ function render_block( array $attributes ): string {
 		\esc_attr( get_base_url() ),
 		\esc_attr( $json_params ),
 		$variation_attr,
-		\esc_html__( 'Donation form loading…', 'dekode-fundraising' ),
 		\esc_html__( 'This donation form requires JavaScript. Please enable JavaScript in your browser and reload the page.', 'dekode-fundraising' ),
 	);
 }
