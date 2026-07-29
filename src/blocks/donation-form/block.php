@@ -10,6 +10,7 @@ declare( strict_types = 1 );
 namespace Dekode\Fundraising\Blocks\DonationForm;
 
 use function Dekode\Fundraising\get_base_url;
+use function Dekode\Fundraising\sanitize_form_url_params;
 use function Dekode\Fundraising\Settings\get_api_key;
 
 /**
@@ -55,19 +56,17 @@ function render_block( array $attributes ): string {
 		return '';
 	}
 
-	$params = [];
+	$raw_params = [];
 
 	foreach ( (array) ( $attributes['urlParams'] ?? [] ) as $p ) {
-		if ( ! \is_array( $p ) || empty( $p['key'] ) || ! \is_string( $p['key'] ) ) {
-			continue;
+		if ( \is_array( $p ) && ! empty( $p['key'] ) && \is_string( $p['key'] ) ) {
+			$raw_params[ $p['key'] ] = $p['value'] ?? '';
 		}
-
-		if ( ! \preg_match( '/^[A-Za-z0-9_-]{1,64}$/', $p['key'] ) || ! \is_scalar( $p['value'] ?? '' ) ) {
-			continue;
-		}
-
-		$params[ $p['key'] ] = \mb_substr( (string) ( $p['value'] ?? '' ), 0, 500 );
 	}
+
+	// Free-form author input that ends up as URL query parameters in the
+	// forms runtime - hence the shared conservative key shape and length caps.
+	$params = sanitize_form_url_params( $raw_params );
 
 	$json_params = \wp_json_encode( $params );
 
@@ -86,9 +85,9 @@ function render_block( array $attributes ): string {
 		$variation_attr = \sprintf( ' data-variation="%s"', \esc_attr( $matches[1] ) );
 	}
 
-	// The forms runtime replaces the mount's children when it renders, so the
-	// visually-hidden loading text and the noscript fallback below only ever
-	// reach users for whom the remote bundle never executes.
+	// The forms runtime replaces the mount's children when it renders, so
+	// the noscript fallback below only ever reaches users for whom the
+	// remote bundle never executes.
 	return \sprintf( '
 		<div %1$s>
 			<div

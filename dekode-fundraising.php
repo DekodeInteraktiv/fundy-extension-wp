@@ -119,6 +119,32 @@ function get_base_url(): string {
 }
 
 /**
+ * Sanitize author-supplied form URL parameters.
+ *
+ * The forms runtime appends these to URL query strings, hence the
+ * conservative shape: keys must match [A-Za-z0-9_-]{1,64}, values must be
+ * scalar and are capped at 500 characters. Entries outside those limits are
+ * dropped. Shared by the donation-form block and the [fundy_form] shortcode
+ * so both embed paths enforce the same limits.
+ *
+ * @param array $params Raw parameters, keyed by parameter name.
+ * @return array<string, string> The sanitized parameters.
+ */
+function sanitize_form_url_params( array $params ): array {
+	$sanitized = [];
+
+	foreach ( $params as $key => $value ) {
+		if ( ! \preg_match( '/^[A-Za-z0-9_-]{1,64}$/', (string) $key ) || ! \is_scalar( $value ) ) {
+			continue;
+		}
+
+		$sanitized[ (string) $key ] = \mb_substr( (string) $value, 0, 500 );
+	}
+
+	return $sanitized;
+}
+
+/**
  * If either check fails, display notice and bail.
  */
 if ( ! php_version_check() || ! wp_version_check() ) {
@@ -130,7 +156,7 @@ if ( ! php_version_check() || ! wp_version_check() ) {
  * Load plugin text domain.
  */
 function load_textdomain(): void {
-	\load_plugin_textdomain( 'dekode-fundraising', false, FUNDY_PLUGIN_DIR . 'languages' );
+	\load_plugin_textdomain( 'dekode-fundraising', false, \dirname( \plugin_basename( __FILE__ ) ) . '/languages' );
 }
 \add_action( 'init', __NAMESPACE__ . '\\load_textdomain' );
 

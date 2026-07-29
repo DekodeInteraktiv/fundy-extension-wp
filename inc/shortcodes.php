@@ -10,6 +10,7 @@ declare( strict_types = 1 );
 namespace Dekode\Fundraising\Shortcodes;
 
 use function Dekode\Fundraising\get_base_url;
+use function Dekode\Fundraising\sanitize_form_url_params;
 
 /**
  * Hooks.
@@ -44,15 +45,15 @@ function render_fundy_form_shortcode( array $atts ): string {
 		return '';
 	}
 
-	$params = [];
+	// Author-supplied params share the block path's limits (see
+	// sanitize_form_url_params()); invalid or non-object JSON carries none.
+	$json_params = '';
 
 	if ( ! empty( $atts['params'] ) ) {
-		$params = \json_decode( $atts['params'], true );
+		$decoded = \json_decode( (string) $atts['params'], true );
 
-		if ( \json_last_error() === JSON_ERROR_NONE ) {
-			$atts['params'] = \wp_json_encode( $params );
-		} else {
-			$atts['params'] = '';
+		if ( \is_array( $decoded ) ) {
+			$json_params = (string) \wp_json_encode( sanitize_form_url_params( $decoded ) );
 		}
 	}
 
@@ -88,7 +89,7 @@ function render_fundy_form_shortcode( array $atts ): string {
 		',
 		\esc_attr( (int) $atts['id'] ),
 		\esc_attr( get_base_url() ),
-		\esc_attr( $atts['params'] ),
+		\esc_attr( $json_params ),
 		$variation_attr,
 	);
 }
