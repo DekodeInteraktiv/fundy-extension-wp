@@ -26,6 +26,7 @@ if ( ! \defined( 'ABSPATH' ) ) {
  */
 \add_action( 'wp_enqueue_scripts', __NAMESPACE__ . '\\register_assets' );
 \add_filter( 'style_loader_tag', __NAMESPACE__ . '\\add_form_style_attrs', 10, 2 );
+\add_filter( 'script_loader_tag', __NAMESPACE__ . '\\add_script_fetchpriority', 10, 2 );
 
 /**
  * Register all assets.
@@ -119,9 +120,8 @@ function register_form_assets(): void {
 			[ 'fundy-config' ],
 			null,
 			[
-				'in_footer'     => ! $load_in_head,
-				'strategy'      => 'defer',
-				'fetchpriority' => 'high',
+				'in_footer' => ! $load_in_head,
+				'strategy'  => 'defer',
 			]
 		);
 	}
@@ -159,6 +159,39 @@ function add_form_style_attrs( string $tag, string $handle ): string {
 	return (string) \preg_replace(
 		'/<link\b([^>]*\bhref=)/',
 		'<link fetchpriority="high"$1',
+		$tag,
+		1
+	);
+}
+
+/**
+ * Add fetchpriority to the rendered remote script tags.
+ *
+ * wp_register_script()'s $args only supports `in_footer` and `strategy` —
+ * a `fetchpriority` key there is silently discarded — so the attribute has
+ * to be filtered onto the tag, mirroring add_form_style_attrs(). The form
+ * bundle's `high` matches its preload hint in inc/head.php.
+ */
+function add_script_fetchpriority( string $tag, string $handle ): string {
+	$priorities = [
+		'fundy-form-script'       => 'high',
+		'fundy-conversion-script' => 'low',
+		'fundy-tracking-script'   => 'low',
+	];
+
+	if ( ! isset( $priorities[ $handle ] ) ) {
+		return $tag;
+	}
+
+	if ( false !== \strpos( $tag, 'fetchpriority=' ) ) {
+		return $tag;
+	}
+
+	// Target the <script ...> that carries src=... — inline before/after
+	// fragments for the same handle have no src attribute.
+	return (string) \preg_replace(
+		'/<script\b([^>]*\bsrc=)/',
+		'<script fetchpriority="' . $priorities[ $handle ] . '"$1',
 		$tag,
 		1
 	);
@@ -227,7 +260,6 @@ function register_conversion_script(): void {
 			[
 				'in_footer' => true,
 				'strategy'  => 'defer',
-				'fetchpriority' => 'low',
 			]
 		);
 	}
@@ -258,7 +290,6 @@ function register_tracking_script(): void {
 			[
 				'in_footer' => true,
 				'strategy'  => 'defer',
-				'fetchpriority' => 'low',
 			]
 		);
 	}

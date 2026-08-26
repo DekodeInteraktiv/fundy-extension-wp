@@ -6,10 +6,10 @@ import { registerBlockType } from '@wordpress/blocks';
 /**
  * Internal dependencies
  */
-import name from './block.json';
+import metadata from './block.json';
 import edit from './edit';
 
-registerBlockType(name, {
+registerBlockType(metadata, {
 	edit,
 	save: () => null,
 });

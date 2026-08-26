@@ -10,6 +10,7 @@ declare( strict_types = 1 );
 namespace Dekode\Fundraising\Blocks\DonationForm;
 
 use function Dekode\Fundraising\get_base_url;
+use function Dekode\Fundraising\sanitize_form_url_params;
 use function Dekode\Fundraising\Settings\get_api_key;
 
 /**
@@ -27,15 +28,22 @@ function register_block(): void {
 		'render_callback' => __NAMESPACE__ . '\\render_block',
 	] );
 
-	\wp_set_script_translations( 'fundy-donation-form-editor-script', 'dekode-fundraising', \FUNDY_PLUGIN_DIR . '/languages' );
+	\wp_set_script_translations( 'fundy-donation-form-editor-script', 'dekode-fundraising', \FUNDY_PLUGIN_DIR . 'languages' );
 
-	\wp_localize_script(
+	// The API token must never reach the browser so only the
+	// token's existence is exposed here.
+	$settings = [
+		'hasApiToken' => '' !== get_api_key(),
+	];
+
+	if ( \current_user_can( 'manage_options' ) ) {
+		$settings['settingsUrl'] = \admin_url( 'options-general.php?page=fundy_settings_page' );
+	}
+
+	\wp_add_inline_script(
 		'fundy-donation-form-editor-script',
-		'fundySettings',
-		[
-			'baseURL'  => get_base_url(),
-			'apiToken' => get_api_key(),
-		]
+		'window.fundySettings = ' . \wp_json_encode( $settings, \JSON_HEX_TAG | \JSON_HEX_AMP | \JSON_UNESCAPED_SLASHES ) . ';',
+		'before'
 	);
 }
 
@@ -48,13 +56,23 @@ function render_block( array $attributes ): string {
 		return '';
 	}
 
-	$params = [];
-	foreach ( $attributes['urlParams'] as $p ) {
-		if ( !empty( $p['key'] ) ) {
-			$params[ $p['key'] ] = $p['value'] ?? '';
+	$raw_params = [];
+
+	foreach ( (array) ( $attributes['urlParams'] ?? [] ) as $p ) {
+		if ( \is_array( $p ) && ! empty( $p['key'] ) && \is_string( $p['key'] ) ) {
+			$raw_params[ $p['key'] ] = $p['value'] ?? '';
 		}
 	}
+
+	// Free-form author input that ends up as URL query parameters in the
+	// forms runtime - hence the shared conservative key shape and length caps.
+	$params = sanitize_form_url_params( $raw_params );
+
 	$json_params = \wp_json_encode( $params );
+
+	if ( false === $json_params ) {
+		$json_params = '[]';
+	}
 
 	// Block styles registered by themes land in className as is-style-*.
 	// data-variation carries the chosen style across the shadow boundary so
@@ -67,15 +85,17 @@ function render_block( array $attributes ): string {
 		$variation_attr = \sprintf( ' data-variation="%s"', \esc_attr( $matches[1] ) );
 	}
 
+	// The forms runtime replaces the mount's children when it renders, so
+	// the noscript fallback below only ever reaches users for whom the
+	// remote bundle never executes.
 	return \sprintf( '
-		<div %s>
+		<div %1$s>
 			<div
 				class="fundy-form fundraising-form"
-				data-form-id="%s"
-				data-core-url="%s"
-				data-button-classes="%s"
-				data-params="%s"%s
-			></div>
+				data-form-id="%2$s"
+				data-core-url="%3$s"
+				data-params="%4$s"%5$s
+			><noscript>%6$s</noscript></div>
 		</div>
 		',
 		\get_block_wrapper_attributes( [
@@ -83,8 +103,8 @@ function render_block( array $attributes ): string {
 		] ),
 		\esc_attr( $attributes['formId'] ),
 		\esc_attr( get_base_url() ),
-		\esc_attr( 'wp-element-button' ),
 		\esc_attr( $json_params ),
 		$variation_attr,
+		\esc_html__( 'This donation form requires JavaScript. Please enable JavaScript in your browser and reload the page.', 'dekode-fundraising' ),
 	);
 }
