@@ -10,6 +10,7 @@ declare( strict_types = 1 );
 namespace Dekode\Fundraising\Head;
 
 use function Dekode\Fundraising\get_base_url;
+use function Dekode\Fundraising\Assets\get_client_css_urls;
 use function Dekode\Fundraising\Assets\should_load_form_assets_in_head;
 
 if ( ! \defined( 'ABSPATH' ) ) {
@@ -66,6 +67,17 @@ function add_preload_resources( array $resources ): array {
 	if ( $style && ! empty( $style->src ) ) {
 		$resources[] = [
 			'href'          => $style->src,
+			'as'            => 'style',
+			'fetchpriority' => 'high',
+		];
+	}
+
+	// The bundle only creates the client CSS <link> inside the shadow root
+	// once it executes, so this preload is what lets the client stylesheet
+	// fetch in parallel with the script.
+	foreach ( get_client_css_urls() as $client_css_url ) {
+		$resources[] = [
+			'href'          => $client_css_url,
 			'as'            => 'style',
 			'fetchpriority' => 'high',
 		];

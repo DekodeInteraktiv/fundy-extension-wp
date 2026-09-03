@@ -128,6 +128,19 @@ function sanitize_custom_css_url( string $value ): string {
 }
 
 /**
+ * Sanitize an organization theme name.
+ *
+ * Mirrors the shape core enforces on theme names
+ * (OrganizationTheme::VALID_NAME_PATTERN, max 50 characters); anything else
+ * collapses to '' (no theme).
+ */
+function sanitize_theme_name( string $value ): string {
+	$value = \trim( $value );
+
+	return 1 === \preg_match( '/^[a-zA-Z0-9-]{1,50}$/', $value ) ? $value : '';
+}
+
+/**
  * Retrieve the API key.
  */
 function get_api_key(): string {
@@ -219,6 +232,38 @@ function get_custom_css_url(): string {
 	// Re-sanitized on read so values written outside the settings screens
 	// (wp-cli, importers) can't bypass the scheme allowlist.
 	return sanitize_custom_css_url( (string) get_setting_value( 'custom_css_url', '' ) );
+}
+
+/**
+ * Retrieve the selected organization theme name ('' = none).
+ */
+function get_theme_name(): string {
+	return sanitize_theme_name( (string) get_setting_value( 'theme', '' ) );
+}
+
+/**
+ * Retrieve the resolved theme stylesheet URL ('' = none).
+ */
+function get_theme_css_url(): string {
+	// Re-sanitized on read so values written outside the settings screens
+	// (wp-cli, importers) can't bypass the scheme allowlist.
+	return sanitize_custom_css_url( (string) get_setting_value( 'theme_css_url', '' ) );
+}
+
+/**
+ * Retrieve the stylesheet URL injected into Fundy forms ('' = none).
+ *
+ * The custom CSS URL is the explicit override (and the local dev loop);
+ * the selected theme's deployed stylesheet applies otherwise.
+ */
+function get_form_css_url(): string {
+	$custom_css_url = get_custom_css_url();
+
+	if ( '' !== $custom_css_url ) {
+		return $custom_css_url;
+	}
+
+	return get_theme_css_url();
 }
 
 /**

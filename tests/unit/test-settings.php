@@ -1,7 +1,10 @@
 <?php
 
 use function Dekode\Fundraising\Settings\get_custom_css_url;
+use function Dekode\Fundraising\Settings\get_form_css_url;
+use function Dekode\Fundraising\Settings\get_theme_css_url;
 use function Dekode\Fundraising\Settings\sanitize_custom_css_url;
+use function Dekode\Fundraising\Settings\sanitize_theme_name;
 
 /**
  * Tests for the Dekode Fundraising settings helpers.
@@ -60,5 +63,57 @@ class TestSettings extends WP_UnitTestCase {
 		\delete_option( 'fundy_options' );
 
 		$this->assertSame( '', get_custom_css_url() );
+	}
+
+	public function test_theme_name_accepts_valid_names() {
+		$this->assertSame( 'default', sanitize_theme_name( 'default' ) );
+		$this->assertSame( 'Theme-2', sanitize_theme_name( 'Theme-2' ) );
+		$this->assertSame( 'default', sanitize_theme_name( ' default ' ) );
+	}
+
+	public function test_theme_name_rejects_invalid_names() {
+		$this->assertSame( '', sanitize_theme_name( '' ) );
+		$this->assertSame( '', sanitize_theme_name( 'has space' ) );
+		$this->assertSame( '', sanitize_theme_name( 'under_score' ) );
+		$this->assertSame( '', sanitize_theme_name( '../../etc' ) );
+		$this->assertSame( '', sanitize_theme_name( \str_repeat( 'a', 51 ) ) );
+	}
+
+	public function test_get_theme_css_url_reads_option_and_sanitizes() {
+		\update_option( 'fundy_options', [ 'theme_css_url' => 'http://example.com/x.css' ] );
+		$this->assertSame( '', get_theme_css_url() );
+
+		\update_option( 'fundy_options', [ 'theme_css_url' => 'https://assets.fundy.cloud/styles/production/acme/default.css' ] );
+		$this->assertSame( 'https://assets.fundy.cloud/styles/production/acme/default.css', get_theme_css_url() );
+
+		\delete_option( 'fundy_options' );
+	}
+
+	public function test_get_form_css_url_prefers_custom_over_theme() {
+		\update_option( 'fundy_options', [
+			'custom_css_url' => 'https://example.test/custom.css',
+			'theme_css_url'  => 'https://assets.fundy.cloud/styles/production/acme/default.css',
+		] );
+
+		$this->assertSame( 'https://example.test/custom.css', get_form_css_url() );
+
+		\delete_option( 'fundy_options' );
+	}
+
+	public function test_get_form_css_url_falls_back_to_theme() {
+		\update_option( 'fundy_options', [
+			'custom_css_url' => '',
+			'theme_css_url'  => 'https://assets.fundy.cloud/styles/production/acme/default.css',
+		] );
+
+		$this->assertSame( 'https://assets.fundy.cloud/styles/production/acme/default.css', get_form_css_url() );
+
+		\delete_option( 'fundy_options' );
+	}
+
+	public function test_get_form_css_url_empty_when_both_unset() {
+		\delete_option( 'fundy_options' );
+
+		$this->assertSame( '', get_form_css_url() );
 	}
 }

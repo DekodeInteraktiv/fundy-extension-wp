@@ -109,7 +109,7 @@ class TestDonationFormBlock extends WP_UnitTestCase {
 		] );
 
 		$this->assertStringContainsString( '<noscript>', $html );
-		$this->assertStringContainsString( 'Donation form loading', $html );
+		$this->assertStringContainsString( 'This donation form requires JavaScript', $html );
 	}
 
 	/**

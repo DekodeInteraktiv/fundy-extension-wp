@@ -54,6 +54,12 @@ Please report security bugs found in the source code of the Dekode Fundraising p
 
 == Changelog ==
 
+= 2.6.0 =
+* Enhancement- Theme setting: select a theme deployed for your organization in Fundy; its stylesheet is injected into the forms.
+* Enhancement- Custom CSS URL setting: inject a custom stylesheet into the forms (overrides the selected theme).
+* Enhancement- Block style variations and the shortcode `variation` attribute are passed to the form renderer.
+* Enhancement- Form picker in the block editor, backed by a server-side forms REST proxy.
+
 = 2.5.0 (2026-04-24) =
 * Loads forms script in <head> when possible.
 * Added Patchstack VDP link.

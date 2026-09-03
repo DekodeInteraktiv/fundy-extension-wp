@@ -27,7 +27,7 @@ if ( ! \defined( 'ABSPATH' ) ) {
 \define( 'FUNDY_VERSION', '2.5.0' );
 \define( 'FUNDY_PLUGIN_URL', \plugin_dir_url( __FILE__ ) );
 \define( 'FUNDY_PLUGIN_DIR', \plugin_dir_path( __FILE__ ) );
-\define( 'FUNDY_MIN_PHP_VERSION', '8.0' );
+\define( 'FUNDY_MIN_PHP_VERSION', '8.1' );
 \define( 'FUNDY_MIN_WP_VERSION', '6.4' );
 
 /**
@@ -161,6 +161,7 @@ function load_textdomain(): void {
 \add_action( 'init', __NAMESPACE__ . '\\load_textdomain' );
 
 require_once FUNDY_PLUGIN_DIR . 'inc/settings.php';
+require_once FUNDY_PLUGIN_DIR . 'inc/api.php';
 require_once FUNDY_PLUGIN_DIR . 'inc/rest.php';
 require_once FUNDY_PLUGIN_DIR . 'inc/settings-page.php';
 require_once FUNDY_PLUGIN_DIR . 'inc/settings-page-network.php';

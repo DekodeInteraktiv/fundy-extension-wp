@@ -9,7 +9,7 @@ declare( strict_types = 1 );
 
 namespace Dekode\Fundraising\REST;
 
-use function Dekode\Fundraising\get_base_url;
+use function Dekode\Fundraising\API\request;
 use function Dekode\Fundraising\Settings\get_api_key;
 
 if ( ! \defined( 'ABSPATH' ) ) {
@@ -60,47 +60,16 @@ function get_forms(): \WP_REST_Response|\WP_Error {
 		);
 	}
 
-	$response = \wp_remote_get(
-		get_base_url() . '/api/v1/organization/forms',
-		[
-			'headers' => [
-				'Accept'        => 'application/json',
-				'Authorization' => 'Bearer ' . $api_key,
-			],
-			'timeout' => 15,
-		]
-	);
+	$data = request( '/api/v1/organization/forms', $api_key );
 
-	if ( \is_wp_error( $response ) ) {
-		return new \WP_Error(
-			'fundy_forms_request_failed',
-			\__( 'Could not reach the Fundy API.', 'dekode-fundraising' ),
-			[ 'status' => 502 ]
-		);
-	}
+	if ( \is_wp_error( $data ) ) {
+		// This route's error codes predate the shared client and are public
+		// surface, so the client's generic codes are mapped back onto them.
+		$code = 'fundy_invalid_response' === $data->get_error_code()
+			? 'fundy_forms_invalid_response'
+			: 'fundy_forms_request_failed';
 
-	$code = (int) \wp_remote_retrieve_response_code( $response );
-
-	if ( 200 !== $code ) {
-		return new \WP_Error(
-			'fundy_forms_request_failed',
-			\sprintf(
-				/* translators: %d: HTTP status code returned by the Fundy API. */
-				\__( 'The Fundy API returned an unexpected response (HTTP %d).', 'dekode-fundraising' ),
-				$code
-			),
-			[ 'status' => 502 ]
-		);
-	}
-
-	$data = \json_decode( \wp_remote_retrieve_body( $response ), true );
-
-	if ( ! \is_array( $data ) ) {
-		return new \WP_Error(
-			'fundy_forms_invalid_response',
-			\__( 'The Fundy API returned an invalid response.', 'dekode-fundraising' ),
-			[ 'status' => 502 ]
-		);
+		return new \WP_Error( $code, $data->get_error_message(), [ 'status' => 502 ] );
 	}
 
 	$forms = [];

@@ -16,8 +16,10 @@ use function Dekode\Fundraising\Settings\get_disable_data_layer_event;
 use function Dekode\Fundraising\Settings\get_forms_script_env;
 use function Dekode\Fundraising\Settings\get_tracking_script_enabled;
 use function Dekode\Fundraising\Settings\get_tracking_script_env;
+use function Dekode\Fundraising\API\get_organization_themes;
 use function Dekode\Fundraising\Settings\normalize_script_env;
 use function Dekode\Fundraising\Settings\sanitize_custom_css_url;
+use function Dekode\Fundraising\Settings\sanitize_theme_name;
 
 if ( ! \defined( 'ABSPATH' ) ) {
 	exit;
@@ -62,6 +64,8 @@ function register_settings(): void {
 				'tracking_script'          => 'prod',
 				'disable_data_layer_event' => '',
 				'debug'                    => '',
+				'theme'                    => '',
+				'theme_css_url'            => '',
 				'custom_css_url'           => '',
 			],
 		]
@@ -140,6 +144,15 @@ function register_settings(): void {
 	);
 
 	\add_settings_field(
+		'fundy_theme',
+		\__( 'Theme', 'dekode-fundraising' ),
+		__NAMESPACE__ . '\\theme_callback',
+		'fundy_settings_page',
+		'fundy_settings_section_advanced',
+		[ 'label_for' => 'fundy_theme' ]
+	);
+
+	\add_settings_field(
 		'fundy_custom_css_url',
 		\__( 'Custom CSS URL', 'dekode-fundraising' ),
 		__NAMESPACE__ . '\\custom_css_url_callback',
@@ -168,6 +181,8 @@ function sanitize_options( array|null $input ): array {
 		$sanitized['tracking_script'] = '';
 		$sanitized['disable_data_layer_event'] = '';
 		$sanitized['debug'] = '';
+		$sanitized['theme'] = '';
+		$sanitized['theme_css_url'] = '';
 		$sanitized['custom_css_url'] = '';
 
 		return $sanitized;
@@ -183,9 +198,88 @@ function sanitize_options( array|null $input ): array {
 	$sanitized['tracking_script'] = normalize_script_env( (string) ( $input['tracking_script'] ?? '' ), 'prod' );
 	$sanitized['disable_data_layer_event'] = ! empty( $input['disable_data_layer_event'] ) ? 'yes' : '';
 	$sanitized['debug'] = ! empty( $input['debug'] ) ? 'yes' : '';
+	$sanitized['theme'] = sanitize_theme_name( (string) ( $input['theme'] ?? '' ) );
 	$sanitized['custom_css_url'] = sanitize_custom_css_url( (string) ( $input['custom_css_url'] ?? '' ) );
 
+	$previous = \get_option( 'fundy_options', [] );
+	$previous = \is_array( $previous ) ? $previous : [];
+
+	// Resolved with the API key being saved in this same request, not
+	// get_api_key(), so a key change and a theme choice in one save work.
+	$resolution = resolve_theme_css_url(
+		$sanitized['theme'],
+		$sanitized['api_key'],
+		sanitize_theme_name( (string) ( $previous['theme'] ?? '' ) ),
+		sanitize_custom_css_url( (string) ( $previous['theme_css_url'] ?? '' ) )
+	);
+
+	$sanitized['theme_css_url'] = $resolution['url'];
+
+	if ( '' !== $resolution['error'] ) {
+		\add_settings_error( 'fundy_options', 'fundy_theme_css_url', $resolution['error'] );
+	}
+
 	return $sanitized;
+}
+
+/**
+ * Resolve the stylesheet URL for a theme name at save time.
+ *
+ * The URL is resolved once here, never on the front end, so a page render
+ * never makes a remote request. When resolution fails (list unavailable, or
+ * the name is no longer in it) the previously resolved URL is kept for an
+ * unchanged name - saving unrelated settings must not drop a working theme -
+ * otherwise the URL is cleared and the caller surfaces the error.
+ *
+ * @param string $theme          Sanitized theme name being saved.
+ * @param string $api_key        API key being saved in the same request.
+ * @param string $previous_theme Previously stored theme name.
+ * @param string $previous_url   Previously stored stylesheet URL.
+ * @return array{url: string, error: string}
+ */
+function resolve_theme_css_url( string $theme, string $api_key, string $previous_theme, string $previous_url ): array {
+	if ( '' === $theme ) {
+		return [
+			'url'   => '',
+			'error' => '',
+		];
+	}
+
+	$themes = get_organization_themes( $api_key );
+
+	if ( ! \is_wp_error( $themes ) && isset( $themes[ $theme ] ) ) {
+		return [
+			'url'   => $themes[ $theme ]['url'],
+			'error' => '',
+		];
+	}
+
+	if ( $theme === $previous_theme && '' !== $previous_url ) {
+		return [
+			'url'   => $previous_url,
+			'error' => '',
+		];
+	}
+
+	if ( \is_wp_error( $themes ) ) {
+		return [
+			'url'   => '',
+			'error' => \sprintf(
+				/* translators: %s: error message returned while fetching the theme list. */
+				\__( 'The stylesheet URL for the selected theme could not be resolved (%s). Save the settings again to retry.', 'dekode-fundraising' ),
+				$themes->get_error_message()
+			),
+		];
+	}
+
+	return [
+		'url'   => '',
+		'error' => \sprintf(
+			/* translators: %s: theme name. */
+			\__( 'The theme "%s" is not deployed for your organization, so no stylesheet will be applied.', 'dekode-fundraising' ),
+			$theme
+		),
+	];
 }
 
 /**
@@ -390,6 +484,111 @@ function debug_callback(): void {
 		<?php \esc_html_e( 'Enable', 'dekode-fundraising' ); ?>
 	</label>
 	<?php
+}
+
+/**
+ * Field callback for the Theme setting.
+ */
+function theme_callback(): void {
+	$options = \get_option( 'fundy_options', [] );
+	$options = \is_array( $options ) ? $options : [];
+
+	$network_managed = \is_multisite() && empty( $options['override_network'] );
+
+	render_theme_select(
+		'fundy_options[theme]',
+		sanitize_theme_name( (string) ( $options['theme'] ?? '' ) ),
+		sanitize_custom_css_url( (string) ( $options['theme_css_url'] ?? '' ) ),
+		(string) ( $options['api_key'] ?? '' ),
+		$network_managed
+	);
+}
+
+/**
+ * Render the theme select, shared with the network settings page.
+ *
+ * Rendering fetches the theme list (filling the shared cache the sanitize
+ * callback reads on the following POST). A saved name missing from the list
+ * stays selectable so saving unrelated settings never silently drops it.
+ *
+ * @param string $field_name      Input name attribute.
+ * @param string $saved_name      Stored theme name.
+ * @param string $saved_url       Stored resolved stylesheet URL.
+ * @param string $api_key         API key used to fetch the theme list.
+ * @param bool   $network_managed Whether the field is controlled by the network settings.
+ */
+function render_theme_select( string $field_name, string $saved_name, string $saved_url, string $api_key, bool $network_managed ): void {
+	$themes = [];
+	$error  = '';
+	$no_key = ! $network_managed && '' === $api_key;
+
+	if ( ! $network_managed && ! $no_key ) {
+		$result = get_organization_themes( $api_key );
+
+		if ( \is_wp_error( $result ) ) {
+			$error = $result->get_error_message();
+		} else {
+			$themes = $result;
+		}
+	}
+
+	$stale_label = $saved_name;
+
+	if ( '' !== $saved_name && ! isset( $themes[ $saved_name ] ) && '' === $error && ! $no_key && ! $network_managed ) {
+		$stale_label = \sprintf(
+			/* translators: %s: theme name. */
+			\__( '%s (not found)', 'dekode-fundraising' ),
+			$saved_name
+		);
+	}
+	?>
+	<select
+		id="fundy_theme"
+		name="<?php echo \esc_attr( $field_name ); ?>"
+		<?php \disabled( $network_managed || $no_key ); ?>
+	>
+		<option value=""><?php \esc_html_e( 'None', 'dekode-fundraising' ); ?></option>
+		<?php foreach ( $themes as $theme ) : ?>
+			<option value="<?php echo \esc_attr( $theme['name'] ); ?>" <?php \selected( $saved_name, $theme['name'] ); ?>>
+				<?php echo \esc_html( theme_option_label( $theme ) ); ?>
+			</option>
+		<?php endforeach; ?>
+		<?php if ( '' !== $saved_name && ! isset( $themes[ $saved_name ] ) ) : ?>
+			<option value="<?php echo \esc_attr( $saved_name ); ?>" selected>
+				<?php echo \esc_html( $stale_label ); ?>
+			</option>
+		<?php endif; ?>
+	</select>
+	<?php if ( $no_key ) : ?>
+		<p class="description"><?php \esc_html_e( 'Set an API key to list themes.', 'dekode-fundraising' ); ?></p>
+	<?php elseif ( '' !== $error ) : ?>
+		<p class="description"><?php echo \esc_html( $error ); ?></p>
+	<?php endif; ?>
+	<p class="description"><?php \esc_html_e( 'A theme deployed for your organization in Fundy. The custom CSS URL below overrides it when set.', 'dekode-fundraising' ); ?></p>
+	<?php if ( '' !== $saved_url ) : ?>
+		<p class="description"><code><?php echo \esc_html( $saved_url ); ?></code></p>
+		<?php
+	endif;
+}
+
+/**
+ * Build the select option label for a theme entry.
+ *
+ * @param array{name: string, url: string, deployed_at: string} $theme Theme entry.
+ */
+function theme_option_label( array $theme ): string {
+	$deployed = \strtotime( $theme['deployed_at'] );
+
+	if ( false === $deployed ) {
+		return $theme['name'];
+	}
+
+	return \sprintf(
+		/* translators: 1: theme name, 2: date the theme was last deployed. */
+		\__( '%1$s (deployed %2$s)', 'dekode-fundraising' ),
+		$theme['name'],
+		\wp_date( (string) \get_option( 'date_format' ), $deployed )
+	);
 }
 
 /**
