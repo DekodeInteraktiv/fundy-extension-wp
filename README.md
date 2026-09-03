@@ -34,6 +34,8 @@ Two settings under Settings → Dekode Fundraising → Advanced control the styl
 
 Precedence: the custom CSS URL wins when set, otherwise the selected theme's URL, otherwise nothing. The winner is emitted as `window.FundyConfig.customCssUrl` and can be overridden with the `fundy/config/custom_css_url` filter.
 
+The selected theme name is also emitted as a `data-theme` attribute on every form container (block and shortcode), so the forms bundle's schema-driven organization stylesheet resolves to the same theme instead of falling back to `default`.
+
 ## Shortcode
 
 If you do not have access to the Dekode Fundraising block, you can render any Dekode Fundraising form using the following shortcode:

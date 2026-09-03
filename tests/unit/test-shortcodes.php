@@ -29,6 +29,23 @@ class TestShortcodes extends WP_UnitTestCase {
 		$this->assertStringNotContainsString( 'data-variation', $html );
 	}
 
+	public function test_selected_theme_is_emitted_as_data_theme() {
+		\update_option( 'fundy_options', [ 'theme' => 'moss' ] );
+
+		$html = \do_shortcode( '[fundy_form id="1"]' );
+
+		$this->assertStringContainsString( 'data-theme="moss"', $html );
+		\delete_option( 'fundy_options' );
+	}
+
+	public function test_no_data_theme_without_a_selected_theme() {
+		\delete_option( 'fundy_options' );
+
+		$html = \do_shortcode( '[fundy_form id="1"]' );
+
+		$this->assertStringNotContainsString( 'data-theme', $html );
+	}
+
 	/**
 	 * Pull the data-params JSON back out of the rendered attribute.
 	 */

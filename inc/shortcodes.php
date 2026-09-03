@@ -11,6 +11,7 @@ namespace Dekode\Fundraising\Shortcodes;
 
 use function Dekode\Fundraising\get_base_url;
 use function Dekode\Fundraising\sanitize_form_url_params;
+use function Dekode\Fundraising\theme_data_attribute;
 
 /**
  * Hooks.
@@ -83,7 +84,7 @@ function render_fundy_form_shortcode( array $atts ): string {
 				class="fundy-form fundraising-form"
 				data-form-id="%s"
 				data-core-url="%s"
-				data-params="%s"%s
+				data-params="%s"%s%s
 			></div>
 		</div>
 		',
@@ -91,5 +92,6 @@ function render_fundy_form_shortcode( array $atts ): string {
 		\esc_attr( get_base_url() ),
 		\esc_attr( $json_params ),
 		$variation_attr,
+		theme_data_attribute(),
 	);
 }
