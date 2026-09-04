@@ -11,6 +11,11 @@ namespace Dekode\Fundraising\SettingsPageNetwork;
 
 use function Dekode\Fundraising\Settings\normalize_script_env;
 use function Dekode\Fundraising\Settings\sanitize_custom_css_url;
+use function Dekode\Fundraising\Settings\sanitize_organization_public_id;
+use function Dekode\Fundraising\Settings\sanitize_theme_name;
+use function Dekode\Fundraising\SettingsPage\render_theme_select;
+use function Dekode\Fundraising\SettingsPage\resolve_organization_public_id;
+use function Dekode\Fundraising\SettingsPage\resolve_theme_css_url;
 
 if ( ! \defined( 'ABSPATH' ) ) {
 	exit;
@@ -20,6 +25,7 @@ if ( \is_multisite() ) {
 	\add_action( 'network_admin_menu', __NAMESPACE__ . '\\register_page' );
 	\add_action( 'network_admin_menu', __NAMESPACE__ . '\\register_settings' );
 	\add_action( 'network_admin_edit_fundy_network_settings_group', __NAMESPACE__ . '\\save_network_settings' );
+	\add_action( 'network_admin_notices', __NAMESPACE__ . '\\render_theme_notice' );
 }
 
 /**
@@ -48,12 +54,15 @@ function register_settings(): void {
 			'sanitize_callback' => __NAMESPACE__ . '\\sanitize_network_options',
 			'default'           => [
 				'api_key'                  => '',
+				'organization_public_id'   => '',
 				'forms_script'             => 'prod',
 				'conversion_script'        => 'prod',
 				'tracking_enabled'         => '',
 				'tracking_script'          => 'prod',
 				'disable_data_layer_event' => '',
 				'debug'                    => '',
+				'theme'                    => '',
+				'theme_css_url'            => '',
 				'custom_css_url'           => '',
 			],
 		]
@@ -122,6 +131,15 @@ function register_settings(): void {
 	);
 
 	\add_settings_field(
+		'fundy_theme',
+		\__( 'Theme', 'dekode-fundraising' ),
+		__NAMESPACE__ . '\\theme_callback',
+		'fundy_network_settings_page',
+		'fundy_network_settings_section_advanced',
+		[ 'label_for' => 'fundy_theme' ]
+	);
+
+	\add_settings_field(
 		'fundy_custom_css_url',
 		\__( 'Custom CSS URL', 'dekode-fundraising' ),
 		__NAMESPACE__ . '\\custom_css_url_callback',
@@ -169,9 +187,62 @@ function sanitize_network_options( array $input ): array {
 	$sanitized['tracking_script'] = normalize_script_env( (string) ( $input['tracking_script'] ?? '' ), 'prod' );
 	$sanitized['disable_data_layer_event'] = ! empty( $input['disable_data_layer_event'] ) ? 'yes' : '';
 	$sanitized['debug'] = ! empty( $input['debug'] ) ? 'yes' : '';
+	$sanitized['theme'] = sanitize_theme_name( (string) ( $input['theme'] ?? '' ) );
 	$sanitized['custom_css_url'] = sanitize_custom_css_url( (string) ( $input['custom_css_url'] ?? '' ) );
 
+	$previous = \get_network_option( null, 'fundy_network_options', [] );
+	$previous = \is_array( $previous ) ? $previous : [];
+
+	$id_resolution = resolve_organization_public_id(
+		$sanitized['api_key'],
+		(string) ( $previous['api_key'] ?? '' ),
+		sanitize_organization_public_id( (string) ( $previous['organization_public_id'] ?? '' ) )
+	);
+
+	$sanitized['organization_public_id'] = $id_resolution['id'];
+
+	// Resolved with the API key being saved in this same request, so a key
+	// change and a theme choice in one save work together.
+	$resolution = resolve_theme_css_url(
+		$sanitized['theme'],
+		$sanitized['api_key'],
+		sanitize_theme_name( (string) ( $previous['theme'] ?? '' ) ),
+		sanitize_custom_css_url( (string) ( $previous['theme_css_url'] ?? '' ) )
+	);
+
+	$sanitized['theme_css_url'] = $resolution['url'];
+
+	$notices = \array_filter( [ $id_resolution['error'], $resolution['error'] ] );
+
+	if ( [] !== $notices ) {
+		// The network save path redirects, so there is no settings-error
+		// channel; the message is parked for this user's next admin page load.
+		\set_transient( theme_notice_key(), \implode( ' ', $notices ), \MINUTE_IN_SECONDS );
+	}
+
 	return $sanitized;
+}
+
+/**
+ * Transient key holding the pending theme-resolution notice for this user.
+ */
+function theme_notice_key(): string {
+	return 'fundy_network_theme_notice_' . \get_current_user_id();
+}
+
+/**
+ * Render the theme-resolution notice parked by the last network save.
+ */
+function render_theme_notice(): void {
+	$notice = \get_transient( theme_notice_key() );
+
+	if ( ! \is_string( $notice ) || '' === $notice ) {
+		return;
+	}
+
+	\delete_transient( theme_notice_key() );
+
+	echo '<div class="notice notice-error is-dismissible"><p>' . \esc_html( $notice ) . '</p></div>';
 }
 
 /**
@@ -343,6 +414,22 @@ function debug_callback(): void {
 		<?php \esc_html_e( 'Enable', 'dekode-fundraising' ); ?>
 	</label>
 	<?php
+}
+
+/**
+ * Field callback for the Theme setting.
+ */
+function theme_callback(): void {
+	$options = \get_network_option( null, 'fundy_network_options', [] );
+	$options = \is_array( $options ) ? $options : [];
+
+	render_theme_select(
+		'fundy_network_options[theme]',
+		sanitize_theme_name( (string) ( $options['theme'] ?? '' ) ),
+		sanitize_custom_css_url( (string) ( $options['theme_css_url'] ?? '' ) ),
+		(string) ( $options['api_key'] ?? '' ),
+		false
+	);
 }
 
 /**

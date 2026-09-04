@@ -22,8 +22,22 @@ For local development you can edit this constant in the `.wp-env.json` file and 
 
 * `fundy/enqueue/form_styles` (bool) - Whether to enqueue the Dekode Fundraising form styles. Default is true.
 * `fundy/base_url` (string) - Used to modify the base API URL.
-* `fundy/config/custom_css_url` (string) - Override the custom stylesheet URL injected into Dekode Fundraising forms (the `customCssUrl` key of `window.FundyConfig`). Defaults to the "Custom CSS URL" plugin setting; an empty value omits the key.
+* `fundy/config/custom_css_url` (string|string[]) - Override the client stylesheet URL(s) injected into Dekode Fundraising forms (the `customCssUrl` key of `window.FundyConfig`). Receives the resolved URL per the precedence in "Form styling" below; an empty value omits the key.
+* `fundy/config/organization_id` (string) - Override the organization public ID emitted as the `organizationId` key of `window.FundyConfig`. Defaults to the ID fetched from the Fundy API when the API key setting is saved; an empty value omits the key.
 * `fundy/load_form_assets_in_head` (bool) - Force (or prevent) loading the form script/style in `<head>` with preload hints. Defaults to automatic detection on singular pages.
+
+## Form styling
+
+Two settings under Settings → Dekode Fundraising → Advanced control the stylesheet injected into the forms (they render inside a shadow root, so host-page CSS does not reach them):
+
+* **Theme** - a theme deployed for your organization in Fundy. The stylesheet URL is resolved from the Fundy API when the settings are saved (shown under the select), never at page render time.
+* **Custom CSS URL** - an explicit stylesheet URL, also the local development loop.
+
+Precedence: the custom CSS URL wins when set, otherwise the selected theme's URL, otherwise nothing. The winner is emitted as `window.FundyConfig.customCssUrl` and can be overridden with the `fundy/config/custom_css_url` filter.
+
+The selected theme name is also emitted as a `data-theme` attribute on every form container (block and shortcode), so the forms bundle's schema-driven organization stylesheet resolves to the same theme instead of falling back to `default`.
+
+Saving an API key also fetches and stores the organization's public ID. It is emitted as `window.FundyConfig.organizationId`, which lets the forms bundle inject the organization stylesheet before the form schema arrives, and the stylesheet is preloaded in `<head>` when a form is detected - together these avoid a flash of unstyled form content.
 
 ## Shortcode
 

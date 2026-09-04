@@ -11,6 +11,7 @@ namespace Dekode\Fundraising\Blocks\DonationForm;
 
 use function Dekode\Fundraising\get_base_url;
 use function Dekode\Fundraising\sanitize_form_url_params;
+use function Dekode\Fundraising\theme_data_attribute;
 use function Dekode\Fundraising\Settings\get_api_key;
 
 /**
@@ -94,8 +95,8 @@ function render_block( array $attributes ): string {
 				class="fundy-form fundraising-form"
 				data-form-id="%2$s"
 				data-core-url="%3$s"
-				data-params="%4$s"%5$s
-			><noscript>%6$s</noscript></div>
+				data-params="%4$s"%5$s%6$s
+			><noscript>%7$s</noscript></div>
 		</div>
 		',
 		\get_block_wrapper_attributes( [
@@ -105,6 +106,7 @@ function render_block( array $attributes ): string {
 		\esc_attr( get_base_url() ),
 		\esc_attr( $json_params ),
 		$variation_attr,
+		theme_data_attribute(),
 		\esc_html__( 'This donation form requires JavaScript. Please enable JavaScript in your browser and reload the page.', 'dekode-fundraising' ),
 	);
 }

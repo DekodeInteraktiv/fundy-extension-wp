@@ -82,6 +82,30 @@ class TestAssets extends WP_UnitTestCase {
 		\delete_option( 'fundy_options' );
 	}
 
+	public function test_config_custom_css_url_falls_back_to_theme_url() {
+		\update_option( 'fundy_options', [
+			'theme'         => 'default',
+			'theme_css_url' => 'https://assets.fundy.cloud/styles/production/acme/default.css',
+		] );
+
+		$config = build_fundy_config();
+
+		$this->assertSame( 'https://assets.fundy.cloud/styles/production/acme/default.css', $config['customCssUrl'] ?? null );
+		\delete_option( 'fundy_options' );
+	}
+
+	public function test_config_custom_css_url_wins_over_theme_url() {
+		\update_option( 'fundy_options', [
+			'custom_css_url' => 'https://example.test/custom.css',
+			'theme_css_url'  => 'https://assets.fundy.cloud/styles/production/acme/default.css',
+		] );
+
+		$config = build_fundy_config();
+
+		$this->assertSame( 'https://example.test/custom.css', $config['customCssUrl'] ?? null );
+		\delete_option( 'fundy_options' );
+	}
+
 	public function test_config_custom_css_url_filter_overrides() {
 		$override = static function () {
 			return 'https://example.test/theme.css';
@@ -92,6 +116,21 @@ class TestAssets extends WP_UnitTestCase {
 
 		$this->assertSame( 'https://example.test/theme.css', $config['customCssUrl'] ?? null );
 		\remove_filter( 'fundy/config/custom_css_url', $override );
+	}
+
+	public function test_config_includes_organization_id_when_stored() {
+		\update_option( 'fundy_options', [ 'organization_public_id' => '2e5b9014-f274-44c7-8b6b-27ae151d9a9e' ] );
+
+		$config = build_fundy_config();
+
+		$this->assertSame( '2e5b9014-f274-44c7-8b6b-27ae151d9a9e', $config['organizationId'] ?? null );
+		\delete_option( 'fundy_options' );
+	}
+
+	public function test_config_omits_organization_id_by_default() {
+		$config = build_fundy_config();
+
+		$this->assertArrayNotHasKey( 'organizationId', $config );
 	}
 
 	public function test_that_form_script_depends_on_fundy_config() {
@@ -261,6 +300,133 @@ class TestAssets extends WP_UnitTestCase {
 		$this->assertNotNull( $style_entry );
 		$this->assertSame( 'high', $style_entry['fetchpriority'] );
 		$this->assertArrayNotHasKey( 'crossorigin', $style_entry );
+	}
+
+	public function test_preload_includes_client_css_when_form_detected() {
+		\update_option( 'fundy_options', [
+			'theme_css_url' => 'https://assets.fundy.cloud/styles/production/acme/default.css',
+		] );
+
+		$post_id = self::factory()->post->create( [
+			'post_content' => '[fundy_form id="1"]',
+		] );
+		$this->go_to( \get_permalink( $post_id ) );
+
+		register_assets();
+		\do_action( 'wp_enqueue_scripts' );
+
+		$resources = \apply_filters( 'wp_preload_resources', [] );
+
+		$client_entry = null;
+		foreach ( $resources as $resource ) {
+			if ( ( $resource['href'] ?? '' ) === 'https://assets.fundy.cloud/styles/production/acme/default.css' ) {
+				$client_entry = $resource;
+			}
+		}
+
+		$this->assertNotNull( $client_entry );
+		$this->assertSame( 'style', $client_entry['as'] );
+		$this->assertArrayNotHasKey( 'crossorigin', $client_entry );
+		\delete_option( 'fundy_options' );
+	}
+
+	public function test_preload_includes_organization_css_when_form_detected() {
+		\update_option( 'fundy_options', [ 'organization_public_id' => '2e5b9014-f274-44c7-8b6b-27ae151d9a9e' ] );
+		// Pin the base URL: the wp-env config points FUNDY_CORE_URL at stage.
+		$production = static function () {
+			return 'https://fundy.cloud/core';
+		};
+		\add_filter( 'fundy/base_url', $production );
+
+		$post_id = self::factory()->post->create( [
+			'post_content' => '[fundy_form id="1"]',
+		] );
+		$this->go_to( \get_permalink( $post_id ) );
+
+		register_assets();
+		\do_action( 'wp_enqueue_scripts' );
+
+		// A non-local home host, added only after navigation so permalinks
+		// stay intact: wp-env serves from localhost, which the local-
+		// development guard would otherwise skip the preload for.
+		$public_home = static function ( $url, $path ) {
+			return 'https://example.org' . $path;
+		};
+		\add_filter( 'home_url', $public_home, 10, 2 );
+
+		$resources = \apply_filters( 'wp_preload_resources', [] );
+
+		$this->assertContains(
+			'https://assets.fundy.cloud/styles/production/2e5b9014-f274-44c7-8b6b-27ae151d9a9e/default.css',
+			\wp_list_pluck( $resources, 'href' )
+		);
+
+		\remove_filter( 'fundy/base_url', $production );
+		\remove_filter( 'home_url', $public_home );
+		\delete_option( 'fundy_options' );
+	}
+
+	public function test_organization_css_preload_dedupes_against_the_theme_url() {
+		\update_option( 'fundy_options', [
+			'organization_public_id' => '2e5b9014-f274-44c7-8b6b-27ae151d9a9e',
+			'theme'                  => 'moss',
+			'theme_css_url'          => 'https://assets.fundy.cloud/styles/production/2e5b9014-f274-44c7-8b6b-27ae151d9a9e/moss.css',
+		] );
+		// Pin the base URL so the derived organization URL matches the
+		// stored theme URL.
+		$production = static function () {
+			return 'https://fundy.cloud/core';
+		};
+		\add_filter( 'fundy/base_url', $production );
+
+		$post_id = self::factory()->post->create( [
+			'post_content' => '[fundy_form id="1"]',
+		] );
+		$this->go_to( \get_permalink( $post_id ) );
+
+		register_assets();
+		\do_action( 'wp_enqueue_scripts' );
+
+		// A non-local home host, added only after navigation so permalinks
+		// stay intact - without it the local-development guard skips the
+		// organization preload and the dedupe path is never exercised.
+		$public_home = static function ( $url, $path ) {
+			return 'https://example.org' . $path;
+		};
+		\add_filter( 'home_url', $public_home, 10, 2 );
+
+		$resources = \apply_filters( 'wp_preload_resources', [] );
+
+		$hrefs = \array_count_values( \wp_list_pluck( $resources, 'href' ) );
+
+		$this->assertSame(
+			1,
+			$hrefs['https://assets.fundy.cloud/styles/production/2e5b9014-f274-44c7-8b6b-27ae151d9a9e/moss.css'] ?? 0
+		);
+
+		\remove_filter( 'fundy/base_url', $production );
+		\remove_filter( 'home_url', $public_home );
+		\delete_option( 'fundy_options' );
+	}
+
+	public function test_preload_omits_client_css_without_form() {
+		\update_option( 'fundy_options', [
+			'theme_css_url' => 'https://assets.fundy.cloud/styles/production/acme/default.css',
+		] );
+
+		$this->go_to( '/' );
+
+		register_assets();
+		\do_action( 'wp_enqueue_scripts' );
+
+		$resources = \apply_filters( 'wp_preload_resources', [] );
+
+		$this->assertNotContains(
+			'https://assets.fundy.cloud/styles/production/acme/default.css',
+			\wp_list_pluck( $resources, 'href' )
+		);
+
+		\delete_option( 'fundy_options' );
 	}
 
 	public function test_preload_resources_not_added_when_detection_fails() {

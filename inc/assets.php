@@ -10,10 +10,11 @@ declare( strict_types = 1 );
 namespace Dekode\Fundraising\Assets;
 
 use function Dekode\Fundraising\Settings\get_conversion_script_env;
-use function Dekode\Fundraising\Settings\get_custom_css_url;
 use function Dekode\Fundraising\Settings\get_debug_enabled;
 use function Dekode\Fundraising\Settings\get_disable_data_layer_event;
+use function Dekode\Fundraising\Settings\get_form_css_url;
 use function Dekode\Fundraising\Settings\get_forms_script_env;
+use function Dekode\Fundraising\Settings\get_organization_public_id;
 use function Dekode\Fundraising\Settings\get_tracking_script_enabled;
 use function Dekode\Fundraising\Settings\get_tracking_script_env;
 
@@ -83,10 +84,16 @@ function build_fundy_config(): array {
 		'enableDebugMode'       => $enable_debug_mode,
 	];
 
-	$custom_css_url = \apply_filters( 'fundy/config/custom_css_url', get_custom_css_url() );
+	$custom_css_url = \apply_filters( 'fundy/config/custom_css_url', get_form_css_url() );
 
 	if ( ! empty( $custom_css_url ) ) {
 		$config['customCssUrl'] = $custom_css_url;
+	}
+
+	$organization_id = \apply_filters( 'fundy/config/organization_id', get_organization_public_id() );
+
+	if ( ! empty( $organization_id ) ) {
+		$config['organizationId'] = $organization_id;
 	}
 
 	/**
@@ -95,6 +102,28 @@ function build_fundy_config(): array {
 	 * @param array $config The configuration array.
 	 */
 	return \apply_filters( 'fundy/config', $config );
+}
+
+/**
+ * The client stylesheet URL(s) the forms bundle injects into its shadow roots.
+ *
+ * Runs the same filter as build_fundy_config() - the filter can turn the URL
+ * into an array, and a preload for a URL the bundle never fetches would just
+ * waste bandwidth - but normalizes to a flat list for the head preload.
+ *
+ * @return string[] Absolute stylesheet URLs, possibly empty.
+ */
+function get_client_css_urls(): array {
+	$value = \apply_filters( 'fundy/config/custom_css_url', get_form_css_url() );
+	$urls  = [];
+
+	foreach ( \is_array( $value ) ? $value : [ $value ] as $url ) {
+		if ( \is_string( $url ) && '' !== $url ) {
+			$urls[] = $url;
+		}
+	}
+
+	return $urls;
 }
 
 /**

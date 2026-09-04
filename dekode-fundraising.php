@@ -27,7 +27,7 @@ if ( ! \defined( 'ABSPATH' ) ) {
 \define( 'FUNDY_VERSION', '2.5.0' );
 \define( 'FUNDY_PLUGIN_URL', \plugin_dir_url( __FILE__ ) );
 \define( 'FUNDY_PLUGIN_DIR', \plugin_dir_path( __FILE__ ) );
-\define( 'FUNDY_MIN_PHP_VERSION', '8.0' );
+\define( 'FUNDY_MIN_PHP_VERSION', '8.1' );
 \define( 'FUNDY_MIN_WP_VERSION', '6.4' );
 
 /**
@@ -145,6 +145,25 @@ function sanitize_form_url_params( array $params ): array {
 }
 
 /**
+ * The data-theme attribute for form containers ('' when no theme is set).
+ *
+ * The forms bundle also builds an organization stylesheet URL from the
+ * schema's organization_id, taking the theme name from the container's
+ * data-theme attribute; without it that path falls back to the "default"
+ * theme regardless of the Theme setting. Shared by the donation-form block
+ * and the [fundy_form] shortcode so both embed paths agree.
+ */
+function theme_data_attribute(): string {
+	$theme = Settings\get_theme_name();
+
+	if ( '' === $theme ) {
+		return '';
+	}
+
+	return \sprintf( ' data-theme="%s"', \esc_attr( $theme ) );
+}
+
+/**
  * If either check fails, display notice and bail.
  */
 if ( ! php_version_check() || ! wp_version_check() ) {
@@ -161,6 +180,7 @@ function load_textdomain(): void {
 \add_action( 'init', __NAMESPACE__ . '\\load_textdomain' );
 
 require_once FUNDY_PLUGIN_DIR . 'inc/settings.php';
+require_once FUNDY_PLUGIN_DIR . 'inc/api.php';
 require_once FUNDY_PLUGIN_DIR . 'inc/rest.php';
 require_once FUNDY_PLUGIN_DIR . 'inc/settings-page.php';
 require_once FUNDY_PLUGIN_DIR . 'inc/settings-page-network.php';

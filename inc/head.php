@@ -10,7 +10,9 @@ declare( strict_types = 1 );
 namespace Dekode\Fundraising\Head;
 
 use function Dekode\Fundraising\get_base_url;
+use function Dekode\Fundraising\Assets\get_client_css_urls;
 use function Dekode\Fundraising\Assets\should_load_form_assets_in_head;
+use function Dekode\Fundraising\Settings\get_organization_css_url;
 
 if ( ! \defined( 'ABSPATH' ) ) {
 	die();
@@ -71,5 +73,34 @@ function add_preload_resources( array $resources ): array {
 		];
 	}
 
+	// The bundle only creates the client CSS <link> inside the shadow root
+	// once it executes, so these preloads are what let the client and
+	// organization stylesheets fetch in parallel with the script.
+	$client_css_urls = get_client_css_urls();
+
+	$organization_css_url = get_organization_css_url();
+
+	if ( '' !== $organization_css_url && ! \in_array( $organization_css_url, $client_css_urls, true ) && ! is_local_hostname() ) {
+		$client_css_urls[] = $organization_css_url;
+	}
+
+	foreach ( $client_css_urls as $client_css_url ) {
+		$resources[] = [
+			'href'          => $client_css_url,
+			'as'            => 'style',
+			'fetchpriority' => 'high',
+		];
+	}
+
 	return $resources;
+}
+
+/**
+ * Whether the site is served from a local development hostname.
+ */
+function is_local_hostname(): bool {
+	$host = \strtolower( (string) \wp_parse_url( \home_url(), \PHP_URL_HOST ) );
+
+	return \in_array( $host, [ 'localhost', '127.0.0.1', '0.0.0.0', '::1', '[::1]' ], true )
+		|| 1 === \preg_match( '/\.(local|test|localhost)$/', $host );
 }

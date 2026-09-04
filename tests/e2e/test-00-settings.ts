@@ -11,6 +11,32 @@ test.describe('Settings page', () => {
 		).toBeVisible();
 	});
 
+	test('Theme select is disabled without an API key', async ({
+		admin,
+		page,
+	}) => {
+		await admin.visitAdminPage(
+			'options-general.php?page=fundy_settings_page',
+		);
+
+		// The theme list is fetched server-side with the saved API key, so
+		// the no-key state is the only one Playwright can assert without a
+		// reachable core; clear the key first to make reruns deterministic.
+		const apiKeyInput = page.getByRole('textbox', {
+			name: 'Enter your API key',
+		});
+		await apiKeyInput.fill('');
+		await page.getByRole('button', { name: 'Save' }).click();
+		await expect(page.getByText('Settings saved.')).toBeVisible();
+
+		await expect(
+			page.getByRole('combobox', { name: 'Theme' }),
+		).toBeDisabled();
+		await expect(
+			page.getByText('Set an API key to list themes.'),
+		).toBeVisible();
+	});
+
 	test('Can edit and save API key', async ({ admin, page }) => {
 		await admin.visitAdminPage(
 			'options-general.php?page=fundy_settings_page',
