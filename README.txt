@@ -3,7 +3,7 @@ Tags: fundraising, donations, forms
 Requires at least: 6.4
 Requires PHP: 8.1
 Tested up to: 6.8
-Stable tag: 2.5.0
+Stable tag: 2.6.0
 License: GPLv3 or later
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
@@ -54,33 +54,39 @@ Please report security bugs found in the source code of the Dekode Fundraising p
 
 == Changelog ==
 
-= 2.6.0 =
-* Enhancement- Theme setting: select a theme deployed for your organization in Fundy; its stylesheet is injected into the forms and the theme name is passed to the form renderer.
-* Enhancement- The organization ID is fetched when an API key is saved and passed to the form renderer, so the organization stylesheet loads before the forms render.
-* Enhancement- Custom CSS URL setting: inject a custom stylesheet into the forms (overrides the selected theme).
-* Enhancement- Block style variations and the shortcode `variation` attribute are passed to the form renderer.
-* Enhancement- Form picker in the block editor, backed by a server-side forms REST proxy.
+= 2.6.0 (2026-09-04) =
+* Enhancement- Choose a form theme. Pick one of your organization's Fundy themes in the plugin's settings and every form on your site is styled with it.
+* Enhancement- Use your own stylesheet. Enter a Custom CSS URL in the settings to style the forms exactly as you want. When set, it takes precedence over the selected theme.
+* Enhancement- No more flash of unstyled forms. Your organization's styling is loaded ahead of the form itself, so forms look right from the moment they appear.
+* Enhancement- Pick a form from a list. The block editor now lists your organization's forms, so you select one instead of typing its ID. If the API key has not been added yet, the block points you to the settings page.
+* Enhancement- Block styles offered by your theme now apply to the form. The shortcode accepts a matching `variation` attribute.
+* Enhancement- The Donation Form block is now called "Fundy Form", as it handles donation, lead, membership and petition forms, and it is easier to find in the block inserter.
+* Enhancement- Visitors with JavaScript disabled now see a short message asking them to enable it, instead of an empty space.
+* Enhancement- The block's text colour option has been removed, as it never reached the form itself. Background colour still works.
+* Enhancement- Developers can override the custom stylesheet, the organization ID and early loading of form assets with new filters. See the plugin README for details.
+* Bugfix- Extra URL parameters added to a block or shortcode are now validated before they reach the form.
+* Maintenance- Updated build dependencies.
 
 = 2.5.0 (2026-04-24) =
-* Loads forms script in <head> when possible.
-* Added Patchstack VDP link.
+* Enhancement- Forms load sooner. The form script is now loaded early in the page where possible.
+* Enhancement- Added a link for reporting security issues through Patchstack.
 
 = 2.4.1 (2026-02-24) =
-* Maintenance- Dependency updates.
+* Maintenance- Updated build dependencies.
 
 = 2.4.0 (2026-02-06) =
 * Enhancement- Added support for the new conversion and tracking scripts.
-* Enhancement- Asset build dependency updates.
-* Bugfix- Reverted `@wordpress/scripts` to `27.9.0`, to keep compatibility with WP 6.4 and up.
+* Maintenance- Updated build dependencies.
+* Bugfix- Restored compatibility with WordPress 6.4 and up.
 
-= 2.3.2 (2025-12-04) =
-* Remove receipt link icon.
+= 2.3.2 (2025-12-17) =
+* Enhancement- Removed the icon from the receipt link.
 
 = 2.3.1 (2025-12-04) =
-* Bundle languages dir in zip.
+* Bugfix- Translations are now included in the plugin package.
 
 = 2.3.0 (2025-12-02) =
-* Reintroduce translation files.
+* Enhancement- Translations are back.
 
 = 2.2.1 (2025-08-22) =
 * Initial WordPress.org release.
