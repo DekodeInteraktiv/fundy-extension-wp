@@ -1,5 +1,6 @@
 <?php
 
+use function Dekode\Fundraising\API\fetch_organization_public_id;
 use function Dekode\Fundraising\API\get_organization_themes;
 use function Dekode\Fundraising\API\request;
 use function Dekode\Fundraising\API\themes_cache_key;
@@ -181,6 +182,60 @@ class TestApi extends WP_UnitTestCase {
 		get_organization_themes( 'secret-token' );
 
 		$this->assertSame( 2, $requests );
+	}
+
+	public function test_organization_public_id_is_fetched_and_sanitized() {
+		$seen = [];
+
+		$this->mock_http( function ( $pre, $args, $url ) use ( &$seen ) {
+			$seen['url'] = $url;
+
+			return $this->json_response( [
+				'organization' => [
+					'id'        => 7,
+					'public_id' => '2E5B9014-F274-44C7-8B6B-27AE151D9A9E',
+					'name'      => 'Acme',
+				],
+			] );
+		} );
+
+		$this->assertSame( '2e5b9014-f274-44c7-8b6b-27ae151d9a9e', fetch_organization_public_id( 'secret-token' ) );
+		$this->assertStringEndsWith( '/api/v1/organization/self', $seen['url'] );
+	}
+
+	public function test_organization_public_id_rejects_a_non_uuid() {
+		$this->mock_http( function () {
+			return $this->json_response( [
+				'organization' => [ 'public_id' => 'not-a-uuid' ],
+			] );
+		} );
+
+		$result = fetch_organization_public_id( 'secret-token' );
+
+		$this->assertWPError( $result );
+		$this->assertSame( 'fundy_invalid_response', $result->get_error_code() );
+	}
+
+	public function test_organization_public_id_requires_an_api_key_without_touching_http() {
+		$this->mock_http( function () {
+			$this->fail( 'No HTTP request expected without an API key.' );
+		} );
+
+		$result = fetch_organization_public_id( '' );
+
+		$this->assertWPError( $result );
+		$this->assertSame( 'fundy_no_api_token', $result->get_error_code() );
+	}
+
+	public function test_organization_public_id_passes_through_upstream_errors() {
+		$this->mock_http( function () {
+			return $this->json_response( '', 500 );
+		} );
+
+		$result = fetch_organization_public_id( 'secret-token' );
+
+		$this->assertWPError( $result );
+		$this->assertSame( 'fundy_request_failed', $result->get_error_code() );
 	}
 
 	public function test_theme_errors_are_not_cached() {

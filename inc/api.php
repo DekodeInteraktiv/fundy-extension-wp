@@ -11,6 +11,7 @@ namespace Dekode\Fundraising\API;
 
 use function Dekode\Fundraising\get_base_url;
 use function Dekode\Fundraising\Settings\sanitize_custom_css_url;
+use function Dekode\Fundraising\Settings\sanitize_organization_public_id;
 use function Dekode\Fundraising\Settings\sanitize_theme_name;
 
 if ( ! \defined( 'ABSPATH' ) ) {
@@ -144,6 +145,43 @@ function get_organization_themes( string $api_key ): array|\WP_Error {
 	\set_transient( $cache_key, $themes, THEMES_CACHE_TTL );
 
 	return $themes;
+}
+
+/**
+ * Fetch the organization public id for an API key.
+ *
+ * Called from the settings sanitize flow when an API key is saved; the id
+ * is stored as a setting so front-end renders never make this request.
+ *
+ * @param string $api_key Organization API token.
+ * @return string|\WP_Error The organization public id (a UUID), or an error.
+ */
+function fetch_organization_public_id( string $api_key ): string|\WP_Error {
+	if ( '' === $api_key ) {
+		return new \WP_Error(
+			'fundy_no_api_token',
+			\__( 'No Fundy API token is configured.', 'dekode-fundraising' ),
+			[ 'status' => 400 ]
+		);
+	}
+
+	$data = request( '/api/v1/organization/self', $api_key, 5 );
+
+	if ( \is_wp_error( $data ) ) {
+		return $data;
+	}
+
+	$public_id = sanitize_organization_public_id( (string) ( $data['organization']['public_id'] ?? '' ) );
+
+	if ( '' === $public_id ) {
+		return new \WP_Error(
+			'fundy_invalid_response',
+			\__( 'The Fundy API returned an invalid response.', 'dekode-fundraising' ),
+			[ 'status' => 502 ]
+		);
+	}
+
+	return $public_id;
 }
 
 /**

@@ -56,6 +56,7 @@ Please report security bugs found in the source code of the Dekode Fundraising p
 
 = 2.6.0 =
 * Enhancement- Theme setting: select a theme deployed for your organization in Fundy; its stylesheet is injected into the forms and the theme name is passed to the form renderer.
+* Enhancement- The organization ID is fetched when an API key is saved and passed to the form renderer, so the organization stylesheet loads before the forms render.
 * Enhancement- Custom CSS URL setting: inject a custom stylesheet into the forms (overrides the selected theme).
 * Enhancement- Block style variations and the shortcode `variation` attribute are passed to the form renderer.
 * Enhancement- Form picker in the block editor, backed by a server-side forms REST proxy.

@@ -9,6 +9,8 @@ declare( strict_types = 1 );
 
 namespace Dekode\Fundraising\Settings;
 
+use function Dekode\Fundraising\get_base_url;
+
 /**
  * Retrieve a setting value, respecting multisite overrides.
  *
@@ -141,6 +143,17 @@ function sanitize_theme_name( string $value ): string {
 }
 
 /**
+ * Sanitize an organization public id.
+ *
+ * Core public ids are UUIDs; anything else collapses to '' (unknown).
+ */
+function sanitize_organization_public_id( string $value ): string {
+	$value = \strtolower( \trim( $value ) );
+
+	return 1 === \preg_match( '/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/', $value ) ? $value : '';
+}
+
+/**
  * Retrieve the API key.
  */
 function get_api_key(): string {
@@ -264,6 +277,61 @@ function get_form_css_url(): string {
 	}
 
 	return get_theme_css_url();
+}
+
+/**
+ * Retrieve the organization public id ('' = unknown).
+ *
+ * Fetched from the Fundy API and stored whenever an API key is saved, so
+ * front-end renders never make a remote request for it.
+ */
+function get_organization_public_id(): string {
+	return sanitize_organization_public_id( (string) get_setting_value( 'organization_public_id', '' ) );
+}
+
+/**
+ * The assets.fundy.cloud environment directory for the current core URL.
+ *
+ * Mirrors the forms bundle's getEnvironmentFromCoreUrl(): anything not
+ * recognisably stage or test is treated as production.
+ */
+function get_assets_environment(): string {
+	$base_url = get_base_url();
+
+	if ( false !== \strpos( $base_url, 'stage.fundy.cloud' ) ) {
+		return 'stage';
+	}
+
+	if ( false !== \strpos( $base_url, 'test.fundy.cloud' ) ) {
+		return 'test';
+	}
+
+	return 'production';
+}
+
+/**
+ * The organization stylesheet URL the forms bundle will load ('' when the
+ * organization public id is unknown).
+ *
+ * Built exactly the way the forms bundle builds it from the schema's
+ * organization_id: the theme segment comes from the Theme setting,
+ * lowercased because the bundle lowercases data-theme, falling back to
+ * "default".
+ */
+function get_organization_css_url(): string {
+	$public_id = get_organization_public_id();
+
+	if ( '' === $public_id ) {
+		return '';
+	}
+
+	$theme = \strtolower( get_theme_name() );
+
+	if ( '' === $theme ) {
+		$theme = 'default';
+	}
+
+	return \sprintf( 'https://assets.fundy.cloud/styles/%s/%s/%s.css', get_assets_environment(), $public_id, $theme );
 }
 
 /**

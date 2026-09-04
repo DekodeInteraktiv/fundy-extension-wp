@@ -11,8 +11,10 @@ namespace Dekode\Fundraising\SettingsPageNetwork;
 
 use function Dekode\Fundraising\Settings\normalize_script_env;
 use function Dekode\Fundraising\Settings\sanitize_custom_css_url;
+use function Dekode\Fundraising\Settings\sanitize_organization_public_id;
 use function Dekode\Fundraising\Settings\sanitize_theme_name;
 use function Dekode\Fundraising\SettingsPage\render_theme_select;
+use function Dekode\Fundraising\SettingsPage\resolve_organization_public_id;
 use function Dekode\Fundraising\SettingsPage\resolve_theme_css_url;
 
 if ( ! \defined( 'ABSPATH' ) ) {
@@ -52,6 +54,7 @@ function register_settings(): void {
 			'sanitize_callback' => __NAMESPACE__ . '\\sanitize_network_options',
 			'default'           => [
 				'api_key'                  => '',
+				'organization_public_id'   => '',
 				'forms_script'             => 'prod',
 				'conversion_script'        => 'prod',
 				'tracking_enabled'         => '',
@@ -190,6 +193,14 @@ function sanitize_network_options( array $input ): array {
 	$previous = \get_network_option( null, 'fundy_network_options', [] );
 	$previous = \is_array( $previous ) ? $previous : [];
 
+	$id_resolution = resolve_organization_public_id(
+		$sanitized['api_key'],
+		(string) ( $previous['api_key'] ?? '' ),
+		sanitize_organization_public_id( (string) ( $previous['organization_public_id'] ?? '' ) )
+	);
+
+	$sanitized['organization_public_id'] = $id_resolution['id'];
+
 	// Resolved with the API key being saved in this same request, so a key
 	// change and a theme choice in one save work together.
 	$resolution = resolve_theme_css_url(
@@ -201,10 +212,12 @@ function sanitize_network_options( array $input ): array {
 
 	$sanitized['theme_css_url'] = $resolution['url'];
 
-	if ( '' !== $resolution['error'] ) {
+	$notices = \array_filter( [ $id_resolution['error'], $resolution['error'] ] );
+
+	if ( [] !== $notices ) {
 		// The network save path redirects, so there is no settings-error
 		// channel; the message is parked for this user's next admin page load.
-		\set_transient( theme_notice_key(), $resolution['error'], \MINUTE_IN_SECONDS );
+		\set_transient( theme_notice_key(), \implode( ' ', $notices ), \MINUTE_IN_SECONDS );
 	}
 
 	return $sanitized;

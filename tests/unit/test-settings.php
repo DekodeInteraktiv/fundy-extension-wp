@@ -2,8 +2,11 @@
 
 use function Dekode\Fundraising\Settings\get_custom_css_url;
 use function Dekode\Fundraising\Settings\get_form_css_url;
+use function Dekode\Fundraising\Settings\get_organization_css_url;
+use function Dekode\Fundraising\Settings\get_organization_public_id;
 use function Dekode\Fundraising\Settings\get_theme_css_url;
 use function Dekode\Fundraising\Settings\sanitize_custom_css_url;
+use function Dekode\Fundraising\Settings\sanitize_organization_public_id;
 use function Dekode\Fundraising\Settings\sanitize_theme_name;
 
 /**
@@ -115,5 +118,71 @@ class TestSettings extends WP_UnitTestCase {
 		\delete_option( 'fundy_options' );
 
 		$this->assertSame( '', get_form_css_url() );
+	}
+
+	public function test_organization_public_id_accepts_a_uuid_and_normalizes_case() {
+		$this->assertSame(
+			'2e5b9014-f274-44c7-8b6b-27ae151d9a9e',
+			sanitize_organization_public_id( ' 2E5B9014-F274-44C7-8B6B-27AE151D9A9E ' )
+		);
+	}
+
+	public function test_organization_public_id_rejects_invalid_values() {
+		$this->assertSame( '', sanitize_organization_public_id( '' ) );
+		$this->assertSame( '', sanitize_organization_public_id( 'not-a-uuid' ) );
+		$this->assertSame( '', sanitize_organization_public_id( '2e5b9014f27444c78b6b27ae151d9a9e' ) );
+		$this->assertSame( '', sanitize_organization_public_id( '../2e5b9014-f274-44c7-8b6b-27ae151d9a9e' ) );
+	}
+
+	public function test_get_organization_public_id_reads_option_and_sanitizes() {
+		\update_option( 'fundy_options', [ 'organization_public_id' => 'junk' ] );
+		$this->assertSame( '', get_organization_public_id() );
+
+		\update_option( 'fundy_options', [ 'organization_public_id' => '2e5b9014-f274-44c7-8b6b-27ae151d9a9e' ] );
+		$this->assertSame( '2e5b9014-f274-44c7-8b6b-27ae151d9a9e', get_organization_public_id() );
+
+		\delete_option( 'fundy_options' );
+	}
+
+	public function test_organization_css_url_is_empty_without_a_public_id() {
+		\delete_option( 'fundy_options' );
+
+		$this->assertSame( '', get_organization_css_url() );
+	}
+
+	public function test_organization_css_url_defaults_to_the_default_theme_on_production() {
+		\update_option( 'fundy_options', [ 'organization_public_id' => '2e5b9014-f274-44c7-8b6b-27ae151d9a9e' ] );
+		// Pin the base URL: the wp-env config points FUNDY_CORE_URL at stage.
+		$production = static function () {
+			return 'https://fundy.cloud/core';
+		};
+		\add_filter( 'fundy/base_url', $production );
+
+		$this->assertSame(
+			'https://assets.fundy.cloud/styles/production/2e5b9014-f274-44c7-8b6b-27ae151d9a9e/default.css',
+			get_organization_css_url()
+		);
+
+		\remove_filter( 'fundy/base_url', $production );
+		\delete_option( 'fundy_options' );
+	}
+
+	public function test_organization_css_url_uses_the_lowercased_theme_and_environment() {
+		\update_option( 'fundy_options', [
+			'organization_public_id' => '2e5b9014-f274-44c7-8b6b-27ae151d9a9e',
+			'theme'                  => 'Moss',
+		] );
+		$stage = static function () {
+			return 'https://stage.fundy.cloud/core';
+		};
+		\add_filter( 'fundy/base_url', $stage );
+
+		$this->assertSame(
+			'https://assets.fundy.cloud/styles/stage/2e5b9014-f274-44c7-8b6b-27ae151d9a9e/moss.css',
+			get_organization_css_url()
+		);
+
+		\remove_filter( 'fundy/base_url', $stage );
+		\delete_option( 'fundy_options' );
 	}
 }

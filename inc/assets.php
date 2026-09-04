@@ -14,6 +14,7 @@ use function Dekode\Fundraising\Settings\get_debug_enabled;
 use function Dekode\Fundraising\Settings\get_disable_data_layer_event;
 use function Dekode\Fundraising\Settings\get_form_css_url;
 use function Dekode\Fundraising\Settings\get_forms_script_env;
+use function Dekode\Fundraising\Settings\get_organization_public_id;
 use function Dekode\Fundraising\Settings\get_tracking_script_enabled;
 use function Dekode\Fundraising\Settings\get_tracking_script_env;
 
@@ -87,6 +88,12 @@ function build_fundy_config(): array {
 
 	if ( ! empty( $custom_css_url ) ) {
 		$config['customCssUrl'] = $custom_css_url;
+	}
+
+	$organization_id = \apply_filters( 'fundy/config/organization_id', get_organization_public_id() );
+
+	if ( ! empty( $organization_id ) ) {
+		$config['organizationId'] = $organization_id;
 	}
 
 	/**

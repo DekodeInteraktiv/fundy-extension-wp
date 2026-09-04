@@ -16,9 +16,11 @@ use function Dekode\Fundraising\Settings\get_disable_data_layer_event;
 use function Dekode\Fundraising\Settings\get_forms_script_env;
 use function Dekode\Fundraising\Settings\get_tracking_script_enabled;
 use function Dekode\Fundraising\Settings\get_tracking_script_env;
+use function Dekode\Fundraising\API\fetch_organization_public_id;
 use function Dekode\Fundraising\API\get_organization_themes;
 use function Dekode\Fundraising\Settings\normalize_script_env;
 use function Dekode\Fundraising\Settings\sanitize_custom_css_url;
+use function Dekode\Fundraising\Settings\sanitize_organization_public_id;
 use function Dekode\Fundraising\Settings\sanitize_theme_name;
 
 if ( ! \defined( 'ABSPATH' ) ) {
@@ -58,6 +60,7 @@ function register_settings(): void {
 			'sanitize_callback' => __NAMESPACE__ . '\\sanitize_options',
 			'default'           => [
 				'api_key'                  => '',
+				'organization_public_id'   => '',
 				'forms_script'             => 'prod',
 				'conversion_script'        => 'prod',
 				'tracking_enabled'         => '',
@@ -179,6 +182,7 @@ function sanitize_options( array|null $input ): array {
 		$sanitized['conversion_script'] = '';
 		$sanitized['tracking_enabled'] = '';
 		$sanitized['tracking_script'] = '';
+		$sanitized['organization_public_id'] = '';
 		$sanitized['disable_data_layer_event'] = '';
 		$sanitized['debug'] = '';
 		$sanitized['theme'] = '';
@@ -204,6 +208,18 @@ function sanitize_options( array|null $input ): array {
 	$previous = \get_option( 'fundy_options', [] );
 	$previous = \is_array( $previous ) ? $previous : [];
 
+	$id_resolution = resolve_organization_public_id(
+		$sanitized['api_key'],
+		(string) ( $previous['api_key'] ?? '' ),
+		sanitize_organization_public_id( (string) ( $previous['organization_public_id'] ?? '' ) )
+	);
+
+	$sanitized['organization_public_id'] = $id_resolution['id'];
+
+	if ( '' !== $id_resolution['error'] ) {
+		\add_settings_error( 'fundy_options', 'fundy_organization_public_id', $id_resolution['error'] );
+	}
+
 	// Resolved with the API key being saved in this same request, not
 	// get_api_key(), so a key change and a theme choice in one save work.
 	$resolution = resolve_theme_css_url(
@@ -220,6 +236,48 @@ function sanitize_options( array|null $input ): array {
 	}
 
 	return $sanitized;
+}
+
+/**
+ * Resolve the organization public id for the API key being saved.
+ *
+ * @param string $api_key            API key being saved in the same request.
+ * @param string $previous_api_key   Previously stored API key.
+ * @param string $previous_public_id Previously stored organization public id.
+ * @return array{id: string, error: string}
+ */
+function resolve_organization_public_id( string $api_key, string $previous_api_key, string $previous_public_id ): array {
+	if ( '' === $api_key ) {
+		return [
+			'id'    => '',
+			'error' => '',
+		];
+	}
+
+	if ( $api_key === $previous_api_key && '' !== $previous_public_id ) {
+		return [
+			'id'    => $previous_public_id,
+			'error' => '',
+		];
+	}
+
+	$public_id = fetch_organization_public_id( $api_key );
+
+	if ( ! \is_wp_error( $public_id ) ) {
+		return [
+			'id'    => $public_id,
+			'error' => '',
+		];
+	}
+
+	return [
+		'id'    => '',
+		'error' => $api_key === $previous_api_key ? '' : \sprintf(
+			/* translators: %s: error message returned while fetching the organization. */
+			\__( 'The organization ID could not be fetched (%s). Save the settings again to retry.', 'dekode-fundraising' ),
+			$public_id->get_error_message()
+		),
+	];
 }
 
 /**

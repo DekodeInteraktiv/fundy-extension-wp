@@ -32,7 +32,7 @@ class TestSettingsPage extends WP_UnitTestCase {
 		$this->unmock_http();
 		$this->http_filter = $handler;
 
-		\add_filter( 'pre_http_request', $handler );
+		\add_filter( 'pre_http_request', $handler, 10, 3 );
 	}
 
 	private function unmock_http(): void {
@@ -137,6 +137,62 @@ class TestSettingsPage extends WP_UnitTestCase {
 		] );
 
 		$this->assertSame( '', $sanitized['theme_css_url'] );
+		$this->assertNotEmpty( \get_settings_errors( 'fundy_options' ) );
+	}
+
+	public function test_api_key_change_fetches_and_stores_the_organization_public_id() {
+		\update_option( 'fundy_options', [
+			'api_key'                => 'old-token',
+			'organization_public_id' => '11111111-1111-1111-1111-111111111111',
+		] );
+		$this->mock_http( static function ( $pre, $args, $url ) {
+			if ( false === \strpos( $url, '/organization/self' ) ) {
+				return $pre;
+			}
+
+			return [
+				'headers'  => [],
+				'body'     => \wp_json_encode( [
+					'organization' => [ 'public_id' => '2e5b9014-f274-44c7-8b6b-27ae151d9a9e' ],
+				] ),
+				'response' => [
+					'code'    => 200,
+					'message' => 'OK',
+				],
+				'cookies'  => [],
+				'filename' => null,
+			];
+		} );
+
+		$sanitized = sanitize_options( [ 'api_key' => 'new-token' ] );
+
+		$this->assertSame( '2e5b9014-f274-44c7-8b6b-27ae151d9a9e', $sanitized['organization_public_id'] );
+	}
+
+	public function test_unchanged_api_key_keeps_the_public_id_without_a_request() {
+		\update_option( 'fundy_options', [
+			'api_key'                => 'secret-token',
+			'organization_public_id' => '2e5b9014-f274-44c7-8b6b-27ae151d9a9e',
+		] );
+		$this->mock_http( function () {
+			$this->fail( 'No HTTP request expected for an unchanged API key.' );
+		} );
+
+		$sanitized = sanitize_options( [ 'api_key' => 'secret-token' ] );
+
+		$this->assertSame( '2e5b9014-f274-44c7-8b6b-27ae151d9a9e', $sanitized['organization_public_id'] );
+	}
+
+	public function test_failed_public_id_fetch_on_key_change_clears_and_warns() {
+		\update_option( 'fundy_options', [
+			'api_key'                => 'old-token',
+			'organization_public_id' => '11111111-1111-1111-1111-111111111111',
+		] );
+		$this->mock_http_failure();
+
+		$sanitized = sanitize_options( [ 'api_key' => 'new-token' ] );
+
+		$this->assertSame( '', $sanitized['organization_public_id'] );
 		$this->assertNotEmpty( \get_settings_errors( 'fundy_options' ) );
 	}
 
