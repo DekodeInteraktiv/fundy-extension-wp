@@ -469,7 +469,7 @@ function render_live_map_kiosk_link( string $api_key, string $public_id, bool $n
 		<?php \esc_html_e( 'Copy', 'dekode-fundraising' ); ?>
 	</button>
 	<p class="description">
-		<?php \esc_html_e( 'Open this link on an office or event screen for the full-screen Live Map with today\'s counters and goals. Anyone with the link sees those figures, so share it with care; regenerate it on the organization page in the Fundy dashboard if it leaks.', 'dekode-fundraising' ); ?>
+		<?php \esc_html_e( 'Open this link on an office or event screen for the full-screen Live Map with today\'s counters. Anyone with the link sees those figures, so share it with care; regenerate it on the organization page in the Fundy dashboard if it leaks.', 'dekode-fundraising' ); ?>
 	</p>
 	<?php
 }
