@@ -1,0 +1,67 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "fundy/live-map",
+	"title": "Fundy Live Map",
+	"description": "Shows your organization's live donation map: anonymous, approximate activity as it happens, with today's counters.",
+	"category": "widgets",
+	"keywords": ["live", "map", "donations", "fundraising", "fundy"],
+	"textdomain": "dekode-fundraising",
+	"icon": "location-alt",
+	"example": {},
+	"supports": {
+		"html": false,
+		"align": ["wide", "full"],
+		"color": {
+			"background": true,
+			"text": false
+		},
+		"spacing": {
+			"margin": true,
+			"padding": true
+		}
+	},
+	"attributes": {
+		"mode": {
+			"type": "string",
+			"enum": ["activity", "gifts"],
+			"default": "gifts"
+		},
+		"view": {
+			"type": "string",
+			"enum": ["org", "nordics", "europe", "world"],
+			"default": "org"
+		},
+		"theme": {
+			"type": "string",
+			"enum": ["light", "dark"],
+			"default": "light"
+		},
+		"showCounters": {
+			"type": "boolean",
+			"default": true
+		},
+		"showLabels": {
+			"type": "boolean",
+			"default": true
+		},
+		"interactive": {
+			"type": "boolean",
+			"default": false
+		},
+		"height": {
+			"type": "number",
+			"default": 480
+		},
+		"window": {
+			"type": "string",
+			"enum": ["live", "hour", "today"],
+			"default": "today"
+		},
+		"ctaUrl": {
+			"type": "string",
+			"default": ""
+		}
+	},
+	"editorScript": "file:./editor.js"
+}
