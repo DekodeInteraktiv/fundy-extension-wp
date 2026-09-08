@@ -26,6 +26,7 @@ For local development you can edit this constant in the `.wp-env.json` file and 
 * `fundy/config/organization_id` (string) - Override the organization public ID emitted as the `organizationId` key of `window.FundyConfig`. Defaults to the ID fetched from the Fundy API when the API key setting is saved; an empty value omits the key.
 * `fundy/load_form_assets_in_head` (bool) - Force (or prevent) loading the form script/style in `<head>` with preload hints. Defaults to automatic detection on singular pages.
 * `fundy/live_map/base_url` (string) - The origin of the Fundy interface that serves the Live Map. Defaults to `FUNDY_CORE_URL` with its `/core` path stripped.
+* `fundy/live_map/organization_id` (string) - Override the organization public ID the Live Map block and shortcode embed. Defaults to the ID fetched when the API key was saved; an empty value renders nothing. Point it at `00000000-0000-0000-0000-000000000000` with a local surge (`ENVIRONMENT=local`) to embed its fake organization.
 * `fundy/live_map/embed_params` (array) - The query parameters of the Live Map iframe URL, keyed by name, with the sanitized block/shortcode arguments as the second argument.
 * `fundy/live_map/embed_url` (string) - The final Live Map iframe URL.
 

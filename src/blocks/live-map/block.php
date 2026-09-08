@@ -10,9 +10,9 @@ declare( strict_types = 1 );
 namespace Dekode\Fundraising\Blocks\LiveMap;
 
 use function Dekode\Fundraising\LiveMap\build_embed_url;
+use function Dekode\Fundraising\LiveMap\get_embed_organization_id;
 use function Dekode\Fundraising\LiveMap\render;
 use function Dekode\Fundraising\LiveMap\sanitize_args;
-use function Dekode\Fundraising\Settings\get_organization_public_id;
 
 /**
  * Hooks.
@@ -31,7 +31,7 @@ function register_block(): void {
 
 	\wp_set_script_translations( 'fundy-live-map-editor-script', 'dekode-fundraising', \FUNDY_PLUGIN_DIR . 'languages' );
 
-	$public_id = get_organization_public_id();
+	$public_id = get_embed_organization_id();
 
 	// The editor preview is the same iframe the front end renders, built
 	// here so the interface origin and the id never reach the JS by any

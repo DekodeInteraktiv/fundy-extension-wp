@@ -18,6 +18,7 @@ class TestLiveMap extends WP_UnitTestCase {
 	public function tear_down() {
 		\delete_option( 'fundy_options' );
 		\remove_all_filters( 'fundy/live_map/base_url' );
+		\remove_all_filters( 'fundy/live_map/organization_id' );
 		\remove_all_filters( 'fundy/live_map/embed_params' );
 		\remove_all_filters( 'fundy/live_map/embed_url' );
 		\remove_all_filters( 'locale' );
@@ -114,6 +115,22 @@ class TestLiveMap extends WP_UnitTestCase {
 
 		$this->assertSame( '', render( [] ) );
 		$this->assertSame( '', \do_shortcode( '[fundy_live_map]' ) );
+	}
+
+	public function test_organization_id_filter_overrides_the_stored_id() {
+		$this->store_public_id();
+		\add_filter( 'fundy/live_map/organization_id', fn () => '00000000-0000-0000-0000-000000000000' );
+
+		[ $url ] = $this->extract_src( render( [] ) );
+
+		$this->assertStringContainsString( '/live-map/00000000-0000-0000-0000-000000000000?', $url );
+	}
+
+	public function test_organization_id_filter_can_switch_the_map_off() {
+		$this->store_public_id();
+		\add_filter( 'fundy/live_map/organization_id', '__return_empty_string' );
+
+		$this->assertSame( '', render( [] ) );
 	}
 
 	public function test_iframe_markup() {

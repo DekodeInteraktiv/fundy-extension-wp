@@ -178,6 +178,17 @@ function get_kiosk_url( string $public_id, string $kiosk_token ): string {
 }
 
 /**
+ * The organization the map is embedded for: the stored public id, unless
+ * a filter points elsewhere (local development against surge's fake
+ * organization, or a multi-brand site).
+ */
+function get_embed_organization_id(): string {
+	$public_id = \apply_filters( 'fundy/live_map/organization_id', get_organization_public_id() );
+
+	return \is_string( $public_id ) ? \trim( $public_id ) : '';
+}
+
+/**
  * Render the Live Map iframe.
  *
  * Nothing renders without a stored organization public id: the map is
@@ -187,7 +198,7 @@ function get_kiosk_url( string $public_id, string $kiosk_token ): string {
  * @param string               $wrapper_attributes Extra attributes for the wrapper element (block supports).
  */
 function render( array $args, string $wrapper_attributes = '' ): string {
-	$public_id = get_organization_public_id();
+	$public_id = get_embed_organization_id();
 
 	if ( '' === $public_id ) {
 		return '';
