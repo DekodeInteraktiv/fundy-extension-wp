@@ -25,6 +25,10 @@ For local development you can edit this constant in the `.wp-env.json` file and 
 * `fundy/config/custom_css_url` (string|string[]) - Override the client stylesheet URL(s) injected into Dekode Fundraising forms (the `customCssUrl` key of `window.FundyConfig`). Receives the resolved URL per the precedence in "Form styling" below; an empty value omits the key.
 * `fundy/config/organization_id` (string) - Override the organization public ID emitted as the `organizationId` key of `window.FundyConfig`. Defaults to the ID fetched from the Fundy API when the API key setting is saved; an empty value omits the key.
 * `fundy/load_form_assets_in_head` (bool) - Force (or prevent) loading the form script/style in `<head>` with preload hints. Defaults to automatic detection on singular pages.
+* `fundy/live_map/base_url` (string) - The origin of the Fundy interface that serves the Live Map. Defaults to `FUNDY_CORE_URL` with its `/core` path stripped.
+* `fundy/live_map/organization_id` (string) - Override the organization public ID the Live Map block and shortcode embed. Defaults to the ID fetched when the API key was saved; an empty value renders nothing. Point it at `00000000-0000-0000-0000-000000000000` with a local surge (`ENVIRONMENT=local`) to embed its fake organization.
+* `fundy/live_map/embed_params` (array) - The query parameters of the Live Map iframe URL, keyed by name, with the sanitized block/shortcode arguments as the second argument.
+* `fundy/live_map/embed_url` (string) - The final Live Map iframe URL.
 
 ## Form styling
 
@@ -38,6 +42,28 @@ Precedence: the custom CSS URL wins when set, otherwise the selected theme's URL
 The selected theme name is also emitted as a `data-theme` attribute on every form container (block and shortcode), so the forms bundle's schema-driven organization stylesheet resolves to the same theme instead of falling back to `default`.
 
 Saving an API key also fetches and stores the organization's public ID. It is emitted as `window.FundyConfig.organizationId`, which lets the forms bundle inject the organization stylesheet before the form schema arrives, and the stylesheet is preloaded in `<head>` when a form is detected - together these avoid a flash of unstyled form content.
+
+## Live map
+
+The **Fundy Live Map** block (`fundy/live-map`) embeds your organization's live donation map: form activity as anonymous, approximate locations while it happens, with today's counters beside it. It renders an `<iframe>` of the map page on the Fundy interface, so nothing from the map runs on your site, and it needs the organization to have switched the public map on in the Fundy dashboard (Organization → Live Map). The map shows no names, no exact places and nothing about an individual gift; the amount raised today appears only when the organization allows it.
+
+The block needs the organization public ID that the plugin stores when the API key is saved. Sites that saved their key before this feature shipped need to save the settings again; the editor says so.
+
+The same options are available as a shortcode for the classic editor, widgets and templates:
+
+```[fundy_live_map mode="gifts" view="org" theme="light" showcounters="true" showlabels="true" interactive="false" height="480" window="today" ctaurl=""]```
+
+* `mode` - `gifts` (default) shows gifts only, `activity` adds the ambient form activity.
+* `view` - `org` (default, your country), `nordics`, `europe` or `world`.
+* `theme` - `light` (default) or `dark`.
+* `showcounters` - Whether the counters overlay is shown. Default `true`.
+* `showlabels` - Whether place names are shown on the basemap. Default `true`.
+* `interactive` - Whether visitors can move the map. Default `false`.
+* `height` - Height in pixels, minimum 240. Default `480`.
+* `window` - How long activity stays on the map: `live` (2 minutes), `hour` or `today` (default).
+* `ctaurl` - A donation page link, shown as a QR code on kiosk screens opened from the page.
+
+The plugin settings page shows the organization's **kiosk link** for office and event screens: the full-screen layout with large counters and the amount raised today. The link carries a token that is read from the Fundy API when the settings page loads (it is never stored on the site); regenerate it on the organization page in the Fundy dashboard if it leaks.
 
 ## Shortcode
 

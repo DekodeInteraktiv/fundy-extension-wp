@@ -1,3 +1,8 @@
+= Unreleased =
+* Enhancement- New "Fundy Live Map" block and `[fundy_live_map]` shortcode embed your organization's live donation map on any page, with today's counters. The map shows anonymous, approximate activity and nothing about individual donors.
+* Enhancement- The settings page shows your organization's Live Map kiosk link for office and event screens.
+* Enhancement- Sites that saved their API key before this version need to save the settings once more for the Live Map block to connect.
+
 = 2.6.0 (2026-09-04) =
 * Enhancement- Choose a form theme. Pick one of your organization's Fundy themes in the plugin's settings and every form on your site is styled with it.
 * Enhancement- Use your own stylesheet. Enter a Custom CSS URL in the settings to style the forms exactly as you want. When set, it takes precedence over the selected theme.

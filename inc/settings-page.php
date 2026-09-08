@@ -17,7 +17,9 @@ use function Dekode\Fundraising\Settings\get_forms_script_env;
 use function Dekode\Fundraising\Settings\get_tracking_script_enabled;
 use function Dekode\Fundraising\Settings\get_tracking_script_env;
 use function Dekode\Fundraising\API\fetch_organization_public_id;
+use function Dekode\Fundraising\API\get_organization_self;
 use function Dekode\Fundraising\API\get_organization_themes;
+use function Dekode\Fundraising\LiveMap\get_kiosk_url;
 use function Dekode\Fundraising\Settings\normalize_script_env;
 use function Dekode\Fundraising\Settings\sanitize_custom_css_url;
 use function Dekode\Fundraising\Settings\sanitize_organization_public_id;
@@ -33,6 +35,7 @@ if ( ! \defined( 'ABSPATH' ) ) {
 if (\is_blog_admin()) {
 	\add_action( 'admin_init', __NAMESPACE__ . '\\register_settings' );
 	\add_action( 'admin_menu', __NAMESPACE__ . '\\register_page' );
+	\add_action( 'admin_enqueue_scripts', __NAMESPACE__ . '\\enqueue_copy_script' );
 }
 
 /**
@@ -102,6 +105,14 @@ function register_settings(): void {
 		'fundy_api_key',
 		\__( 'API Key', 'dekode-fundraising' ),
 		__NAMESPACE__ . '\\api_key_callback',
+		'fundy_settings_page',
+		'fundy_settings_section'
+	);
+
+	\add_settings_field(
+		'fundy_live_map_kiosk_link',
+		\__( 'Live Map kiosk link', 'dekode-fundraising' ),
+		__NAMESPACE__ . '\\live_map_kiosk_link_callback',
 		'fundy_settings_page',
 		'fundy_settings_section'
 	);
@@ -389,6 +400,95 @@ function api_key_callback(): void {
 		<?php \disabled( ( \is_multisite() && empty( $options['override_network'] ) ) ); ?>
 	/>
 	<?php
+}
+
+/**
+ * Field callback for the Live Map kiosk link.
+ */
+function live_map_kiosk_link_callback(): void {
+	$options         = \get_option( 'fundy_options', [] );
+	$network_managed = \is_multisite() && empty( $options['override_network'] );
+
+	render_live_map_kiosk_link(
+		(string) ( $options['api_key'] ?? '' ),
+		sanitize_organization_public_id( (string) ( $options['organization_public_id'] ?? '' ) ),
+		$network_managed
+	);
+}
+
+/**
+ * Render the read-only kiosk link with its copy button.
+ *
+ * The token is read live from the cached organization record, never from
+ * an option, so a link regenerated in the Fundy dashboard shows up here
+ * within minutes and the secret never lands in the database. Shared by the
+ * site and network settings pages.
+ *
+ * @param string $api_key         API key the record is fetched with.
+ * @param string $public_id       Stored organization public id.
+ * @param bool   $network_managed Whether the site defers to network settings.
+ */
+function render_live_map_kiosk_link( string $api_key, string $public_id, bool $network_managed ): void {
+	if ( $network_managed ) {
+		echo '<p class="description">' . \esc_html__( 'Managed in the network settings.', 'dekode-fundraising' ) . '</p>';
+		return;
+	}
+
+	if ( '' === $api_key || '' === $public_id ) {
+		echo '<p class="description">' . \esc_html__( 'Save an API key to get the kiosk link.', 'dekode-fundraising' ) . '</p>';
+		return;
+	}
+
+	$self = get_organization_self( $api_key );
+	$url  = \is_wp_error( $self ) ? '' : get_kiosk_url( $public_id, $self['live_map_kiosk_token'] );
+
+	if ( \is_wp_error( $self ) ) {
+		echo '<p class="description">' . \esc_html(
+			\sprintf(
+				/* translators: %s: error message returned while fetching the organization. */
+				\__( 'The kiosk link could not be fetched (%s). Reload the page to retry.', 'dekode-fundraising' ),
+				$self->get_error_message()
+			)
+		) . '</p>';
+		return;
+	}
+
+	if ( '' === $url ) {
+		echo '<p class="description">' . \esc_html__( 'No kiosk link yet. Create one on the organization page in the Fundy dashboard, under Live Map.', 'dekode-fundraising' ) . '</p>';
+		return;
+	}
+	?>
+	<input
+		type="text"
+		id="fundy_live_map_kiosk_link"
+		value="<?php echo \esc_url( $url ); ?>"
+		class="regular-text code"
+		readonly
+	/>
+	<button type="button" class="button" data-fundy-copy="fundy_live_map_kiosk_link">
+		<?php \esc_html_e( 'Copy', 'dekode-fundraising' ); ?>
+	</button>
+	<p class="description">
+		<?php \esc_html_e( 'Open this link on an office or event screen for the full-screen Live Map with today\'s counters. Anyone with the link sees those figures, so share it with care; regenerate it on the organization page in the Fundy dashboard if it leaks.', 'dekode-fundraising' ); ?>
+	</p>
+	<?php
+}
+
+/**
+ * The copy-to-clipboard helper for the settings pages, attached to a
+ * virtual handle so a CSP plugin can nonce it.
+ */
+function enqueue_copy_script( string $hook_suffix ): void {
+	if ( ! \in_array( $hook_suffix, [ 'settings_page_fundy_settings_page', 'settings_page_fundy_network_settings_page-network' ], true ) ) {
+		return;
+	}
+
+	\wp_register_script( 'fundy-settings-copy', false, [], \FUNDY_VERSION, true );
+	\wp_add_inline_script(
+		'fundy-settings-copy',
+		'document.addEventListener("click",function(e){var b=e.target.closest("[data-fundy-copy]");if(!b){return;}var i=document.getElementById(b.getAttribute("data-fundy-copy"));if(!i){return;}i.select();var done=function(){b.textContent=' . \wp_json_encode( \__( 'Copied', 'dekode-fundraising' ) ) . ';};if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(i.value).then(done);}else if(document.execCommand("copy")){done();}});'
+	);
+	\wp_enqueue_script( 'fundy-settings-copy' );
 }
 
 /**
