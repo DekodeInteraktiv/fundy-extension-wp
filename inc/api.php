@@ -11,6 +11,7 @@ namespace Dekode\Fundraising\API;
 
 use function Dekode\Fundraising\get_base_url;
 use function Dekode\Fundraising\Settings\sanitize_custom_css_url;
+use function Dekode\Fundraising\Settings\sanitize_live_map_kiosk_token;
 use function Dekode\Fundraising\Settings\sanitize_organization_public_id;
 use function Dekode\Fundraising\Settings\sanitize_theme_name;
 
@@ -19,6 +20,7 @@ if ( ! \defined( 'ABSPATH' ) ) {
 }
 
 const THEMES_CACHE_TTL = 5 * \MINUTE_IN_SECONDS;
+const SELF_CACHE_TTL   = 5 * \MINUTE_IN_SECONDS;
 
 /**
  * Hooks.
@@ -148,15 +150,19 @@ function get_organization_themes( string $api_key ): array|\WP_Error {
 }
 
 /**
- * Fetch the organization public id for an API key.
+ * Fetch the organization's own record for an API key, cached for a few
+ * minutes.
  *
- * Called from the settings sanitize flow when an API key is saved; the id
- * is stored as a setting so front-end renders never make this request.
+ * The public id is stored as a setting when the key is saved, so front-end
+ * renders never make this request; the Live Map kiosk token is deliberately
+ * never stored and is read from this cache on the settings page, so a token
+ * regenerated in the Fundy dashboard shows up within the cache lifetime and
+ * the secret never lands in wp_options. Errors are never cached.
  *
  * @param string $api_key Organization API token.
- * @return string|\WP_Error The organization public id (a UUID), or an error.
+ * @return array{public_id: string, name: string, live_map_kiosk_token: string}|\WP_Error
  */
-function fetch_organization_public_id( string $api_key ): string|\WP_Error {
+function get_organization_self( string $api_key ): array|\WP_Error {
 	if ( '' === $api_key ) {
 		return new \WP_Error(
 			'fundy_no_api_token',
@@ -165,13 +171,21 @@ function fetch_organization_public_id( string $api_key ): string|\WP_Error {
 		);
 	}
 
+	$cache_key = self_cache_key( $api_key );
+	$cached    = \get_transient( $cache_key );
+
+	if ( \is_array( $cached ) && isset( $cached['public_id'] ) ) {
+		return $cached;
+	}
+
 	$data = request( '/api/v1/organization/self', $api_key, 5 );
 
 	if ( \is_wp_error( $data ) ) {
 		return $data;
 	}
 
-	$public_id = sanitize_organization_public_id( (string) ( $data['organization']['public_id'] ?? '' ) );
+	$organization = \is_array( $data['organization'] ?? null ) ? $data['organization'] : [];
+	$public_id    = sanitize_organization_public_id( (string) ( $organization['public_id'] ?? '' ) );
 
 	if ( '' === $public_id ) {
 		return new \WP_Error(
@@ -181,7 +195,37 @@ function fetch_organization_public_id( string $api_key ): string|\WP_Error {
 		);
 	}
 
-	return $public_id;
+	$self = [
+		'public_id'            => $public_id,
+		'name'                 => \sanitize_text_field( (string) ( $organization['name'] ?? '' ) ),
+		'live_map_kiosk_token' => sanitize_live_map_kiosk_token( (string) ( $organization['live_map_kiosk_token'] ?? '' ) ),
+	];
+
+	\set_transient( $cache_key, $self, SELF_CACHE_TTL );
+
+	return $self;
+}
+
+/**
+ * Fetch the organization public id for an API key.
+ *
+ * Called from the settings sanitize flow when an API key is saved; the id
+ * is stored as a setting so front-end renders never make this request.
+ *
+ * @param string $api_key Organization API token.
+ * @return string|\WP_Error The organization public id (a UUID), or an error.
+ */
+function fetch_organization_public_id( string $api_key ): string|\WP_Error {
+	$self = get_organization_self( $api_key );
+
+	return \is_wp_error( $self ) ? $self : $self['public_id'];
+}
+
+/**
+ * Build the organization self cache transient key for an API key.
+ */
+function self_cache_key( string $api_key ): string {
+	return 'fundy_org_self_' . \md5( get_base_url() . '|' . $api_key );
 }
 
 /**
@@ -192,7 +236,8 @@ function themes_cache_key( string $api_key ): string {
 }
 
 /**
- * Delete the cached theme list for every API key found in the given option sets.
+ * Delete the cached theme list and organization record for every API key
+ * found in the given option sets.
  *
  * @param array<mixed> ...$option_sets Old and/or new option arrays.
  */
@@ -202,6 +247,7 @@ function flush_themes_cache( array ...$option_sets ): void {
 
 		if ( '' !== $api_key ) {
 			\delete_transient( themes_cache_key( $api_key ) );
+			\delete_transient( self_cache_key( $api_key ) );
 		}
 	}
 }

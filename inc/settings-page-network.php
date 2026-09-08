@@ -13,6 +13,7 @@ use function Dekode\Fundraising\Settings\normalize_script_env;
 use function Dekode\Fundraising\Settings\sanitize_custom_css_url;
 use function Dekode\Fundraising\Settings\sanitize_organization_public_id;
 use function Dekode\Fundraising\Settings\sanitize_theme_name;
+use function Dekode\Fundraising\SettingsPage\render_live_map_kiosk_link;
 use function Dekode\Fundraising\SettingsPage\render_theme_select;
 use function Dekode\Fundraising\SettingsPage\resolve_organization_public_id;
 use function Dekode\Fundraising\SettingsPage\resolve_theme_css_url;
@@ -26,6 +27,7 @@ if ( \is_multisite() ) {
 	\add_action( 'network_admin_menu', __NAMESPACE__ . '\\register_settings' );
 	\add_action( 'network_admin_edit_fundy_network_settings_group', __NAMESPACE__ . '\\save_network_settings' );
 	\add_action( 'network_admin_notices', __NAMESPACE__ . '\\render_theme_notice' );
+	\add_action( 'admin_enqueue_scripts', 'Dekode\\Fundraising\\SettingsPage\\enqueue_copy_script' );
 }
 
 /**
@@ -86,6 +88,14 @@ function register_settings(): void {
 		'fundy_api_key',
 		\__( 'API Key', 'dekode-fundraising' ),
 		__NAMESPACE__ . '\\api_key_callback',
+		'fundy_network_settings_page',
+		'fundy_network_settings_section',
+	);
+
+	\add_settings_field(
+		'fundy_live_map_kiosk_link',
+		\__( 'Live Map kiosk link', 'dekode-fundraising' ),
+		__NAMESPACE__ . '\\live_map_kiosk_link_callback',
 		'fundy_network_settings_page',
 		'fundy_network_settings_section',
 	);
@@ -273,6 +283,20 @@ function api_key_callback(): void {
 		class="regular-text"
 	/>
 	<?php
+}
+
+/**
+ * Field callback for the Live Map kiosk link.
+ */
+function live_map_kiosk_link_callback(): void {
+	$options = \get_network_option( null, 'fundy_network_options', [] );
+	$options = \is_array( $options ) ? $options : [];
+
+	render_live_map_kiosk_link(
+		(string) ( $options['api_key'] ?? '' ),
+		sanitize_organization_public_id( (string) ( $options['organization_public_id'] ?? '' ) ),
+		false
+	);
 }
 
 /**

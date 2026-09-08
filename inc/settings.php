@@ -154,6 +154,17 @@ function sanitize_organization_public_id( string $value ): string {
 }
 
 /**
+ * Sanitize a Live Map kiosk token.
+ *
+ * Core issues 64 hex characters; anything else collapses to '' (no link).
+ */
+function sanitize_live_map_kiosk_token( string $value ): string {
+	$value = \strtolower( \trim( $value ) );
+
+	return 1 === \preg_match( '/^[0-9a-f]{64}$/', $value ) ? $value : '';
+}
+
+/**
  * Retrieve the API key.
  */
 function get_api_key(): string {

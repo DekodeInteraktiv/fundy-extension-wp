@@ -187,7 +187,9 @@ require_once FUNDY_PLUGIN_DIR . 'inc/settings-page-network.php';
 require_once FUNDY_PLUGIN_DIR . 'inc/shortcodes.php';
 require_once FUNDY_PLUGIN_DIR . 'inc/assets.php';
 require_once FUNDY_PLUGIN_DIR . 'inc/head.php';
+require_once FUNDY_PLUGIN_DIR . 'inc/live-map.php';
 
 // Blocks.
 require_once FUNDY_PLUGIN_DIR . 'src/blocks/donation-form/block.php';
 require_once FUNDY_PLUGIN_DIR . 'src/blocks/donation-receipt/block.php';
+require_once FUNDY_PLUGIN_DIR . 'src/blocks/live-map/block.php';
