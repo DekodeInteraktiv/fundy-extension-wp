@@ -27,7 +27,7 @@
 		"lint": "./vendor/bin/phpcs .",
 		"make-pot": "./vendor/bin/wp i18n make-pot . --slug=dekode-fundraising --domain=dekode-fundraising --exclude='.github,.cache,tests,src,node_modules,vendor'",
 		"make-json": [
-			"./vendor/bin/wp i18n make-json ./languages --no-purge",
+			"./vendor/bin/wp i18n make-json ./languages",
 			"./vendor/bin/wp i18n make-php ./languages"
 		]
 	},

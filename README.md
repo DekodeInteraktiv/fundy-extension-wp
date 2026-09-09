@@ -23,6 +23,8 @@ For local development you can edit this constant in the `.wp-env.json` file and 
 * `fundy/enqueue/form_styles` (bool) - Whether to enqueue the Dekode Fundraising form styles. Default is true.
 * `fundy/base_url` (string) - Used to modify the base API URL.
 * `fundy/config/custom_css_url` (string|string[]) - Override the client stylesheet URL(s) injected into Dekode Fundraising forms (the `customCssUrl` key of `window.FundyConfig`). Receives the resolved URL per the precedence in "Form styling" below; an empty value omits the key.
+* `fundy/config/disable_data_layer_event` (bool) - Override the `disableDataLayerEvent` key of `window.FundyConfig`. When true the conversion script pushes nothing to the dataLayer, including the `purchase` event.
+* `fundy/config/disable_form_events` (bool) - Override the `disableFormEvents` key of `window.FundyConfig`. When true the conversion script pushes none of the form funnel events (`view_item`, `add_to_cart`, `remove_from_cart`, `begin_checkout`, `add_payment_info`); the `purchase` event still fires.
 * `fundy/config/organization_id` (string) - Override the organization public ID emitted as the `organizationId` key of `window.FundyConfig`. Defaults to the ID fetched from the Fundy API when the API key setting is saved; an empty value omits the key.
 * `fundy/load_form_assets_in_head` (bool) - Force (or prevent) loading the form script/style in `<head>` with preload hints. Defaults to automatic detection on singular pages.
 

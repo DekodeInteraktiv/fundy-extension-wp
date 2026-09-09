@@ -60,6 +60,7 @@ function register_settings(): void {
 				'tracking_enabled'         => '',
 				'tracking_script'          => 'prod',
 				'disable_data_layer_event' => '',
+				'disable_form_events'      => '',
 				'debug'                    => '',
 				'theme'                    => '',
 				'theme_css_url'            => '',
@@ -110,6 +111,14 @@ function register_settings(): void {
 		'fundy_disable_data_layer_event',
 		\__( 'Data Layer Event', 'dekode-fundraising' ),
 		__NAMESPACE__ . '\\disable_data_layer_event_callback',
+		'fundy_network_settings_page',
+		'fundy_network_settings_section',
+	);
+
+	\add_settings_field(
+		'fundy_disable_form_events',
+		\__( 'Form Events', 'dekode-fundraising' ),
+		__NAMESPACE__ . '\\disable_form_events_callback',
 		'fundy_network_settings_page',
 		'fundy_network_settings_section',
 	);
@@ -186,6 +195,7 @@ function sanitize_network_options( array $input ): array {
 	$sanitized['tracking_enabled'] = ! empty( $input['tracking_enabled'] ) ? 'yes' : '';
 	$sanitized['tracking_script'] = normalize_script_env( (string) ( $input['tracking_script'] ?? '' ), 'prod' );
 	$sanitized['disable_data_layer_event'] = ! empty( $input['disable_data_layer_event'] ) ? 'yes' : '';
+	$sanitized['disable_form_events'] = ! empty( $input['disable_form_events'] ) ? 'yes' : '';
 	$sanitized['debug'] = ! empty( $input['debug'] ) ? 'yes' : '';
 	$sanitized['theme'] = sanitize_theme_name( (string) ( $input['theme'] ?? '' ) );
 	$sanitized['custom_css_url'] = sanitize_custom_css_url( (string) ( $input['custom_css_url'] ?? '' ) );
@@ -393,7 +403,27 @@ function disable_data_layer_event_callback(): void {
 		/>
 		<?php \esc_html_e( 'Disable', 'dekode-fundraising' ); ?>
 	</label>
-	<p class="description"><?php \esc_html_e( 'Prevents pushing conversion events to the dataLayer.', 'dekode-fundraising' ); ?></p>
+	<p class="description"><?php \esc_html_e( 'Prevents pushing any conversion events to the dataLayer, including the purchase event.', 'dekode-fundraising' ); ?></p>
+	<?php
+}
+
+/**
+ * Field callback for the disableFormEvents setting.
+ */
+function disable_form_events_callback(): void {
+	$options = \get_network_option( null, 'fundy_network_options', [] );
+	$enabled = ! empty( $options['disable_form_events'] );
+	?>
+	<label>
+		<input
+			type="checkbox"
+			name="fundy_network_options[disable_form_events]"
+			value="yes"
+			<?php \checked( $enabled, true ); ?>
+		/>
+		<?php \esc_html_e( 'Disable', 'dekode-fundraising' ); ?>
+	</label>
+	<p class="description"><?php \esc_html_e( 'Prevents pushing the form funnel events (view_item, add_to_cart, remove_from_cart, begin_checkout, add_payment_info) to the dataLayer. The purchase event still fires.', 'dekode-fundraising' ); ?></p>
 	<?php
 }
 

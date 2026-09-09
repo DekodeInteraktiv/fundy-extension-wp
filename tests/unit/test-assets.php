@@ -67,6 +67,32 @@ class TestAssets extends WP_UnitTestCase {
 		$this->assertNotEmpty( $script->extra['after'] ?? $script->extra['before'] ?? [] );
 	}
 
+	public function test_config_disables_nothing_by_default() {
+		$config = build_fundy_config();
+
+		$this->assertFalse( $config['disableDataLayerEvent'] );
+		$this->assertFalse( $config['disableFormEvents'] );
+	}
+
+	public function test_config_disable_form_events_follows_the_setting() {
+		\update_option( 'fundy_options', [ 'disable_form_events' => 'yes' ] );
+
+		$config = build_fundy_config();
+
+		$this->assertTrue( $config['disableFormEvents'] );
+		$this->assertFalse( $config['disableDataLayerEvent'] );
+		\delete_option( 'fundy_options' );
+	}
+
+	public function test_config_disable_form_events_filter_overrides() {
+		\add_filter( 'fundy/config/disable_form_events', '__return_true' );
+
+		$config = build_fundy_config();
+
+		$this->assertTrue( $config['disableFormEvents'] );
+		\remove_filter( 'fundy/config/disable_form_events', '__return_true' );
+	}
+
 	public function test_config_omits_custom_css_url_by_default() {
 		$config = build_fundy_config();
 
