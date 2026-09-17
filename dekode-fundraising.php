@@ -152,15 +152,56 @@ function sanitize_form_url_params( array $params ): array {
  * data-theme attribute; without it that path falls back to the "default"
  * theme regardless of the Theme setting. Shared by the donation-form block
  * and the [fundy_form] shortcode so both embed paths agree.
+ *
+ * @param array $attributes Container attributes - block attributes for the
+ *                          block, shortcode attributes for [fundy_form]. A
+ *                          'theme' key overrides the site setting for this
+ *                          container.
  */
-function theme_data_attribute(): string {
-	$theme = Settings\get_theme_name();
+function theme_data_attribute( array $attributes = [] ): string {
+	$theme = resolve_container_theme( $attributes );
 
 	if ( '' === $theme ) {
 		return '';
 	}
 
 	return \sprintf( ' data-theme="%s"', \esc_attr( $theme ) );
+}
+
+/**
+ * Resolve the theme name for a form container ('' when none).
+ *
+ * Precedence: an explicit 'theme' attribute on the container (the
+ * shortcode's theme='…' argument), then the site setting, then the
+ * fundy/donation_form/theme filter, which has the last word. Every value is
+ * re-sanitized to the theme slug shape, so an override from outside the
+ * settings screens cannot reach the container attribute unchecked.
+ *
+ * @param array $attributes Container attributes.
+ */
+function resolve_container_theme( array $attributes = [] ): string {
+	$theme = sanitize_theme_attribute( $attributes['theme'] ?? null );
+
+	if ( empty( $theme ) ) {
+		$theme = Settings\get_theme_name();
+	}
+
+	/**
+	 * Filter the theme name emitted as data-theme on the form container.
+	 *
+	 * @param string $theme      Theme name resolved from the container attributes and the site setting ('' when none).
+	 * @param array  $attributes Container attributes - block attributes for the block, shortcode attributes for [fundy_form].
+	 */
+	return sanitize_theme_attribute( \apply_filters( 'fundy/donation_form/theme', $theme, $attributes ) );
+}
+
+/**
+ * Reduce an arbitrary theme value to a theme slug ('' when unusable).
+ *
+ * @param mixed $value Theme value from container attributes or a filter.
+ */
+function sanitize_theme_attribute( $value ): string {
+	return \is_string( $value ) ? Settings\sanitize_theme_name( $value ) : '';
 }
 
 /**
