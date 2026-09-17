@@ -22,11 +22,78 @@ class TestShortcodes extends WP_UnitTestCase {
 		$this->assertStringNotContainsString( 'data-variation', $html );
 	}
 
+	public function test_comma_separated_variations_are_emitted() {
+		$html = \do_shortcode( '[fundy_form id="1" variation="compact,hero"]' );
+
+		$this->assertStringContainsString( 'data-variation="compact,hero"', $html );
+	}
+
+	public function test_surrounding_whitespace_in_the_list_is_trimmed() {
+		$html = \do_shortcode( '[fundy_form id="1" variation=" compact , Hero "]' );
+
+		$this->assertStringContainsString( 'data-variation="compact,hero"', $html );
+	}
+
+	public function test_invalid_entries_are_dropped_from_the_list() {
+		$html = \do_shortcode( '[fundy_form id="1" variation="compact,not a slug!,,hero"]' );
+
+		$this->assertStringContainsString( 'data-variation="compact,hero"', $html );
+	}
+
+	public function test_duplicate_entries_are_emitted_once() {
+		$html = \do_shortcode( '[fundy_form id="1" variation="compact,compact"]' );
+
+		$this->assertStringContainsString( 'data-variation="compact"', $html );
+	}
+
 	public function test_no_data_variation_by_default() {
 		$html = \do_shortcode( '[fundy_form id="1"]' );
 
 		$this->assertStringContainsString( 'fundraising-form', $html );
 		$this->assertStringNotContainsString( 'data-variation', $html );
+	}
+
+	public function test_theme_attribute_is_emitted() {
+		$html = \do_shortcode( '[fundy_form id="1" theme="clay"]' );
+
+		$this->assertStringContainsString( 'data-theme="clay"', $html );
+	}
+
+	public function test_theme_attribute_overrides_the_selected_theme() {
+		\update_option( 'fundy_options', [ 'theme' => 'moss' ] );
+
+		$html = \do_shortcode( '[fundy_form id="1" theme="clay"]' );
+
+		\delete_option( 'fundy_options' );
+
+		$this->assertStringContainsString( 'data-theme="clay"', $html );
+	}
+
+	public function test_invalid_theme_attribute_falls_back_to_the_setting() {
+		\update_option( 'fundy_options', [ 'theme' => 'moss' ] );
+
+		$html = \do_shortcode( '[fundy_form id="1" theme="not a slug!"]' );
+
+		\delete_option( 'fundy_options' );
+
+		$this->assertStringContainsString( 'data-theme="moss"', $html );
+	}
+
+	public function test_theme_filter_receives_the_shortcode_attributes() {
+		$received = null;
+		$filter   = static function ( string $theme, array $atts ) use ( &$received ): string {
+			$received = $atts;
+
+			return $theme;
+		};
+
+		\add_filter( 'fundy/donation_form/theme', $filter, 10, 2 );
+
+		\do_shortcode( '[fundy_form id="1" theme="clay"]' );
+
+		\remove_filter( 'fundy/donation_form/theme', $filter, 10 );
+
+		$this->assertSame( 'clay', $received['theme'] ?? null );
 	}
 
 	public function test_selected_theme_is_emitted_as_data_theme() {

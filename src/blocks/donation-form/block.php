@@ -75,15 +75,13 @@ function render_block( array $attributes ): string {
 		$json_params = '[]';
 	}
 
-	// Block styles registered by themes land in className as is-style-*.
-	// data-variation carries the chosen style across the shadow boundary so
-	// theme CSS can target .variation-<name> inside the shadow root. The
-	// lookahead makes non-slug style names (e.g. is-style-myFancy) drop the
-	// attribute entirely instead of truncating to their lowercase prefix.
+	// The forms runtime splits data-variation on commas, so every resolved
+	// variation travels in one attribute.
+	$variations     = \array_filter( extract_variations( $attributes ), 'is_string' );
 	$variation_attr = '';
 
-	if ( \preg_match( '/(?:^|\s)is-style-([a-z0-9-]+)(?=\s|$)/', (string) ( $attributes['className'] ?? '' ), $matches ) ) {
-		$variation_attr = \sprintf( ' data-variation="%s"', \esc_attr( $matches[1] ) );
+	if ( ! empty( $variations ) ) {
+		$variation_attr = \sprintf( ' data-variation="%s"', \esc_attr( \implode( ',', $variations ) ) );
 	}
 
 	// The forms runtime replaces the mount's children when it renders, so
@@ -106,7 +104,54 @@ function render_block( array $attributes ): string {
 		\esc_attr( get_base_url() ),
 		\esc_attr( $json_params ),
 		$variation_attr,
-		theme_data_attribute(),
+		theme_data_attribute( $attributes ),
 		\esc_html__( 'This donation form requires JavaScript. Please enable JavaScript in your browser and reload the page.', 'dekode-fundraising' ),
 	);
+}
+
+/**
+ * Resolve the style variations carried across the shadow boundary.
+ *
+ * Block styles registered by themes land in className as `is-style-<name>`,
+ * and editor background colours as `has-<name>-background-color`. Both become
+ * data-variation values so theme CSS can target `.variation-<name>` inside the
+ * shadow root - colours as `background-color-<name>`, keeping them distinct
+ * from a block style of the same name. The lookarounds keep partial class
+ * names (e.g. `not-is-style-compact`) from matching.
+ *
+ * @param array $attributes Block attributes.
+ * @return array List of variation names.
+ */
+function extract_variations( array $attributes ): array {
+	$class_name = (string) ( $attributes['className'] ?? '' );
+	$variations = [];
+
+	// Pattern => prefix for the resolved name. Background colours are
+	// prefixed so theme CSS can tell them apart from block styles.
+	$patterns = [
+		'/(?:^|\s)is-style-([A-Za-z0-9_-]+)(?=\s|$)/'             => '',
+		'/(?:^|\s)has-([A-Za-z0-9_-]+)-background-color(?=\s|$)/' => 'background-color-',
+	];
+
+	foreach ( $patterns as $pattern => $prefix ) {
+		if ( \preg_match_all( $pattern, $class_name, $matches ) ) {
+			foreach ( $matches[1] as $match ) {
+				$variations[] = $prefix . $match;
+			}
+		}
+	}
+
+	if ( array_key_exists( 'backgroundColor', $attributes ) && ! empty( $attributes['backgroundColor'] ) ) {
+		$variations[] = 'background-color-' . $attributes['backgroundColor'];
+	}
+
+	$variations = \array_values( \array_unique( $variations ) );
+
+	/**
+	 * Filter the variation names emitted as data-variation on the form container.
+	 *
+	 * @param array $variations List of variation names resolved from className.
+	 * @param array $attributes Block attributes.
+	 */
+	return (array) \apply_filters( 'fundy/donation_form/variations', $variations, $attributes );
 }

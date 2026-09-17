@@ -25,6 +25,8 @@ For local development you can edit this constant in the `.wp-env.json` file and 
 * `fundy/config/custom_css_url` (string|string[]) - Override the client stylesheet URL(s) injected into Dekode Fundraising forms (the `customCssUrl` key of `window.FundyConfig`). Receives the resolved URL per the precedence in "Form styling" below; an empty value omits the key.
 * `fundy/config/organization_id` (string) - Override the organization public ID emitted as the `organizationId` key of `window.FundyConfig`. Defaults to the ID fetched from the Fundy API when the API key setting is saved; an empty value omits the key.
 * `fundy/load_form_assets_in_head` (bool) - Force (or prevent) loading the form script/style in `<head>` with preload hints. Defaults to automatic detection on singular pages.
+* `fundy/donation_form/theme` (string) - Override the theme name emitted as `data-theme` on the form container (block and shortcode), which selects the per-organization stylesheet variant the forms bundle loads. Receives the name resolved from the container's `theme` attribute and the Theme setting, plus the container attributes as a second argument. Values outside the theme slug shape (letters, digits and `-`, max 50 characters) are dropped.
+* `fundy/donation_form/variations` (array) - Modify the style variations emitted as `data-variation` on the Donation Form block container (the forms runtime turns each one into a `.variation-<name>` class inside the shadow root). Receives the names resolved from the block's `className` - `is-style-<name>` block styles become `<name>`, and `has-<name>-background-color` colour classes become `background-color-<name>` so they stay distinguishable - and the block attributes as a second argument.
 
 ## Form styling
 
@@ -51,9 +53,17 @@ You can also define extra parameters to be passed to the frontend by using the `
 
 ```[fundy_form id='13' params='{"utm_source":123,"other_parameter":"some value"}]```
 
-You can select a styling variation for the form with the `variation` attribute, matching the `is-style-*` block styles available on the Donation Form block:
+You can select one or more styling variations for the form with the `variation` attribute, matching the `is-style-*` block styles available on the Donation Form block. Pass several as a comma-separated list:
 
 ```[fundy_form id='13' variation='compact']```
+
+```[fundy_form id='13' variation='compact,dark']```
+
+Each entry is lowercased and must consist of letters, digits and `-`; entries outside that shape are dropped individually.
+
+You can override the site's Theme setting for a single form with the `theme` attribute:
+
+```[fundy_form id='13' theme='clay']```
 
 Note: URL parameter keys are restricted to letters, digits, `_` and `-` (max 64 characters); values are capped at 500 characters. Entries outside those limits are dropped at render time.
 
