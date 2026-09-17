@@ -5,7 +5,14 @@
 	"title": "Fundy Form",
 	"description": "Displays a lead/donation/membership form.",
 	"category": "widgets",
-	"keywords": ["donation", "fundraising", "petition", "lead", "fundy", "form"],
+	"keywords": [
+		"donation",
+		"fundraising",
+		"petition",
+		"lead",
+		"fundy",
+		"form"
+	],
 	"textdomain": "dekode-fundraising",
 	"icon": "clipboard",
 	"example": {},
