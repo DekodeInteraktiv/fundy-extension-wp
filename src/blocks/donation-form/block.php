@@ -51,7 +51,7 @@ function register_block(): void {
 /**
  * Render the block.
  */
-function render_block( array $attributes, string $content, \WP_Block $block ): string {
+function render_block( array $attributes ): string {
 	// If no form ID is set, return empty string.
 	if ( empty( $attributes['formId'] ) ) {
 		return '';
