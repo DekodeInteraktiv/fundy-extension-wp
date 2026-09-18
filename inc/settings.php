@@ -232,6 +232,13 @@ function get_disable_data_layer_event(): bool {
 }
 
 /**
+ * Retrieve the disableFormEvents config value.
+ */
+function get_disable_form_events(): bool {
+	return ! empty( get_setting_value( 'disable_form_events', '' ) );
+}
+
+/**
  * Retrieve the debug config value.
  */
 function get_debug_enabled(): bool {

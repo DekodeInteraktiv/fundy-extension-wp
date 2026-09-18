@@ -1,190 +1,455 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
-"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/dekode-"
-"fundraising\n"
-"POT-Creation-Date: 2025-12-02T15:15:59+00:00\n"
-"PO-Revision-Date: 2025-12-02 15:24+0000\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/dekode-fundraising\n"
 "Last-Translator: \n"
 "Language-Team: \n"
-"Language: nb_NO\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"POT-Creation-Date: 2025-12-02T15:15:59+00:00\n"
+"PO-Revision-Date: 2026-09-09T11:24:55+00:00\n"
+"Language: nb_NO\n"
 "X-Generator: Poedit 3.8\n"
 "X-Poedit-Basepath: .\n"
 
 #. Plugin Name of the plugin
-#: dekode-fundraising.php inc/settings-page-network.php:29
-#: inc/settings-page.php:30
+#: dekode-fundraising.php:3
+#: inc/settings-page-network.php:38
+#: inc/settings-page.php:45
 msgid "Dekode Fundraising"
 msgstr "Dekode Fundraising"
 
 #. Plugin URI of the plugin
-#: dekode-fundraising.php
+#: dekode-fundraising.php:4
 msgid "https://github.com/DekodeInteraktiv/fundy-extension-wp/"
 msgstr "https://github.com/DekodeInteraktiv/fundy-extension-wp/"
 
 #. Description of the plugin
-#: dekode-fundraising.php
-msgid ""
-"Integrates with Dekode Fundraising, making it easy to add donation forms to "
-"your website."
+#: dekode-fundraising.php:5
+msgid "Integrates with Dekode Fundraising, making it easy to add donation forms to your website."
 msgstr ""
 
 #. Author of the plugin
-#: dekode-fundraising.php
+#: dekode-fundraising.php:7
 msgid "Dekode Interaktiv"
 msgstr ""
 
 #. Author URI of the plugin
-#: dekode-fundraising.php
+#: dekode-fundraising.php:8
 msgid "https://dekode.no"
 msgstr ""
 
 #. translators: placeholder 1 is minimum required PHP version, placeholder 2 is installed PHP version.
-#: dekode-fundraising.php:80
+#: dekode-fundraising.php:94
 #, php-format
-msgid ""
-"Dekode Fundraising plugin requires PHP %1$s or higher. You are still on %2$s."
+msgid "Dekode Fundraising plugin requires PHP %1$s or higher. You are still on %2$s."
 msgstr ""
 
 #. translators: placeholder 1 is minimum required WordPress version, placeholder 2 is installed WordPress version.
-#: dekode-fundraising.php:89
+#: dekode-fundraising.php:103
 #, php-format
-msgid ""
-"Dekode Fundraising plugin requires at least WordPress in version %1$s, You "
-"are on %2$s."
+msgid "Dekode Fundraising plugin requires at least WordPress in version %1$s, You are on %2$s."
 msgstr ""
 
-#: inc/settings-page-network.php:28 inc/settings-page-network.php:178
-#: inc/settings-page.php:29 inc/settings-page.php:204
+#: inc/api.php:58
+msgid "Could not reach the Fundy API."
+msgstr ""
+
+#. translators: %d: HTTP status code returned by the Fundy API.
+#: inc/api.php:70
+#, php-format
+msgid "The Fundy API returned an unexpected response (HTTP %d)."
+msgstr ""
+
+#: inc/api.php:82
+#: inc/api.php:179
+msgid "The Fundy API returned an invalid response."
+msgstr ""
+
+#: inc/api.php:104
+#: inc/api.php:163
+#: inc/rest.php:58
+msgid "No Fundy API token is configured."
+msgstr ""
+
+#: inc/settings-page-network.php:37
+#: inc/settings-page-network.php:492
+#: inc/settings-page.php:44
+#: inc/settings-page.php:714
 msgid "Dekode Fundraising Settings"
 msgstr ""
 
-#: inc/settings-page-network.php:55 inc/settings-page.php:56
-msgid "General Configuration"
+#: inc/settings-page-network.php:74
+#: inc/settings-page.php:81
+msgid "General"
 msgstr ""
 
-#: inc/settings-page-network.php:62 inc/settings-page.php:73
+#: inc/settings-page-network.php:81
+#: inc/settings-page.php:88
+msgid "Advanced"
+msgstr ""
+
+#: inc/settings-page-network.php:88
+#: inc/settings-page.php:105
 msgid "API Key"
 msgstr ""
 
-#: inc/settings-page-network.php:70 inc/settings-page.php:81
-msgid "Script Environment"
+#: inc/settings-page-network.php:96
+#: inc/settings-page.php:113
+msgid "Forms Script"
 msgstr ""
 
-#: inc/settings-page-network.php:82
+#: inc/settings-page-network.php:104
+#: inc/settings-page.php:121
+msgid "Conversion Script"
+msgstr ""
+
+#: inc/settings-page-network.php:112
+#: inc/settings-page.php:129
+msgid "Data Layer Event"
+msgstr ""
+
+#: inc/settings-page-network.php:120
+#: inc/settings-page.php:137
+msgid "Form Events"
+msgstr ""
+
+#: inc/settings-page-network.php:128
+#: inc/settings-page.php:145
+msgid "Tracking Script"
+msgstr ""
+
+#: inc/settings-page-network.php:136
+#: inc/settings-page.php:153
+msgid "Debug Mode"
+msgstr ""
+
+#: inc/settings-page-network.php:144
+#: inc/settings-page.php:161
+msgid "Theme"
+msgstr ""
+
+#: inc/settings-page-network.php:153
+#: inc/settings-page.php:170
+msgid "Custom CSS URL"
+msgstr ""
+
+#: inc/settings-page-network.php:166
 msgid "Insufficient permissions."
 msgstr ""
 
-#: inc/settings-page-network.php:120 inc/settings-page.php:121
-msgid ""
-"If you are unsure about the settings here please talk to your Dekode "
-"Fundraising contact."
+#: inc/settings-page-network.php:262
+#: inc/settings-page.php:359
+msgid "If you are unsure about the settings here please talk to your Dekode Fundraising contact."
 msgstr ""
 
-#: inc/settings-page-network.php:154 inc/settings-page.php:177
+#: inc/settings-page-network.php:269
+#: inc/settings-page.php:366
+msgid "Advanced settings for troubleshooting and diagnostics."
+msgstr ""
+
+#: inc/settings-page-network.php:303
+#: inc/settings-page-network.php:333
+#: inc/settings-page-network.php:375
+#: inc/settings-page.php:422
+#: inc/settings-page.php:455
+#: inc/settings-page.php:501
 msgid "Development"
 msgstr ""
 
-#: inc/settings-page-network.php:163 inc/settings-page.php:188
+#: inc/settings-page-network.php:312
+#: inc/settings-page-network.php:342
+#: inc/settings-page-network.php:384
+#: inc/settings-page.php:433
+#: inc/settings-page.php:466
+#: inc/settings-page.php:512
 msgid "Production"
 msgstr ""
 
-#: inc/settings-page-network.php:185 inc/settings-page.php:211
+#: inc/settings-page-network.php:364
+#: inc/settings-page-network.php:444
+#: inc/settings-page.php:489
+#: inc/settings-page.php:575
+msgid "Enable"
+msgstr ""
+
+#: inc/settings-page-network.php:404
+#: inc/settings-page-network.php:424
+#: inc/settings-page.php:533
+#: inc/settings-page.php:554
+msgid "Disable"
+msgstr ""
+
+#: inc/settings-page-network.php:406
+#: inc/settings-page.php:535
+msgid "Prevents pushing any conversion events to the dataLayer, including the purchase event."
+msgstr ""
+
+#: inc/settings-page-network.php:426
+#: inc/settings-page.php:556
+msgid "Prevents pushing the form funnel events (view_item, add_to_cart, remove_from_cart, begin_checkout, add_payment_info) to the dataLayer. The purchase event still fires."
+msgstr ""
+
+#: inc/settings-page-network.php:479
+#: inc/settings-page.php:700
+msgid "URL of a custom stylesheet injected into Fundy forms."
+msgstr ""
+
+#: inc/settings-page-network.php:499
+#: inc/settings-page.php:721
 msgid "Save"
 msgstr "Lagre"
 
-#: inc/settings-page.php:64
+#: inc/settings-page.php:96
 msgid "Override Network Settings"
 msgstr ""
 
-#: inc/settings-page.php:138
+#. translators: %s: error message returned while fetching the organization.
+#: inc/settings-page.php:289
+#, php-format
+msgid "The organization ID could not be fetched (%s). Save the settings again to retry."
+msgstr ""
+
+#. translators: %s: error message returned while fetching the theme list.
+#: inc/settings-page.php:339
+#, php-format
+msgid "The stylesheet URL for the selected theme could not be resolved (%s). Save the settings again to retry."
+msgstr ""
+
+#. translators: %s: theme name.
+#: inc/settings-page.php:349
+#, php-format
+msgid "The theme \"%s\" is not deployed for your organization, so no stylesheet will be applied."
+msgstr ""
+
+#: inc/settings-page.php:383
 msgid "Override network settings?"
 msgstr ""
 
-#: inc/settings-page.php:153
+#: inc/settings-page.php:398
 msgid "Enter your API key"
 msgstr ""
 
-#: build/blocks/donation-form/editor.js:1
-msgid "Please set an API Token on the plugin settings page."
+#. translators: %s: theme name.
+#: inc/settings-page.php:631
+#, php-format
+msgid "%s (not found)"
 msgstr ""
 
-#: build/blocks/donation-form/editor.js:1
-msgid "Dekode Fundraising Form"
-msgstr "Dekode Fundraising-skjema"
+#: inc/settings-page.php:641
+msgid "None"
+msgstr ""
 
-#: build/blocks/donation-form/editor.js:1
+#: inc/settings-page.php:654
+msgid "Set an API key to list themes."
+msgstr ""
+
+#: inc/settings-page.php:658
+msgid "A theme deployed for your organization in Fundy. The custom CSS URL below overrides it when set."
+msgstr ""
+
+#. translators: 1: theme name, 2: date the theme was last deployed.
+#: inc/settings-page.php:679
+#, php-format
+msgid "%1$s (deployed %2$s)"
+msgstr ""
+
+#: build/blocks/donation-form/editor.js:104
+#: build/blocks/donation-form/editor.js:95
+msgid "Unable to load forms."
+msgstr ""
+
+#: build/blocks/donation-form/editor.js:116
+#: build/blocks/donation-form/editor.js:173
+#: build/blocks/donation-form/editor.js:110
+#: build/blocks/donation-form/editor.js:185
+msgid "Fundy Form"
+msgstr "Fundy-skjema"
+
+#: build/blocks/donation-form/editor.js:117
+#: build/blocks/donation-form/editor.js:113
+msgid "Set an API token on the plugin settings page to select a form."
+msgstr ""
+
+#: build/blocks/donation-form/editor.js:117
+msgid "An API token is required. Ask a site administrator to configure the Dekode Fundraising plugin."
+msgstr ""
+
+#: build/blocks/donation-form/editor.js:121
+#: build/blocks/donation-form/editor.js:125
+msgid "Open settings"
+msgstr ""
+
+#: build/blocks/donation-form/editor.js:130
+#: build/blocks/donation-form/editor.js:142
+msgid "— Select a form —"
+msgstr ""
+
+#. translators: %d: saved form ID.
+#: build/blocks/donation-form/editor.js:137
+#: build/blocks/donation-form/editor.js:153
+#, js-format
+msgid "Form ID %d (missing)"
+msgstr ""
+
+#: build/blocks/donation-form/editor.js:176
+#: build/blocks/donation-form/editor.js:189
 msgid "Select a Form"
 msgstr "Velg et skjema"
 
-#: build/blocks/donation-form/editor.js:1
-msgid ""
-"No forms found. Please create a Form on your Dekode Fundraising account "
-"first."
+#: build/blocks/donation-form/editor.js:187
+#: build/blocks/donation-form/editor.js:203
+msgid "Loading forms…"
+msgstr "Laster skjemaer…"
+
+#: build/blocks/donation-form/editor.js:192
+#: build/blocks/donation-form/editor.js:210
+msgid "No forms found. Please create a Form on your Dekode Fundraising account first."
 msgstr "Ingen skjemaer funnet. Opprett først et skjema på Fundy-kontoen din."
 
-#: build/blocks/donation-form/editor.js:1
-msgid "Loading…"
-msgstr "Laster…"
+#. translators: %d: saved form ID.
+#: build/blocks/donation-form/editor.js:197
+#: build/blocks/donation-form/editor.js:221
+#, js-format
+msgid "The selected form (ID %d) no longer exists in your Fundy account. Please choose another form."
+msgstr ""
 
-#: build/blocks/donation-form/editor.js:1
+#. translators: %s: error message.
+#: build/blocks/donation-form/editor.js:202
+#: build/blocks/donation-form/editor.js:234
+#, js-format
+msgid "Could not load forms: %s"
+msgstr ""
+
+#: build/blocks/donation-form/editor.js:206
+#: build/blocks/donation-form/editor.js:245
 msgid "Default URL Parameters (Optional)"
 msgstr "Standard-URL-parametere (valgfritt)"
 
-#: build/blocks/donation-form/editor.js:1
+#: build/blocks/donation-form/editor.js:214
+#: build/blocks/donation-form/editor.js:256
 msgid "Key"
 msgstr "Nøkkel"
 
-#: build/blocks/donation-form/editor.js:1
+#: build/blocks/donation-form/editor.js:222
+#: build/blocks/donation-form/editor.js:267
 msgid "Value"
 msgstr "Verdi"
 
-#: build/blocks/donation-form/editor.js:1
+#. translators: %s: parameter key.
+#: build/blocks/donation-form/editor.js:236
+#: build/blocks/donation-form/editor.js:288
+#, js-format
+msgid "Remove parameter \"%s\""
+msgstr ""
+
+#. translators: %d: row number.
+#: build/blocks/donation-form/editor.js:237
+#: build/blocks/donation-form/editor.js:296
+#, js-format
+msgid "Remove parameter %d"
+msgstr ""
+
+#: build/blocks/donation-form/editor.js:238
+#: build/blocks/donation-form/editor.js:304
 msgid "Remove"
 msgstr "Fjern"
 
-#: build/blocks/donation-form/editor.js:1
+#: build/blocks/donation-form/editor.js:244
+#: build/blocks/donation-form/editor.js:310
 msgid "Add Parameter"
 msgstr "Legg til parameter"
 
-#: build/blocks/donation-receipt/editor.js:1
-#: build/blocks/donation-receipt/frontend.js:1
+#: build/blocks/donation-receipt/editor.js:38
+#: build/blocks/donation-receipt/frontend.js:137
+#: build/blocks/donation-receipt/editor.js:16
+#: build/blocks/donation-receipt/frontend.js:139
 msgid "Name"
 msgstr "Navn"
 
-#: build/blocks/donation-receipt/editor.js:1
-#: build/blocks/donation-receipt/frontend.js:1
+#: build/blocks/donation-receipt/editor.js:44
+#: build/blocks/donation-receipt/frontend.js:114
+#: build/blocks/donation-receipt/frontend.js:143
+#: build/blocks/donation-receipt/editor.js:20
+#: build/blocks/donation-receipt/frontend.js:112
+#: build/blocks/donation-receipt/frontend.js:149
 msgid "Date"
 msgstr "Dato"
 
-#: build/blocks/donation-receipt/editor.js:1
-#: build/blocks/donation-receipt/frontend.js:1
+#: build/blocks/donation-receipt/editor.js:50
+#: build/blocks/donation-receipt/frontend.js:120
+#: build/blocks/donation-receipt/frontend.js:149
+#: build/blocks/donation-receipt/editor.js:24
+#: build/blocks/donation-receipt/frontend.js:157
 msgid "Total amount"
 msgstr "Beløp"
 
-#: build/blocks/donation-receipt/frontend.js:1
-msgid ""
-"Unfortunately, we were unable to load the details for the donation at this "
-"moment; the link may have expired."
-msgstr ""
-"Detaljene for donasjonen fikk vi dessverre ikke lastet inn akkurat nå, mulig "
-"lenken har gått ut på tid."
+#: build/blocks/donation-receipt/frontend.js:92
+#: build/blocks/donation-receipt/frontend.js:79
+msgid "Unfortunately, we were unable to load the details for the donation at this moment; the link may have expired."
+msgstr "Detaljene for donasjonen fikk vi dessverre ikke lastet inn akkurat nå, mulig lenken har gått ut på tid."
 
-#: build/blocks/donation-receipt/frontend.js:1
+#: build/blocks/donation-receipt/frontend.js:102
+#: build/blocks/donation-receipt/frontend.js:96
 msgid "Company name"
 msgstr "Firmanavn"
 
-#: build/blocks/donation-receipt/frontend.js:1
+#: build/blocks/donation-receipt/frontend.js:108
+#: build/blocks/donation-receipt/frontend.js:102
 msgid "Contact person"
 msgstr "Kontaktperson"
 
-#: build/blocks/donation-receipt/frontend.js:1
+#: build/blocks/donation-receipt/frontend.js:126
 msgid "Invoice"
 msgstr "Faktura"
 
-#: build/blocks/donation-receipt/frontend.js:1
+#: build/blocks/donation-receipt/frontend.js:130
+#: build/blocks/donation-receipt/frontend.js:129
 msgid "Download invoice"
 msgstr "Last ned faktura"
+
+#: build/blocks/donation-form/block.json
+msgctxt "block title"
+msgid "Fundy Form"
+msgstr "Fundy-skjema"
+
+#: build/blocks/donation-form/block.json
+msgctxt "block description"
+msgid "Displays a donation/petition form."
+msgstr ""
+
+#: build/blocks/donation-form/block.json
+msgctxt "block keyword"
+msgid "donation"
+msgstr ""
+
+#: build/blocks/donation-form/block.json
+msgctxt "block keyword"
+msgid "fundraising"
+msgstr ""
+
+#: build/blocks/donation-form/block.json
+msgctxt "block keyword"
+msgid "petition"
+msgstr ""
+
+#: build/blocks/donation-form/block.json
+msgctxt "block keyword"
+msgid "fundy"
+msgstr ""
+
+#: build/blocks/donation-form/block.json
+msgctxt "block keyword"
+msgid "form"
+msgstr ""
+
+#: build/blocks/donation-receipt/block.json
+msgctxt "block title"
+msgid "Donation Receipt"
+msgstr ""
+
+#: build/blocks/donation-receipt/block.json
+msgctxt "block description"
+msgid "Displays a donation receipt on a thank you page."
+msgstr ""
