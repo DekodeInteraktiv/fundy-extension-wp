@@ -291,14 +291,62 @@ class TestDonationFormBlock extends WP_UnitTestCase {
 		$this->assertStringNotContainsString( 'data-button-classes', $html );
 	}
 
-	public function test_fallback_content_is_present() {
+	/**
+	 * Core does not allow <noscript> in the 'post' context, so a parent block
+	 * running wp_kses_post() over its inner blocks would strip the tags and
+	 * leave the sentence as visible copy. The fallback is withheld there.
+	 */
+	public function test_fallback_content_is_omitted_when_kses_strips_noscript() {
 		$html = $this->render_donation_form( [
 			'formId'    => 1,
 			'urlParams' => [],
 		] );
 
+		$this->assertStringNotContainsString( '<noscript>', $html );
+		$this->assertStringNotContainsString( 'This donation form requires JavaScript', $html );
+	}
+
+	public function test_fallback_content_is_present_when_kses_allows_noscript() {
+		$filter = static function ( array $tags, string $context ): array {
+			if ( 'post' === $context ) {
+				$tags['noscript'] = [];
+			}
+
+			return $tags;
+		};
+
+		\add_filter( 'wp_kses_allowed_html', $filter, 10, 2 );
+
+		$html = $this->render_donation_form( [
+			'formId'    => 1,
+			'urlParams' => [],
+		] );
+
+		\remove_filter( 'wp_kses_allowed_html', $filter, 10 );
+
 		$this->assertStringContainsString( '<noscript>', $html );
 		$this->assertStringContainsString( 'This donation form requires JavaScript', $html );
+	}
+
+	public function test_fallback_survives_wp_kses_post_when_allowed() {
+		$filter = static function ( array $tags, string $context ): array {
+			if ( 'post' === $context ) {
+				$tags['noscript'] = [];
+			}
+
+			return $tags;
+		};
+
+		\add_filter( 'wp_kses_allowed_html', $filter, 10, 2 );
+
+		$html = \wp_kses_post( $this->render_donation_form( [
+			'formId'    => 1,
+			'urlParams' => [],
+		] ) );
+
+		\remove_filter( 'wp_kses_allowed_html', $filter, 10 );
+
+		$this->assertStringContainsString( '<noscript>', $html );
 	}
 
 	/**
