@@ -3,7 +3,7 @@ Tags: fundraising, donations, forms
 Requires at least: 6.4
 Requires PHP: 8.1
 Tested up to: 7.1
-Stable tag: 2.6.0
+Stable tag: 2.6.1
 License: GPLv3 or later
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
@@ -54,7 +54,10 @@ Please report security bugs found in the source code of the Dekode Fundraising p
 
 == Changelog ==
 
-= 2.6.0 (2026-09-04) =
+= 2.6.1 (2026-09-18) =
+* Bugfix- Previous release was missing files.
+
+= 2.6.0 (2026-09-18) =
 * Enhancement- Choose a form theme. Pick one of your organization's Fundy themes in the plugin's settings and every form on your site is styled with it.
 * Enhancement- Use your own stylesheet. Enter a Custom CSS URL in the settings to style the forms exactly as you want. When set, it takes precedence over the selected theme.
 * Enhancement- Override the theme for a single form. The shortcode takes a `theme` attribute, for example `[fundy_form id='13' theme='clay']`, which applies instead of the site's Theme setting for that form only.
