@@ -84,9 +84,6 @@ function render_block( array $attributes ): string {
 		$variation_attr = \sprintf( ' data-variation="%s"', \esc_attr( \implode( ',', $variations ) ) );
 	}
 
-	// The forms runtime replaces the mount's children when it renders, so
-	// the noscript fallback below only ever reaches users for whom the
-	// remote bundle never executes.
 	return \sprintf( '
 		<div %1$s>
 			<div
@@ -94,7 +91,7 @@ function render_block( array $attributes ): string {
 				data-form-id="%2$s"
 				data-core-url="%3$s"
 				data-params="%4$s"%5$s%6$s
-			><noscript>%7$s</noscript></div>
+			>%7$s</div>
 		</div>
 		',
 		\get_block_wrapper_attributes( [
@@ -105,7 +102,7 @@ function render_block( array $attributes ): string {
 		\esc_attr( $json_params ),
 		$variation_attr,
 		theme_data_attribute( $attributes ),
-		\esc_html__( 'This donation form requires JavaScript. Please enable JavaScript in your browser and reload the page.', 'dekode-fundraising' ),
+		noscript_fallback(),
 	);
 }
 
@@ -154,4 +151,33 @@ function extract_variations( array $attributes ): array {
 	 * @param array $attributes Block attributes.
 	 */
 	return (array) \apply_filters( 'fundy/donation_form/variations', $variations, $attributes );
+}
+
+/**
+ * The noscript fallback for the form mount ('' when kses would strip it).
+ *
+ * The forms runtime replaces the mount's children when it renders, so this
+ * only ever reaches users for whom the remote bundle never executes.
+ *
+ * Parent blocks that pass their inner blocks through wp_kses_post() strip
+ * <noscript> - it is not among core's allowed post tags - which would leave
+ * the fallback sentence behind as visible copy next to the rendered form.
+ * Emitting nothing is the lesser evil, so the fallback is only rendered
+ * where the installation's kses allowlist keeps the tag. A site that wants
+ * it can add 'noscript' to the 'post' context via the wp_kses_allowed_html
+ * filter. The allowlist for that context is the best available proxy: a
+ * parent calling wp_kses() with its own allowlist cannot be detected from
+ * here.
+ */
+function noscript_fallback(): string {
+	$allowed_tags = \wp_kses_allowed_html( 'post' );
+
+	if ( ! isset( $allowed_tags['noscript'] ) ) {
+		return '';
+	}
+
+	return \sprintf(
+		'<noscript>%s</noscript>',
+		\esc_html__( 'This donation form requires JavaScript. Please enable JavaScript in your browser and reload the page.', 'dekode-fundraising' )
+	);
 }

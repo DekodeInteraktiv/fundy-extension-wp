@@ -72,6 +72,18 @@ Note: URL parameter keys are restricted to letters, digits, `_` and `-` (max 64 
 * **Remote bundles without SRI.** The `fundy-forms`, `fundy-conversion`, and `fundy-tracking` scripts load from `assets.fundy.cloud` under rolling tags (`*.latest.js`), so Subresource Integrity hashes are impossible by design. This is an accepted supply-chain trade-off: the CDN origin is treated as trusted, the same way the Fundy API itself is.
 * **Head-load detection gap.** Early (in-`<head>`) loading of the form assets relies on `has_block()` / `has_shortcode()` against the raw post content, which cannot see forms inside synced patterns or reusable blocks (`core/block` references). Those pages fall back to the standard footer `viewScript` path — the form still renders, just without the preload fast path. Use the `fundy/load_form_assets_in_head` filter to force the fast path for such pages.
 * **Block color supports style the wrapper only.** The form itself renders inside a shadow root with its own styles, so block *background* color shows behind the form; text color would not reach inside the form and is therefore not offered.
+* **`<noscript>` fallback is conditional.** The Donation Form block renders a `<noscript>` sentence for visitors whose browser never runs the remote bundle, but `<noscript>` is not among core's allowed post tags. A parent block that passes its inner blocks through `wp_kses_post()` therefore strips the tags and leaves the sentence as visible copy beside the form. The block only emits the fallback when the installation's kses allowlist keeps the tag, so on a stock install it is omitted. Add it back site-wide with the `wp_kses_allowed_html` filter:
+
+    ```php
+    add_filter( 'wp_kses_allowed_html', function ( $tags, $context ) {
+        if ( 'post' === $context ) {
+            $tags['noscript'] = [];
+        }
+
+        return $tags;
+    }, 10, 2 );
+    ```
+
 * **Forms REST proxy.** The block editor lists available forms via `GET /wp-json/fundy/v1/forms` (users with `edit_posts`), which calls the Fundy API server-side. The organization API token never leaves PHP.
 
 ## Setup
