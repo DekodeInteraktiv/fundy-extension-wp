@@ -64,7 +64,7 @@ The same options are available as a shortcode for the classic editor, widgets an
 * `showlabels` - Whether place names are shown on the basemap. Default `true`.
 * `interactive` - Whether visitors can move the map. Default `false`.
 * `height` - Height in pixels, minimum 240. Default `480`.
-* `window` - How long activity stays on the map: `live` (2 minutes), `hour` or `today` (default).
+* `window` - How long activity stays on the map: `live` (2 minutes), `quarter` (15 minutes), `hour` or `today` (default).
 * `ctaurl` - A donation page link, shown as a QR code on kiosk screens opened from the page.
 
 The plugin settings page shows the organization's **kiosk link** for office and event screens: the full-screen layout with large counters and the amount raised today. The link carries a token that is read from the Fundy API when the settings page loads (it is never stored on the site); regenerate it on the organization page in the Fundy dashboard if it leaks.

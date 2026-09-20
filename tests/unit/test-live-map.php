@@ -63,6 +63,16 @@ class TestLiveMap extends WP_UnitTestCase {
 		$this->assertFalse( $args['interactive'] );
 	}
 
+	/**
+	 * Every window the interface accepts must survive sanitizing, or the
+	 * block silently embeds a different one (see the live map developer docs).
+	 */
+	public function test_every_interface_window_is_accepted() {
+		foreach ( [ 'live', 'quarter', 'hour', 'today' ] as $window ) {
+			$this->assertSame( $window, sanitize_args( [ 'window' => $window ] )['window'] );
+		}
+	}
+
 	public function test_flags_accept_shortcode_style_strings() {
 		$args = sanitize_args( [
 			'showCounters' => 'false',

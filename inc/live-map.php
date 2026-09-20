@@ -84,7 +84,7 @@ function sanitize_args( array $args ): array {
 		'showLabels'   => $flag( $args['showLabels'] ?? null, $defaults['showLabels'] ),
 		'interactive'  => $flag( $args['interactive'] ?? null, $defaults['interactive'] ),
 		'height'       => $height >= MIN_HEIGHT ? $height : $defaults['height'],
-		'window'       => $one_of( $args['window'] ?? '', [ 'live', 'hour', 'today' ], $defaults['window'] ),
+		'window'       => $one_of( $args['window'] ?? '', [ 'live', 'quarter', 'hour', 'today' ], $defaults['window'] ),
 		'ctaUrl'       => \esc_url_raw( (string) ( $args['ctaUrl'] ?? '' ), [ 'http', 'https' ] ),
 	];
 }

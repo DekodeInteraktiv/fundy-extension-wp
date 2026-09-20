@@ -55,7 +55,7 @@
 		},
 		"window": {
 			"type": "string",
-			"enum": ["live", "hour", "today"],
+			"enum": ["live", "quarter", "hour", "today"],
 			"default": "today"
 		},
 		"ctaUrl": {

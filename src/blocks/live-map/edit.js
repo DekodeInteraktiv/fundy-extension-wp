@@ -124,6 +124,10 @@ export default function Edit({ attributes, setAttributes }) {
 							value: 'hour',
 						},
 						{
+							label: __('Last 15 minutes', 'dekode-fundraising'),
+							value: 'quarter',
+						},
+						{
 							label: __('Live (2 minutes)', 'dekode-fundraising'),
 							value: 'live',
 						},
