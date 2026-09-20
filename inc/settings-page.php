@@ -18,7 +18,7 @@ use function Dekode\Fundraising\Settings\get_forms_script_env;
 use function Dekode\Fundraising\Settings\get_tracking_script_enabled;
 use function Dekode\Fundraising\Settings\get_tracking_script_env;
 use function Dekode\Fundraising\API\fetch_organization_public_id;
-use function Dekode\Fundraising\API\get_organization_self;
+use function Dekode\Fundraising\API\fetch_live_map_kiosk_token;
 use function Dekode\Fundraising\API\get_organization_themes;
 use function Dekode\Fundraising\LiveMap\get_kiosk_url;
 use function Dekode\Fundraising\Settings\normalize_script_env;
@@ -431,10 +431,10 @@ function live_map_kiosk_link_callback(): void {
 /**
  * Render the read-only kiosk link with its copy button.
  *
- * The token is read live from the cached organization record, never from
- * an option, so a link regenerated in the Fundy dashboard shows up here
- * within minutes and the secret never lands in the database. Shared by the
- * site and network settings pages.
+ * The token is read from Fundy on each render, never cached and never
+ * stored, so a link regenerated in the dashboard shows up here at once and
+ * the secret never lands in the database. Shared by the site and network
+ * settings pages.
  *
  * @param string $api_key         API key the record is fetched with.
  * @param string $public_id       Stored organization public id.
@@ -451,19 +451,20 @@ function render_live_map_kiosk_link( string $api_key, string $public_id, bool $n
 		return;
 	}
 
-	$self = get_organization_self( $api_key );
-	$url  = \is_wp_error( $self ) ? '' : get_kiosk_url( $public_id, $self['live_map_kiosk_token'] );
+	$token = fetch_live_map_kiosk_token( $api_key );
 
-	if ( \is_wp_error( $self ) ) {
+	if ( \is_wp_error( $token ) ) {
 		echo '<p class="description">' . \esc_html(
 			\sprintf(
 				/* translators: %s: error message returned while fetching the organization. */
 				\__( 'The kiosk link could not be fetched (%s). Reload the page to retry.', 'dekode-fundraising' ),
-				$self->get_error_message()
+				$token->get_error_message()
 			)
 		) . '</p>';
 		return;
 	}
+
+	$url = get_kiosk_url( $public_id, $token );
 
 	if ( '' === $url ) {
 		echo '<p class="description">' . \esc_html__( 'No kiosk link yet. Create one on the organization page in the Fundy dashboard, under Live Map.', 'dekode-fundraising' ) . '</p>';

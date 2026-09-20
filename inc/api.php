@@ -150,32 +150,21 @@ function get_organization_themes( string $api_key ): array|\WP_Error {
 }
 
 /**
- * Fetch the organization's own record for an API key, cached for a few
- * minutes.
+ * Request and validate the organization's own record.
  *
- * The public id is stored as a setting when the key is saved, so front-end
- * renders never make this request; the Live Map kiosk token is deliberately
- * never stored and is read from this cache on the settings page, so a token
- * regenerated in the Fundy dashboard shows up within the cache lifetime and
- * the secret never lands in wp_options. Errors are never cached.
+ * The one place GET /organization/self is called; the callers below decide
+ * what may be cached out of it.
  *
  * @param string $api_key Organization API token.
  * @return array{public_id: string, name: string, live_map_kiosk_token: string}|\WP_Error
  */
-function get_organization_self( string $api_key ): array|\WP_Error {
+function request_organization_self( string $api_key ): array|\WP_Error {
 	if ( '' === $api_key ) {
 		return new \WP_Error(
 			'fundy_no_api_token',
 			\__( 'No Fundy API token is configured.', 'dekode-fundraising' ),
 			[ 'status' => 400 ]
 		);
-	}
-
-	$cache_key = self_cache_key( $api_key );
-	$cached    = \get_transient( $cache_key );
-
-	if ( \is_array( $cached ) && isset( $cached['public_id'] ) ) {
-		return $cached;
 	}
 
 	$data = request( '/api/v1/organization/self', $api_key, 5 );
@@ -195,15 +184,69 @@ function get_organization_self( string $api_key ): array|\WP_Error {
 		);
 	}
 
-	$self = [
+	return [
 		'public_id'            => $public_id,
 		'name'                 => \sanitize_text_field( (string) ( $organization['name'] ?? '' ) ),
 		'live_map_kiosk_token' => sanitize_live_map_kiosk_token( (string) ( $organization['live_map_kiosk_token'] ?? '' ) ),
+	];
+}
+
+/**
+ * Fetch the organization's own record for an API key, cached for a few
+ * minutes.
+ *
+ * The public id is stored as a setting when the key is saved, so front-end
+ * renders never make this request. The Live Map kiosk token is deliberately
+ * not part of this record: a transient is an option row on a site without an
+ * external object cache, and the token is a secret, so it is read live by
+ * fetch_live_map_kiosk_token() instead. Errors are never cached.
+ *
+ * @param string $api_key Organization API token.
+ * @return array{public_id: string, name: string}|\WP_Error
+ */
+function get_organization_self( string $api_key ): array|\WP_Error {
+	if ( '' === $api_key ) {
+		return request_organization_self( $api_key );
+	}
+
+	$cache_key = self_cache_key( $api_key );
+	$cached    = \get_transient( $cache_key );
+
+	if ( \is_array( $cached ) && isset( $cached['public_id'] ) ) {
+		return $cached;
+	}
+
+	$organization = request_organization_self( $api_key );
+
+	if ( \is_wp_error( $organization ) ) {
+		return $organization;
+	}
+
+	$self = [
+		'public_id' => $organization['public_id'],
+		'name'      => $organization['name'],
 	];
 
 	\set_transient( $cache_key, $self, SELF_CACHE_TTL );
 
 	return $self;
+}
+
+/**
+ * Fetch the Live Map kiosk token for an API key.
+ *
+ * Never cached and never stored: the token unlocks the organization's kiosk
+ * figures, so it is read from Fundy each time the settings page renders the
+ * link and lives only in that response. A token regenerated in the Fundy
+ * dashboard is therefore shown here immediately.
+ *
+ * @param string $api_key Organization API token.
+ * @return string|\WP_Error The 64-character token, '' when none exists yet, or an error.
+ */
+function fetch_live_map_kiosk_token( string $api_key ): string|\WP_Error {
+	$organization = request_organization_self( $api_key );
+
+	return \is_wp_error( $organization ) ? $organization : $organization['live_map_kiosk_token'];
 }
 
 /**
