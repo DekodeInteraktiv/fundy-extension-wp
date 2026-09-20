@@ -2,8 +2,8 @@
 Tags: fundraising, donations, forms
 Requires at least: 6.4
 Requires PHP: 8.1
-Tested up to: 6.8
-Stable tag: 2.6.0
+Tested up to: 7.1
+Stable tag: 2.6.1
 License: GPLv3 or later
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
@@ -59,17 +59,25 @@ Please report security bugs found in the source code of the Dekode Fundraising p
 * Enhancement- The settings page shows your organization's Live Map kiosk link for office and event screens.
 * Enhancement- Sites that saved their API key before this version need to save the settings once more for the Live Map block to connect.
 
-= 2.6.0 (2026-09-04) =
+= 2.6.1 (2026-09-18) =
+* Bugfix- Previous release was missing files.
+
+= 2.6.0 (2026-09-18) =
 * Enhancement- Choose a form theme. Pick one of your organization's Fundy themes in the plugin's settings and every form on your site is styled with it.
 * Enhancement- Use your own stylesheet. Enter a Custom CSS URL in the settings to style the forms exactly as you want. When set, it takes precedence over the selected theme.
+* Enhancement- Override the theme for a single form. The shortcode takes a `theme` attribute, for example `[fundy_form id='13' theme='clay']`, which applies instead of the site's Theme setting for that form only.
 * Enhancement- No more flash of unstyled forms. Your organization's styling is loaded ahead of the form itself, so forms look right from the moment they appear.
 * Enhancement- Pick a form from a list. The block editor now lists your organization's forms, so you select one instead of typing its ID. If the API key has not been added yet, the block points you to the settings page.
 * Enhancement- Block styles offered by your theme now apply to the form. The shortcode accepts a matching `variation` attribute.
+* Enhancement- Support for adding automatic form style variations based on the donation form block style and background color.
 * Enhancement- The Donation Form block is now called "Fundy Form", as it handles donation, lead, membership and petition forms, and it is easier to find in the block inserter.
 * Enhancement- Visitors with JavaScript disabled now see a short message asking them to enable it, instead of an empty space.
+* Enhancement- New Form Events setting. Switch off the conversion script's funnel events while the `purchase` event keeps firing. The existing dataLayer setting still switches off everything, `purchase` included.
 * Enhancement- The block's text colour option has been removed, as it never reached the form itself. Background colour still works.
-* Enhancement- Developers can override the custom stylesheet, the organization ID and early loading of form assets with new filters. See the plugin README for details.
+* Enhancement- The block's margin and padding options have been removed. Wrap the block in a Group block if you need to control the spacing around a form.
+* Enhancement- Developers can override the custom stylesheet, the organization ID, early loading of form assets, the form theme, the style variations and both dataLayer toggles with new filters. See the plugin README for details.
 * Bugfix- Extra URL parameters added to a block or shortcode are now validated before they reach the form.
+* Bugfix- The "please enable JavaScript" message is no longer output on sites where WordPress strips `<noscript>` tags, where it could appear as stray text next to the form.
 * Maintenance- Updated build dependencies.
 
 = 2.5.0 (2026-04-24) =

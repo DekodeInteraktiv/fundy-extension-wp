@@ -2,14 +2,14 @@
 # This file is distributed under the GPL v3.
 msgid ""
 msgstr ""
-"Project-Id-Version: Dekode Fundraising 2.6.0\n"
+"Project-Id-Version: Dekode Fundraising 2.6.1\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/dekode-fundraising\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2026-09-06T16:38:34+00:00\n"
+"POT-Creation-Date: 2026-09-20T10:49:35+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.12.0\n"
 "X-Domain: dekode-fundraising\n"
@@ -17,7 +17,7 @@ msgstr ""
 #. Plugin Name of the plugin
 #: dekode-fundraising.php
 #: inc/settings-page-network.php:40
-#: inc/settings-page.php:47
+#: inc/settings-page.php:48
 msgid "Dekode Fundraising"
 msgstr ""
 
@@ -81,207 +81,219 @@ msgid "Live map of donations to %s"
 msgstr ""
 
 #: inc/settings-page-network.php:39
-#: inc/settings-page-network.php:486
-#: inc/settings-page.php:46
-#: inc/settings-page.php:781
+#: inc/settings-page-network.php:516
+#: inc/settings-page.php:47
+#: inc/settings-page.php:814
 msgid "Dekode Fundraising Settings"
 msgstr ""
 
-#: inc/settings-page-network.php:75
-#: inc/settings-page.php:82
+#: inc/settings-page-network.php:76
+#: inc/settings-page.php:84
 msgid "General"
 msgstr ""
 
-#: inc/settings-page-network.php:82
-#: inc/settings-page.php:89
+#: inc/settings-page-network.php:83
+#: inc/settings-page.php:91
 msgid "Advanced"
 msgstr ""
 
-#: inc/settings-page-network.php:89
-#: inc/settings-page.php:106
+#: inc/settings-page-network.php:90
+#: inc/settings-page.php:108
 msgid "API Key"
 msgstr ""
 
-#: inc/settings-page-network.php:97
-#: inc/settings-page.php:114
+#: inc/settings-page-network.php:98
+#: inc/settings-page.php:116
 msgid "Live Map kiosk link"
 msgstr ""
 
-#: inc/settings-page-network.php:105
-#: inc/settings-page.php:122
+#: inc/settings-page-network.php:106
+#: inc/settings-page.php:124
 msgid "Forms Script"
 msgstr ""
 
-#: inc/settings-page-network.php:113
-#: inc/settings-page.php:130
+#: inc/settings-page-network.php:114
+#: inc/settings-page.php:132
 msgid "Conversion Script"
 msgstr ""
 
-#: inc/settings-page-network.php:121
-#: inc/settings-page.php:138
+#: inc/settings-page-network.php:122
+#: inc/settings-page.php:140
 msgid "Data Layer Event"
 msgstr ""
 
-#: inc/settings-page-network.php:129
-#: inc/settings-page.php:146
+#: inc/settings-page-network.php:130
+#: inc/settings-page.php:148
+msgid "Form Events"
+msgstr ""
+
+#: inc/settings-page-network.php:138
+#: inc/settings-page.php:156
 msgid "Tracking Script"
 msgstr ""
 
-#: inc/settings-page-network.php:137
-#: inc/settings-page.php:154
+#: inc/settings-page-network.php:146
+#: inc/settings-page.php:164
 msgid "Debug Mode"
 msgstr ""
 
-#: inc/settings-page-network.php:145
-#: inc/settings-page.php:162
+#: inc/settings-page-network.php:154
+#: inc/settings-page.php:172
 #: build/blocks/live-map/editor.js:1
 msgid "Theme"
 msgstr ""
 
-#: inc/settings-page-network.php:154
-#: inc/settings-page.php:171
+#: inc/settings-page-network.php:163
+#: inc/settings-page.php:181
 msgid "Custom CSS URL"
 msgstr ""
 
-#: inc/settings-page-network.php:167
+#: inc/settings-page-network.php:176
 msgid "Insufficient permissions."
 msgstr ""
 
-#: inc/settings-page-network.php:262
-#: inc/settings-page.php:358
+#: inc/settings-page-network.php:272
+#: inc/settings-page.php:370
 msgid "If you are unsure about the settings here please talk to your Dekode Fundraising contact."
 msgstr ""
 
-#: inc/settings-page-network.php:269
-#: inc/settings-page.php:365
+#: inc/settings-page-network.php:279
+#: inc/settings-page.php:377
 msgid "Advanced settings for troubleshooting and diagnostics."
 msgstr ""
 
-#: inc/settings-page-network.php:317
-#: inc/settings-page-network.php:347
-#: inc/settings-page-network.php:389
-#: inc/settings-page.php:510
-#: inc/settings-page.php:543
-#: inc/settings-page.php:589
+#: inc/settings-page-network.php:327
+#: inc/settings-page-network.php:357
+#: inc/settings-page-network.php:399
+#: inc/settings-page.php:522
+#: inc/settings-page.php:555
+#: inc/settings-page.php:601
 msgid "Development"
 msgstr ""
 
-#: inc/settings-page-network.php:326
-#: inc/settings-page-network.php:356
-#: inc/settings-page-network.php:398
-#: inc/settings-page.php:521
-#: inc/settings-page.php:554
-#: inc/settings-page.php:600
+#: inc/settings-page-network.php:336
+#: inc/settings-page-network.php:366
+#: inc/settings-page-network.php:408
+#: inc/settings-page.php:533
+#: inc/settings-page.php:566
+#: inc/settings-page.php:612
 msgid "Production"
 msgstr ""
 
-#: inc/settings-page-network.php:378
-#: inc/settings-page-network.php:438
-#: inc/settings-page.php:577
-#: inc/settings-page.php:642
+#: inc/settings-page-network.php:388
+#: inc/settings-page-network.php:468
+#: inc/settings-page.php:589
+#: inc/settings-page.php:675
 msgid "Enable"
 msgstr ""
 
-#: inc/settings-page-network.php:418
-#: inc/settings-page.php:621
+#: inc/settings-page-network.php:428
+#: inc/settings-page-network.php:448
+#: inc/settings-page.php:633
+#: inc/settings-page.php:654
 msgid "Disable"
 msgstr ""
 
-#: inc/settings-page-network.php:420
-#: inc/settings-page.php:623
-msgid "Prevents pushing conversion events to the dataLayer."
+#: inc/settings-page-network.php:430
+#: inc/settings-page.php:635
+msgid "Prevents pushing any conversion events to the dataLayer, including the purchase event."
 msgstr ""
 
-#: inc/settings-page-network.php:473
-#: inc/settings-page.php:767
+#: inc/settings-page-network.php:450
+#: inc/settings-page.php:656
+msgid "Prevents pushing the form funnel events (view_item, add_to_cart, remove_from_cart, begin_checkout, add_payment_info) to the dataLayer. The purchase event still fires."
+msgstr ""
+
+#: inc/settings-page-network.php:503
+#: inc/settings-page.php:800
 msgid "URL of a custom stylesheet injected into Fundy forms."
 msgstr ""
 
-#: inc/settings-page-network.php:493
-#: inc/settings-page.php:788
+#: inc/settings-page-network.php:523
+#: inc/settings-page.php:821
 msgid "Save"
 msgstr ""
 
-#: inc/settings-page.php:97
+#: inc/settings-page.php:99
 msgid "Override Network Settings"
 msgstr ""
 
 #. translators: %s: error message returned while fetching the organization.
-#: inc/settings-page.php:288
+#: inc/settings-page.php:300
 #, php-format
 msgid "The organization ID could not be fetched (%s). Save the settings again to retry."
 msgstr ""
 
 #. translators: %s: error message returned while fetching the theme list.
-#: inc/settings-page.php:338
+#: inc/settings-page.php:350
 #, php-format
 msgid "The stylesheet URL for the selected theme could not be resolved (%s). Save the settings again to retry."
 msgstr ""
 
 #. translators: %s: theme name.
-#: inc/settings-page.php:348
+#: inc/settings-page.php:360
 #, php-format
 msgid "The theme \"%s\" is not deployed for your organization, so no stylesheet will be applied."
 msgstr ""
 
-#: inc/settings-page.php:382
+#: inc/settings-page.php:394
 msgid "Override network settings?"
 msgstr ""
 
-#: inc/settings-page.php:397
+#: inc/settings-page.php:409
 msgid "Enter your API key"
 msgstr ""
 
-#: inc/settings-page.php:433
+#: inc/settings-page.php:445
 msgid "Managed in the network settings."
 msgstr ""
 
-#: inc/settings-page.php:438
+#: inc/settings-page.php:450
 msgid "Save an API key to get the kiosk link."
 msgstr ""
 
 #. translators: %s: error message returned while fetching the organization.
-#: inc/settings-page.php:449
+#: inc/settings-page.php:461
 #, php-format
 msgid "The kiosk link could not be fetched (%s). Reload the page to retry."
 msgstr ""
 
-#: inc/settings-page.php:457
+#: inc/settings-page.php:469
 msgid "No kiosk link yet. Create one on the organization page in the Fundy dashboard, under Live Map."
 msgstr ""
 
-#: inc/settings-page.php:469
+#: inc/settings-page.php:481
 msgid "Copy"
 msgstr ""
 
-#: inc/settings-page.php:472
+#: inc/settings-page.php:484
 msgid "Open this link on an office or event screen for the full-screen Live Map with today's counters. Anyone with the link sees those figures, so share it with care; regenerate it on the organization page in the Fundy dashboard if it leaks."
 msgstr ""
 
-#: inc/settings-page.php:489
+#: inc/settings-page.php:501
 msgid "Copied"
 msgstr ""
 
 #. translators: %s: theme name.
-#: inc/settings-page.php:698
+#: inc/settings-page.php:731
 #, php-format
 msgid "%s (not found)"
 msgstr ""
 
-#: inc/settings-page.php:708
+#: inc/settings-page.php:741
 msgid "None"
 msgstr ""
 
-#: inc/settings-page.php:721
+#: inc/settings-page.php:754
 msgid "Set an API key to list themes."
 msgstr ""
 
-#: inc/settings-page.php:725
+#: inc/settings-page.php:758
 msgid "A theme deployed for your organization in Fundy. The custom CSS URL below overrides it when set."
 msgstr ""
 
 #. translators: 1: theme name, 2: date the theme was last deployed.
-#: inc/settings-page.php:746
+#: inc/settings-page.php:779
 #, php-format
 msgid "%1$s (deployed %2$s)"
 msgstr ""

@@ -79,6 +79,7 @@ function render_fundy_form_shortcode( array $atts ): string {
 			'id'        => '',
 			'params'    => '',
 			'variation' => '',
+			'theme'     => '',
 		],
 		$atts,
 		'fundy_form'
@@ -100,14 +101,24 @@ function render_fundy_form_shortcode( array $atts ): string {
 		}
 	}
 
-	// Shortcode parity with the block's is-style-* pass-through: only slugs
-	// matching the block-style class shape are forwarded across the shadow
-	// boundary as data-variation.
-	$variation_attr = '';
-	$variation      = \strtolower( \trim( (string) $atts['variation'] ) );
+	// Shortcode parity with the block's variation pass-through: the attribute
+	// takes a comma-separated list, and only slugs matching the block-style
+	// class shape are forwarded across the shadow boundary as data-variation.
+	// Entries failing that shape are dropped individually, so one typo does
+	// not cost the author the rest of the list.
+	$variations = \array_filter(
+		\array_map(
+			static fn ( string $variation ): string => \strtolower( \trim( $variation ) ),
+			\explode( ',', (string) $atts['variation'] )
+		),
+		static fn ( string $variation ): bool => 1 === \preg_match( '/^[a-z0-9-]+$/', $variation )
+	);
 
-	if ( \preg_match( '/^[a-z0-9-]+$/', $variation ) ) {
-		$variation_attr = \sprintf( ' data-variation="%s"', \esc_attr( $variation ) );
+	$variations     = \array_unique( $variations );
+	$variation_attr = '';
+
+	if ( ! empty( $variations ) ) {
+		$variation_attr = \sprintf( ' data-variation="%s"', \esc_attr( \implode( ',', $variations ) ) );
 	}
 
 	\wp_enqueue_script( 'fundy-form-script' );
@@ -134,6 +145,6 @@ function render_fundy_form_shortcode( array $atts ): string {
 		\esc_attr( get_base_url() ),
 		\esc_attr( $json_params ),
 		$variation_attr,
-		theme_data_attribute(),
+		theme_data_attribute( $atts ),
 	);
 }

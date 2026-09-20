@@ -23,8 +23,12 @@ For local development you can edit this constant in the `.wp-env.json` file and 
 * `fundy/enqueue/form_styles` (bool) - Whether to enqueue the Dekode Fundraising form styles. Default is true.
 * `fundy/base_url` (string) - Used to modify the base API URL.
 * `fundy/config/custom_css_url` (string|string[]) - Override the client stylesheet URL(s) injected into Dekode Fundraising forms (the `customCssUrl` key of `window.FundyConfig`). Receives the resolved URL per the precedence in "Form styling" below; an empty value omits the key.
+* `fundy/config/disable_data_layer_event` (bool) - Override the `disableDataLayerEvent` key of `window.FundyConfig`. When true the conversion script pushes nothing to the dataLayer, including the `purchase` event.
+* `fundy/config/disable_form_events` (bool) - Override the `disableFormEvents` key of `window.FundyConfig`. When true the conversion script pushes none of the form funnel events (`view_item`, `add_to_cart`, `remove_from_cart`, `begin_checkout`, `add_payment_info`); the `purchase` event still fires.
 * `fundy/config/organization_id` (string) - Override the organization public ID emitted as the `organizationId` key of `window.FundyConfig`. Defaults to the ID fetched from the Fundy API when the API key setting is saved; an empty value omits the key.
 * `fundy/load_form_assets_in_head` (bool) - Force (or prevent) loading the form script/style in `<head>` with preload hints. Defaults to automatic detection on singular pages.
+* `fundy/donation_form/theme` (string) - Override the theme name emitted as `data-theme` on the form container (block and shortcode), which selects the per-organization stylesheet variant the forms bundle loads. Receives the name resolved from the container's `theme` attribute and the Theme setting, plus the container attributes as a second argument. Values outside the theme slug shape (letters, digits and `-`, max 50 characters) are dropped.
+* `fundy/donation_form/variations` (array) - Modify the style variations emitted as `data-variation` on the Donation Form block container (the forms runtime turns each one into a `.variation-<name>` class inside the shadow root). Receives the names resolved from the block's `className` - `is-style-<name>` block styles become `<name>`, and `has-<name>-background-color` colour classes become `background-color-<name>` so they stay distinguishable - and the block attributes as a second argument.
 * `fundy/live_map/base_url` (string) - The origin of the Fundy interface that serves the Live Map. Defaults to `FUNDY_CORE_URL` with its `/core` path stripped.
 * `fundy/live_map/organization_id` (string) - Override the organization public ID the Live Map block and shortcode embed. Defaults to the ID fetched when the API key was saved; an empty value renders nothing. Point it at `00000000-0000-0000-0000-000000000000` with a local surge (`ENVIRONMENT=local`) to embed its fake organization.
 * `fundy/live_map/embed_params` (array) - The query parameters of the Live Map iframe URL, keyed by name, with the sanitized block/shortcode arguments as the second argument.
@@ -77,9 +81,17 @@ You can also define extra parameters to be passed to the frontend by using the `
 
 ```[fundy_form id='13' params='{"utm_source":123,"other_parameter":"some value"}]```
 
-You can select a styling variation for the form with the `variation` attribute, matching the `is-style-*` block styles available on the Donation Form block:
+You can select one or more styling variations for the form with the `variation` attribute, matching the `is-style-*` block styles available on the Donation Form block. Pass several as a comma-separated list:
 
 ```[fundy_form id='13' variation='compact']```
+
+```[fundy_form id='13' variation='compact,dark']```
+
+Each entry is lowercased and must consist of letters, digits and `-`; entries outside that shape are dropped individually.
+
+You can override the site's Theme setting for a single form with the `theme` attribute:
+
+```[fundy_form id='13' theme='clay']```
 
 Note: URL parameter keys are restricted to letters, digits, `_` and `-` (max 64 characters); values are capped at 500 characters. Entries outside those limits are dropped at render time.
 
@@ -88,6 +100,18 @@ Note: URL parameter keys are restricted to letters, digits, `_` and `-` (max 64 
 * **Remote bundles without SRI.** The `fundy-forms`, `fundy-conversion`, and `fundy-tracking` scripts load from `assets.fundy.cloud` under rolling tags (`*.latest.js`), so Subresource Integrity hashes are impossible by design. This is an accepted supply-chain trade-off: the CDN origin is treated as trusted, the same way the Fundy API itself is.
 * **Head-load detection gap.** Early (in-`<head>`) loading of the form assets relies on `has_block()` / `has_shortcode()` against the raw post content, which cannot see forms inside synced patterns or reusable blocks (`core/block` references). Those pages fall back to the standard footer `viewScript` path — the form still renders, just without the preload fast path. Use the `fundy/load_form_assets_in_head` filter to force the fast path for such pages.
 * **Block color supports style the wrapper only.** The form itself renders inside a shadow root with its own styles, so block *background* color shows behind the form; text color would not reach inside the form and is therefore not offered.
+* **`<noscript>` fallback is conditional.** The Donation Form block renders a `<noscript>` sentence for visitors whose browser never runs the remote bundle, but `<noscript>` is not among core's allowed post tags. A parent block that passes its inner blocks through `wp_kses_post()` therefore strips the tags and leaves the sentence as visible copy beside the form. The block only emits the fallback when the installation's kses allowlist keeps the tag, so on a stock install it is omitted. Add it back site-wide with the `wp_kses_allowed_html` filter:
+
+    ```php
+    add_filter( 'wp_kses_allowed_html', function ( $tags, $context ) {
+        if ( 'post' === $context ) {
+            $tags['noscript'] = [];
+        }
+
+        return $tags;
+    }, 10, 2 );
+    ```
+
 * **Forms REST proxy.** The block editor lists available forms via `GET /wp-json/fundy/v1/forms` (users with `edit_posts`), which calls the Fundy API server-side. The organization API token never leaves PHP.
 
 ## Setup

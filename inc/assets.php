@@ -12,6 +12,7 @@ namespace Dekode\Fundraising\Assets;
 use function Dekode\Fundraising\Settings\get_conversion_script_env;
 use function Dekode\Fundraising\Settings\get_debug_enabled;
 use function Dekode\Fundraising\Settings\get_disable_data_layer_event;
+use function Dekode\Fundraising\Settings\get_disable_form_events;
 use function Dekode\Fundraising\Settings\get_form_css_url;
 use function Dekode\Fundraising\Settings\get_forms_script_env;
 use function Dekode\Fundraising\Settings\get_organization_public_id;
@@ -81,6 +82,7 @@ function build_fundy_config(): array {
 		'coreBaseUrl'           => \apply_filters( 'fundy/config/core_base_url', \FUNDY_CORE_URL ),
 		'surgeBaseUrl'          => \apply_filters( 'fundy/config/surge_base_url', \FUNDY_SURGE_URL ),
 		'disableDataLayerEvent' => \apply_filters( 'fundy/config/disable_data_layer_event', get_disable_data_layer_event() ),
+		'disableFormEvents'     => \apply_filters( 'fundy/config/disable_form_events', get_disable_form_events() ),
 		'enableDebugMode'       => $enable_debug_mode,
 	];
 
