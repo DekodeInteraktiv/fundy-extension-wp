@@ -37,7 +37,7 @@
 		"format": "prettier --write .",
 		"lint-staged": "lint-staged",
 		"wp-env": "wp-env",
-		"test:php": "wp-env run tests-wordpress phpunit -c /var/www/html/wp-content/plugins/fundy-extension-wp/phpunit.xml.dist --verbose",
+		"test:php": "wp-env run tests-wordpress /var/www/html/wp-content/plugins/dekode-fundraising/vendor/bin/phpunit -c /var/www/html/wp-content/plugins/dekode-fundraising/phpunit.xml.dist",
 		"test:e2e": "wp-scripts test-playwright --config tests/e2e/config/playwright.config.ts",
 		"test:e2e:debug": "wp-scripts test-playwright --config tests/e2e/config/playwright.config.ts --ui"
 	},

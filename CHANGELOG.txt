@@ -1,3 +1,8 @@
+= Unreleased =
+* Enhancement- New "Fundy Live Map" block and `[fundy_live_map]` shortcode embed your organization's live donation map on any page, with today's counters. The map shows anonymous, approximate activity and nothing about individual donors.
+* Enhancement- The settings page shows your organization's Live Map kiosk link for office and event screens.
+* Enhancement- Sites that saved their API key before this version need to save the settings once more for the Live Map block to connect.
+
 = 2.6.1 (2026-09-18) =
 * Bugfix- Previous release was missing files.
 

@@ -12,6 +12,8 @@ namespace Dekode\Fundraising\Shortcodes;
 use function Dekode\Fundraising\get_base_url;
 use function Dekode\Fundraising\sanitize_form_url_params;
 use function Dekode\Fundraising\theme_data_attribute;
+use function Dekode\Fundraising\LiveMap\default_args;
+use function Dekode\Fundraising\LiveMap\render as render_live_map;
 
 /**
  * Hooks.
@@ -23,6 +25,46 @@ use function Dekode\Fundraising\theme_data_attribute;
  */
 function register_shortcodes(): void {
 	\add_shortcode( 'fundy_form', __NAMESPACE__ . '\\render_fundy_form_shortcode' );
+	\add_shortcode( 'fundy_live_map', __NAMESPACE__ . '\\render_fundy_live_map_shortcode' );
+}
+
+/**
+ * Render the Live Map shortcode.
+ *
+ * Attribute names and defaults match the fundy/live-map block; both paths
+ * render through LiveMap\render(), so they never drift. Shortcode
+ * attributes arrive lowercased, hence the mapping onto the camelCase names.
+ *
+ * @param array<string, mixed>|string $atts Shortcode attributes.
+ */
+function render_fundy_live_map_shortcode( array|string $atts ): string {
+	$atts = \shortcode_atts(
+		[
+			'mode'         => '',
+			'view'         => '',
+			'theme'        => '',
+			'showcounters' => '',
+			'showlabels'   => '',
+			'interactive'  => '',
+			'height'       => '',
+			'window'       => '',
+			'ctaurl'       => '',
+		],
+		\is_array( $atts ) ? $atts : [],
+		'fundy_live_map'
+	);
+
+	$args = [];
+
+	foreach ( default_args() as $name => $default ) {
+		$value = $atts[ \strtolower( $name ) ];
+
+		if ( '' !== $value ) {
+			$args[ $name ] = $value;
+		}
+	}
+
+	return render_live_map( $args );
 }
 
 /**

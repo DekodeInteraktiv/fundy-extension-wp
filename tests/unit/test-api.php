@@ -1,6 +1,9 @@
 <?php
 
 use function Dekode\Fundraising\API\fetch_organization_public_id;
+use function Dekode\Fundraising\API\fetch_live_map_kiosk_token;
+use function Dekode\Fundraising\API\get_organization_self;
+use function Dekode\Fundraising\API\self_cache_key;
 use function Dekode\Fundraising\API\get_organization_themes;
 use function Dekode\Fundraising\API\request;
 use function Dekode\Fundraising\API\themes_cache_key;
@@ -255,5 +258,103 @@ class TestApi extends WP_UnitTestCase {
 
 		$this->assertSame( [], get_organization_themes( 'secret-token' ) );
 		$this->assertSame( 1, $requests );
+	}
+
+	public function test_organization_self_is_cached() {
+		$calls = 0;
+
+		$this->mock_http( function () use ( &$calls ) {
+			$calls++;
+
+			return $this->json_response( [
+				'organization' => [
+					'public_id'            => '2e5b9014-f274-44c7-8b6b-27ae151d9a9e',
+					'name'                 => 'Acme',
+					'live_map_kiosk_token' => \str_repeat( 'ab', 32 ),
+				],
+			] );
+		} );
+
+		$self = get_organization_self( 'secret-token' );
+
+		$this->assertSame( '2e5b9014-f274-44c7-8b6b-27ae151d9a9e', $self['public_id'] );
+		$this->assertSame( 'Acme', $self['name'] );
+
+		get_organization_self( 'secret-token' );
+		$this->assertSame( 1, $calls, 'the second read is served from the cache' );
+	}
+
+	public function test_organization_self_never_caches_the_kiosk_token() {
+		$token = \str_repeat( 'ab', 32 );
+
+		$this->mock_http( function () use ( $token ) {
+			return $this->json_response( [
+				'organization' => [
+					'public_id'            => '2e5b9014-f274-44c7-8b6b-27ae151d9a9e',
+					'name'                 => 'Acme',
+					'live_map_kiosk_token' => $token,
+				],
+			] );
+		} );
+
+		$self = get_organization_self( 'secret-token' );
+
+		$this->assertArrayNotHasKey( 'live_map_kiosk_token', $self );
+		$this->assertNotContains(
+			$token,
+			(array) \get_transient( self_cache_key( 'secret-token' ) ),
+			'the kiosk token must never reach the transient, which is an option row without an object cache'
+		);
+	}
+
+	public function test_live_map_kiosk_token_is_read_live_every_time() {
+		$calls = 0;
+		$token = \str_repeat( 'ab', 32 );
+
+		$this->mock_http( function () use ( &$calls, $token ) {
+			$calls++;
+
+			return $this->json_response( [
+				'organization' => [
+					'public_id'            => '2e5b9014-f274-44c7-8b6b-27ae151d9a9e',
+					'live_map_kiosk_token' => \strtoupper( $token ),
+				],
+			] );
+		} );
+
+		$this->assertSame( $token, fetch_live_map_kiosk_token( 'secret-token' ) );
+		$this->assertSame( $token, fetch_live_map_kiosk_token( 'secret-token' ) );
+		$this->assertSame( 2, $calls, 'the token is never served from a cache' );
+	}
+
+	public function test_live_map_kiosk_token_drops_a_malformed_value() {
+		$this->mock_http( function () {
+			return $this->json_response( [
+				'organization' => [
+					'public_id'            => '2e5b9014-f274-44c7-8b6b-27ae151d9a9e',
+					'live_map_kiosk_token' => 'not-a-token',
+				],
+			] );
+		} );
+
+		$this->assertSame( '', fetch_live_map_kiosk_token( 'secret-token' ) );
+	}
+
+	public function test_organization_self_cache_is_flushed_when_options_are_saved() {
+		$calls = 0;
+
+		$this->mock_http( function () use ( &$calls ) {
+			$calls++;
+
+			return $this->json_response( [
+				'organization' => [ 'public_id' => '2e5b9014-f274-44c7-8b6b-27ae151d9a9e' ],
+			] );
+		} );
+
+		get_organization_self( 'secret-token' );
+		\update_option( 'fundy_options', [ 'api_key' => 'secret-token' ] );
+		get_organization_self( 'secret-token' );
+
+		$this->assertSame( 2, $calls );
 	}
 }
