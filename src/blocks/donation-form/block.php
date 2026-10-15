@@ -9,6 +9,7 @@ declare( strict_types = 1 );
 
 namespace Dekode\Fundraising\Blocks\DonationForm;
 
+use function Dekode\Fundraising\disable_events_data_attribute;
 use function Dekode\Fundraising\get_base_url;
 use function Dekode\Fundraising\sanitize_form_url_params;
 use function Dekode\Fundraising\theme_data_attribute;
@@ -90,7 +91,7 @@ function render_block( array $attributes ): string {
 				class="fundy-form fundraising-form"
 				data-form-id="%2$s"
 				data-core-url="%3$s"
-				data-params="%4$s"%5$s%6$s
+				data-params="%4$s"%5$s%6$s%8$s
 			>%7$s</div>
 		</div>
 		',
@@ -103,6 +104,7 @@ function render_block( array $attributes ): string {
 		$variation_attr,
 		theme_data_attribute( $attributes ),
 		noscript_fallback(),
+		disable_events_data_attribute( $attributes ),
 	);
 }
 
