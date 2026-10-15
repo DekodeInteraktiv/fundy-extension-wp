@@ -169,6 +169,33 @@ function theme_data_attribute( array $attributes = [] ): string {
 }
 
 /**
+ * The data-disable-events attribute for form containers ('' when not set).
+ *
+ * Tells the forms runtime not to emit analytics events, so administrators
+ * previewing or testing forms do not skew the statistics. Shared by the
+ * donation-form block and the [fundy_form] shortcode so both embed paths
+ * agree.
+ *
+ * @param array $attributes Container attributes - block attributes for the
+ *                          block, shortcode attributes for [fundy_form].
+ */
+function disable_events_data_attribute( array $attributes = [] ): string {
+	$disable_events = \is_user_logged_in() && \current_user_can( 'manage_options' );
+
+	/**
+	 * Filter whether data-disable-events is emitted on the form container.
+	 *
+	 * @param bool  $disable_events True when the current user is an administrator.
+	 * @param array $attributes     Container attributes - block attributes for the block, shortcode attributes for [fundy_form].
+	 */
+	if ( ! \apply_filters( 'fundy/donation_form/disable_events', $disable_events, $attributes ) ) {
+		return '';
+	}
+
+	return ' data-disable-events="1"';
+}
+
+/**
  * Resolve the theme name for a form container ('' when none).
  *
  * Precedence: an explicit 'theme' attribute on the container (the
