@@ -415,4 +415,33 @@ class TestDonationFormBlock extends WP_UnitTestCase {
 
 		$this->assertSame( 500, \strlen( $params['long'] ) );
 	}
+
+	public function test_anchor_is_emitted_as_wrapper_id() {
+		$html = $this->render_donation_form( [
+			'formId'    => 1,
+			'urlParams' => [],
+			'anchor'    => 'donate',
+		] );
+
+		$this->assertStringContainsString( 'id="donate"', $html );
+	}
+
+	public function test_no_id_without_anchor() {
+		$html = $this->render_donation_form( [
+			'formId'    => 1,
+			'urlParams' => [],
+		] );
+
+		$this->assertStringNotContainsString( ' id="', $html );
+	}
+
+	public function test_anchor_is_escaped() {
+		$html = $this->render_donation_form( [
+			'formId'    => 1,
+			'urlParams' => [],
+			'anchor'    => 'x" onclick="alert(1)',
+		] );
+
+		$this->assertStringNotContainsString( 'onclick="', $html );
+	}
 }
