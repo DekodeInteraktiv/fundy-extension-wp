@@ -85,6 +85,13 @@ function render_block( array $attributes ): string {
 		$variation_attr = \sprintf( ' data-variation="%s"', \esc_attr( \implode( ',', $variations ) ) );
 	}
 
+	// Dynamic blocks have no saved markup for core's anchor support to source
+	// the id from, so it is stored as a plain attribute and applied here.
+	$wrapper_attributes = \array_filter( [
+		'class' => 'fundy-form-wrapper',
+		'id'    => \trim( (string) ( $attributes['anchor'] ?? '' ) ),
+	] );
+
 	return \sprintf( '
 		<div %1$s>
 			<div
@@ -95,9 +102,7 @@ function render_block( array $attributes ): string {
 			>%7$s</div>
 		</div>
 		',
-		\get_block_wrapper_attributes( [
-			'class' => 'fundy-form-wrapper',
-		] ),
+		\get_block_wrapper_attributes( $wrapper_attributes ),
 		\esc_attr( $attributes['formId'] ),
 		\esc_attr( get_base_url() ),
 		\esc_attr( $json_params ),
