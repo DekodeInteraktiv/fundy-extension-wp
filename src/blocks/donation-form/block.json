@@ -18,12 +18,16 @@
 	"example": {},
 	"supports": {
 		"html": false,
+		"anchor": true,
 		"color": {
 			"background": true,
 			"text": false
 		}
 	},
 	"attributes": {
+		"anchor": {
+			"type": "string"
+		},
 		"formId": {
 			"type": "number",
 			"default": 0
