@@ -404,7 +404,7 @@ function api_key_callback(): void {
 	$api_key = isset( $options['api_key'] ) ? $options['api_key'] : '';
 	?>
 	<input
-		type="text"
+		type="password"
 		name="fundy_options[api_key]"
 		placeholder="<?php \esc_attr_e( 'Enter your API key', 'dekode-fundraising' ); ?>"
 		value="<?php echo \esc_attr( $api_key ); ?>"
