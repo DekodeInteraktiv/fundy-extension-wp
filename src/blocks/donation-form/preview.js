@@ -12,7 +12,9 @@ import { applyFilters } from '@wordpress/hooks';
  * @return {Object<string, string>} The sanitized parameters.
  */
 export function sanitizeUrlParams(urlParams = []) {
-	const sanitized = {};
+	// Null prototype so a `__proto__` key - valid per the key pattern - is
+	// stored as a plain property, as the PHP sanitizer keeps it.
+	const sanitized = Object.create(null);
 
 	urlParams.forEach((param) => {
 		const key = typeof param?.key === 'string' ? param.key : '';
