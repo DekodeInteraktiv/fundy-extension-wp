@@ -27,6 +27,7 @@ if ( ! \defined( 'ABSPATH' ) ) {
  * Hooks
  */
 \add_action( 'wp_enqueue_scripts', __NAMESPACE__ . '\\register_assets' );
+\add_action( 'enqueue_block_assets', __NAMESPACE__ . '\\enqueue_editor_preview_assets' );
 \add_filter( 'style_loader_tag', __NAMESPACE__ . '\\add_form_style_attrs', 10, 2 );
 \add_filter( 'script_loader_tag', __NAMESPACE__ . '\\add_script_fetchpriority', 10, 2 );
 
@@ -40,6 +41,27 @@ function register_assets(): void {
 	register_form_assets();
 	register_conversion_script();
 	register_tracking_script();
+}
+
+/**
+ * Load the forms runtime for the donation form block's editor preview.
+ *
+ * @return void
+ */
+function enqueue_editor_preview_assets(): void {
+	if ( ! \is_admin() ) {
+		return;
+	}
+
+	if ( \wp_script_is( 'fundy-config', 'registered' ) ) {
+		\wp_enqueue_script( 'fundy-config' );
+	} else {
+		register_fundy_config();
+	}
+
+	register_form_assets();
+
+	\wp_enqueue_script( 'fundy-form-script' );
 }
 
 /**
