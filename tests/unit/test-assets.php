@@ -1,6 +1,7 @@
 <?php
 
 use function Dekode\Fundraising\Assets\build_fundy_config;
+use function Dekode\Fundraising\Assets\enqueue_editor_preview_assets;
 use function Dekode\Fundraising\Assets\register_assets;
 use function Dekode\Fundraising\Assets\should_load_form_assets_in_head;
 
@@ -525,5 +526,37 @@ class TestAssets extends WP_UnitTestCase {
 		$filtered = \apply_filters( 'script_loader_tag', $tag, 'fundy-form-script', '' );
 
 		$this->assertStringNotContainsString( 'fetchpriority=', $filtered );
+	}
+
+	public function test_editor_preview_assets_are_enqueued_in_admin() {
+		\set_current_screen( 'post' );
+
+		enqueue_editor_preview_assets();
+
+		$this->assertTrue( \wp_script_is( 'fundy-config', 'enqueued' ) );
+		$this->assertTrue( \wp_script_is( 'fundy-form-script', 'enqueued' ) );
+		$this->assertFalse( \wp_script_is( 'fundy-conversion-script', 'enqueued' ) );
+		$this->assertFalse( \wp_script_is( 'fundy-tracking-script', 'enqueued' ) );
+
+		\set_current_screen( 'front' );
+	}
+
+	public function test_editor_preview_config_is_attached_once() {
+		\set_current_screen( 'post' );
+
+		enqueue_editor_preview_assets();
+		enqueue_editor_preview_assets();
+
+		$inline = (array) \wp_scripts()->get_data( 'fundy-config', 'after' );
+
+		$this->assertCount( 1, \array_filter( $inline ) );
+
+		\set_current_screen( 'front' );
+	}
+
+	public function test_editor_preview_assets_are_not_enqueued_on_the_frontend() {
+		enqueue_editor_preview_assets();
+
+		$this->assertFalse( \wp_script_is( 'fundy-form-script', 'enqueued' ) );
 	}
 }

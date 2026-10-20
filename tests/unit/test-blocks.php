@@ -444,4 +444,14 @@ class TestDonationFormBlock extends WP_UnitTestCase {
 
 		$this->assertStringNotContainsString( 'onclick="', $html );
 	}
+
+	public function test_editor_settings_expose_core_url_and_theme() {
+		$before = (array) \wp_scripts()->get_data( 'fundy-donation-form-editor-script', 'before' );
+		$inline = \implode( "\n", \array_filter( $before ) );
+
+		$this->assertStringContainsString( 'window.fundySettings', $inline );
+		$this->assertStringContainsString( '"coreUrl":', $inline );
+		$this->assertStringContainsString( '"theme":', $inline );
+		$this->assertStringNotContainsString( 'apiKey', $inline );
+	}
 }
