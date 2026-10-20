@@ -35,6 +35,19 @@ For local development you can edit this constant in the `.wp-env.json` file and 
 * `fundy/live_map/embed_params` (array) - The query parameters of the Live Map iframe URL, keyed by name, with the sanitized block/shortcode arguments as the second argument.
 * `fundy/live_map/embed_url` (string) - The final Live Map iframe URL.
 
+### JavaScript filters (editor preview)
+
+The Donation Form block previews the selected form in the editor canvas. PHP filters don't run there, so the preview exposes [`@wordpress/hooks`](https://developer.wordpress.org/block-editor/reference-guides/packages/packages-hooks/) equivalents. Sites that use `fundy/donation_form/theme` or `fundy/donation_form/variations` should mirror them from a script enqueued on `enqueue_block_editor_assets` (with `wp-hooks` as a dependency) to keep the preview matching the front end:
+
+* `fundy.donationForm.theme` (string) - The theme name emitted as `data-theme` on the previewed form. Receives the Theme setting (`''` when none) and the block attributes. Values outside the theme slug shape are dropped.
+* `fundy.donationForm.variations` (string[]) - The variation names emitted as `data-variation` on the previewed form. Receives the names resolved from the block's `className` and background colour (same rules as the PHP filter) and the block attributes.
+
+```js
+wp.hooks.addFilter( 'fundy.donationForm.theme', 'my-theme/fundy', () => 'dark' );
+```
+
+The core URL comes from PHP (after the `fundy/base_url` filter), and analytics events are always disabled for previews.
+
 ## Form styling
 
 Two settings under Settings → Dekode Fundraising → Advanced control the stylesheet injected into the forms (they render inside a shadow root, so host-page CSS does not reach them):
