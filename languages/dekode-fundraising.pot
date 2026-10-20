@@ -9,7 +9,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2026-09-20T12:59:46+00:00\n"
+"POT-Creation-Date: 2026-10-20T06:07:57+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 3.0.0-alpha\n"
 "X-Domain: dekode-fundraising\n"
@@ -303,7 +303,7 @@ msgid "Unable to load forms."
 msgstr ""
 
 #: build/blocks/donation-form/editor.js:1
-#: build/blocks/donation-form/editor.js:2
+#: build/blocks/donation-form/editor.js:7
 msgid "Fundy Form"
 msgstr ""
 
@@ -344,6 +344,7 @@ msgstr ""
 
 #. translators: %d: saved form ID.
 #: build/blocks/donation-form/editor.js:3
+#: build/blocks/donation-form/editor.js:7
 #, js-format
 msgid "The selected form (ID %d) no longer exists in your Fundy account. Please choose another form."
 msgstr ""
@@ -352,6 +353,10 @@ msgstr ""
 #: build/blocks/donation-form/editor.js:4
 #, js-format
 msgid "Could not load forms: %s"
+msgstr ""
+
+#: build/blocks/donation-form/editor.js:4
+msgid "Form settings"
 msgstr ""
 
 #: build/blocks/donation-form/editor.js:4
@@ -379,11 +384,11 @@ msgid "Remove parameter %d"
 msgstr ""
 
 #: build/blocks/donation-form/editor.js:6
-msgid "Remove"
+msgid "Add Parameter"
 msgstr ""
 
-#: build/blocks/donation-form/editor.js:6
-msgid "Add Parameter"
+#: build/blocks/donation-form/editor.js:7
+msgid "Select the form to display. More settings are available in the block sidebar."
 msgstr ""
 
 #: build/blocks/donation-receipt/editor.js:1

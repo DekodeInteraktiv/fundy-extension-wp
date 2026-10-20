@@ -14,6 +14,7 @@ use function Dekode\Fundraising\get_base_url;
 use function Dekode\Fundraising\sanitize_form_url_params;
 use function Dekode\Fundraising\theme_data_attribute;
 use function Dekode\Fundraising\Settings\get_api_key;
+use function Dekode\Fundraising\Settings\get_theme_name;
 
 /**
  * Hooks.
@@ -32,10 +33,10 @@ function register_block(): void {
 
 	\wp_set_script_translations( 'fundy-donation-form-editor-script', 'dekode-fundraising', \FUNDY_PLUGIN_DIR . 'languages' );
 
-	// The API token must never reach the browser so only the
-	// token's existence is exposed here.
 	$settings = [
 		'hasApiToken' => '' !== get_api_key(),
+		'coreUrl'     => get_base_url(),
+		'theme'       => get_theme_name(),
 	];
 
 	if ( \current_user_can( 'manage_options' ) ) {

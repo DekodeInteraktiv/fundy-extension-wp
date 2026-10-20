@@ -3,7 +3,8 @@
  */
 import { speak } from '@wordpress/a11y';
 import apiFetch from '@wordpress/api-fetch';
-import { useBlockProps } from '@wordpress/block-editor';
+import { InspectorControls, useBlockProps } from '@wordpress/block-editor';
+import { useDebounce } from '@wordpress/compose';
 import { useEffect, useRef, useState } from '@wordpress/element';
 import {
 	Button,
@@ -11,12 +12,22 @@ import {
 	FlexBlock,
 	FlexItem,
 	Notice,
+	PanelBody,
 	Placeholder,
 	SelectControl,
 	Spinner,
 	TextControl,
 } from '@wordpress/components';
 import { __, sprintf } from '@wordpress/i18n';
+
+/**
+ * Internal dependencies
+ */
+import FormPreview, {
+	extractVariations,
+	resolveTheme,
+	sanitizeUrlParams,
+} from './preview';
 
 /**
  * Module-level cache so every block instance in an editor session shares a
@@ -36,15 +47,29 @@ function fetchForms() {
 }
 
 /**
- * Render the donation form block editor UI.
+ * Render the donation form block editor UI: settings in the sidebar, a
+ * static preview of the selected form in the canvas.
+ *
+ * @param {Object}   props               Block props.
+ * @param {Object}   props.attributes    Block attributes.
+ * @param {Function} props.setAttributes Attribute setter.
  */
-export default function Edit({
-	attributes: { formId, urlParams = [] },
-	setAttributes,
-}) {
+export default function Edit({ attributes, setAttributes }) {
+	const { formId, urlParams = [] } = attributes;
 	const blockProps = useBlockProps();
 	const hasApiToken = !!window.fundySettings?.hasApiToken;
 	const settingsUrl = window.fundySettings?.settingsUrl ?? '';
+	const coreUrl = window.fundySettings?.coreUrl ?? '';
+
+	// Debounced so typing in the parameter repeater doesn't refetch the
+	// form schema on every keystroke.
+	const paramsJson = JSON.stringify(sanitizeUrlParams(urlParams));
+	const [previewParamsJson, setPreviewParamsJson] = useState(paramsJson);
+	const updatePreviewParams = useDebounce(setPreviewParamsJson, 500);
+
+	useEffect(() => {
+		updatePreviewParams(paramsJson);
+	}, [paramsJson, updatePreviewParams]);
 
 	// null = still loading; [] = loaded, none found.
 	const [forms, setForms] = useState(null);
@@ -179,67 +204,64 @@ export default function Edit({
 		setAttributes({ urlParams: updated });
 	};
 
-	return (
-		<div {...blockProps} aria-busy={!isLoaded && !error}>
-			<Placeholder
-				label={__('Fundy Form', 'dekode-fundraising')}
-				isColumnLayout
-			>
-				<SelectControl
-					label={__('Select a Form', 'dekode-fundraising')}
-					value={String(formId)}
-					options={formOptions}
-					onChange={(value) =>
-						setAttributes({ formId: parseInt(value, 10) })
-					}
-					__nextHasNoMarginBottom
-					__next40pxDefaultSize
-				/>
+	const formSelect = (
+		<>
+			<SelectControl
+				label={__('Select a Form', 'dekode-fundraising')}
+				value={String(formId)}
+				options={formOptions}
+				onChange={(value) =>
+					setAttributes({ formId: parseInt(value, 10) })
+				}
+				__nextHasNoMarginBottom
+				__next40pxDefaultSize
+			/>
 
-				{!isLoaded && !error && (
-					<Flex justify="flex-start">
-						<Spinner />
-						<span>
-							{__('Loading forms…', 'dekode-fundraising')}
-						</span>
-					</Flex>
-				)}
+			{!isLoaded && !error && (
+				<Flex justify="flex-start">
+					<Spinner />
+					<span>{__('Loading forms…', 'dekode-fundraising')}</span>
+				</Flex>
+			)}
 
-				{isLoaded && !hasForms && (
-					<Notice status="warning" isDismissible={false}>
-						{__(
-							'No forms found. Please create a Form on your Dekode Fundraising account first.',
+			{isLoaded && !hasForms && (
+				<Notice status="warning" isDismissible={false}>
+					{__(
+						'No forms found. Please create a Form on your Dekode Fundraising account first.',
+						'dekode-fundraising',
+					)}
+				</Notice>
+			)}
+
+			{isStale && (
+				<Notice status="warning" isDismissible={false}>
+					{sprintf(
+						/* translators: %d: saved form ID. */
+						__(
+							'The selected form (ID %d) no longer exists in your Fundy account. Please choose another form.',
 							'dekode-fundraising',
-						)}
-					</Notice>
-				)}
+						),
+						formId,
+					)}
+				</Notice>
+			)}
 
-				{isStale && (
-					<Notice status="warning" isDismissible={false}>
-						{sprintf(
-							/* translators: %d: saved form ID. */
-							__(
-								'The selected form (ID %d) no longer exists in your Fundy account. Please choose another form.',
-								'dekode-fundraising',
-							),
-							formId,
-						)}
-					</Notice>
-				)}
+			{error && (
+				<Notice status="error" isDismissible={false}>
+					{sprintf(
+						/* translators: %s: error message. */
+						__('Could not load forms: %s', 'dekode-fundraising'),
+						error,
+					)}
+				</Notice>
+			)}
+		</>
+	);
 
-				{error && (
-					<Notice status="error" isDismissible={false}>
-						{sprintf(
-							/* translators: %s: error message. */
-							__(
-								'Could not load forms: %s',
-								'dekode-fundraising',
-							),
-							error,
-						)}
-					</Notice>
-				)}
-
+	const controls = (
+		<InspectorControls>
+			<PanelBody title={__('Form settings', 'dekode-fundraising')}>
+				{formSelect}
 				<fieldset className="fundy-form-params">
 					<legend>
 						{__(
@@ -250,7 +272,7 @@ export default function Edit({
 
 					<div style={{ marginTop: '1em' }}>
 						{urlParams.map((param, index) => (
-							<Flex key={rowIds.current[index]}>
+							<Flex key={rowIds.current[index]} align="flex-end">
 								<FlexBlock>
 									<TextControl
 										label={__('Key', 'dekode-fundraising')}
@@ -279,9 +301,10 @@ export default function Edit({
 								<FlexItem>
 									<Button
 										isDestructive
+										icon="trash"
+										size="compact"
 										onClick={() => removeParam(index)}
-										style={{ marginTop: '24px' }}
-										aria-label={
+										label={
 											param.key
 												? sprintf(
 														/* translators: %s: parameter key. */
@@ -300,9 +323,7 @@ export default function Edit({
 														index + 1,
 													)
 										}
-									>
-										{__('Remove', 'dekode-fundraising')}
-									</Button>
+									/>
 								</FlexItem>
 							</Flex>
 						))}
@@ -311,7 +332,55 @@ export default function Edit({
 						</Button>
 					</div>
 				</fieldset>
-			</Placeholder>
-		</div>
+			</PanelBody>
+		</InspectorControls>
+	);
+
+	if (!formId) {
+		return (
+			<>
+				{controls}
+				<div {...blockProps} aria-busy={!isLoaded && !error}>
+					<Placeholder
+						label={__('Fundy Form', 'dekode-fundraising')}
+						instructions={__(
+							'Select the form to display. More settings are available in the block sidebar.',
+							'dekode-fundraising',
+						)}
+						isColumnLayout
+					>
+						{formSelect}
+					</Placeholder>
+				</div>
+			</>
+		);
+	}
+
+	return (
+		<>
+			{controls}
+			<div {...blockProps}>
+				{isStale ? (
+					<Notice status="warning" isDismissible={false}>
+						{sprintf(
+							/* translators: %d: saved form ID. */
+							__(
+								'The selected form (ID %d) no longer exists in your Fundy account. Please choose another form.',
+								'dekode-fundraising',
+							),
+							formId,
+						)}
+					</Notice>
+				) : (
+					<FormPreview
+						formId={formId}
+						coreUrl={coreUrl}
+						theme={resolveTheme(attributes)}
+						variations={extractVariations(attributes)}
+						paramsJson={previewParamsJson}
+					/>
+				)}
+			</div>
+		</>
 	);
 }
