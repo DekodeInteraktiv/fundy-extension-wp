@@ -287,7 +287,7 @@ function api_key_callback(): void {
 	$api_key = $options['api_key'] ?? '';
 	?>
 	<input
-		type="text"
+		type="password"
 		name="fundy_network_options[api_key]"
 		value="<?php echo \esc_attr( $api_key ); ?>"
 		class="regular-text"
