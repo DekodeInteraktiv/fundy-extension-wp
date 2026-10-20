@@ -1,4 +1,18 @@
 import { test, expect } from '@wordpress/e2e-test-utils-playwright';
+import { type Page } from '@playwright/test';
+
+/**
+ * Submit the settings form and wait for options.php to redirect back.
+ *
+ * Asserting on the "Settings saved." notice is unreliable: a save that
+ * changes the API key also fetches the organization ID from core, and the
+ * error notice it adds when core is unreachable (as in wp-env) replaces the
+ * success notice even though the options were stored.
+ */
+async function saveSettings(page: Page) {
+	await page.getByRole('button', { name: 'Save' }).click();
+	await page.waitForURL(/settings-updated=true/);
+}
 
 test.describe('Settings page', () => {
 	test('Settings page loads correctly', async ({ admin, page }) => {
@@ -50,12 +64,7 @@ test.describe('Settings page', () => {
 
 		await apiKeyInput.fill('api_key_abc_123#');
 
-		const saveButton = page.getByRole('button', { name: 'Save' });
-		await expect(saveButton).toBeVisible();
-
-		await saveButton.click();
-
-		await expect(page.getByText('Settings saved.')).toBeVisible();
+		await saveSettings(page);
 
 		await expect(apiKeyInput).toHaveValue('api_key_abc_123#');
 	});
@@ -65,19 +74,23 @@ test.describe('Settings page', () => {
 			'options-general.php?page=fundy_settings_page',
 		);
 
-		const devRadio = page.getByText('Development');
-		const prodRadio = page.getByText('Production');
+		// Forms, conversion and tracking scripts each have their own
+		// Development/Production pair, so target the forms script inputs.
+		const devRadio = page.locator(
+			'input[name="fundy_options[forms_script]"][value="dev"]',
+		);
+		const prodRadio = page.locator(
+			'input[name="fundy_options[forms_script]"][value="prod"]',
+		);
 
 		await expect(devRadio).toBeVisible();
 		await expect(prodRadio).toBeVisible();
 
-		await devRadio.click();
+		await devRadio.check();
 		await expect(devRadio).toBeChecked();
 		await expect(prodRadio).not.toBeChecked();
 
-		const saveButton = page.getByRole('button', { name: 'Save' });
-		await saveButton.click();
-		await expect(page.getByText('Settings saved.')).toBeVisible();
+		await saveSettings(page);
 
 		await expect(devRadio).toBeChecked();
 		await expect(prodRadio).not.toBeChecked();
