@@ -170,3 +170,13 @@ npm run test:php
 ```
 
 Run the above command to run the tests and get a report in your console.
+
+## Releasing
+
+Publishing a GitHub release deploys the plugin to WordPress.org. The `Release to WordPress.org` workflow (`.github/workflows/wp-org-release.yml`) builds the plugin, packages it with `npm run plugin-zip`, commits it to the plugin's SVN trunk and a new SVN tag, and attaches `dekode-fundraising.zip` to the GitHub release.
+
+1. In a release PR, set the new version in the `Version` plugin header and the `FUNDY_VERSION` constant in `dekode-fundraising.php`, and in `Stable tag` in `README.txt`. Move the `= Unreleased =` changelog entries in `README.txt` and `CHANGELOG.txt` under the new version, then merge the PR to `main`.
+2. Create a GitHub release on `main` with a new tag that matches the version, without a `v` prefix (for example `2.7.0`), and publish it.
+
+The workflow stops before touching SVN if the release tag, the `Version` header, `FUNDY_VERSION` and `Stable tag` do not all match. Pre-releases are not deployed. Running the workflow manually from the Actions tab performs a dry run: it builds, checks the version numbers and stages the SVN commit without committing. Re-running a failed run is safe, as the deploy is skipped when the version already exists on WordPress.org.
+

@@ -234,9 +234,9 @@ registerBlockType( metadata.name, { edit: Edit } );
 
 ## Out of scope
 
-- **`.github/workflows/*.yml`** — `release.yml`, `security-scan.yml`,
-  `wp-org-release.yml` deploy to WP.org and GitHub releases. Don't edit
-  unless asked.
+- **`.github/workflows/*.yml`** — `wp-org-release.yml` deploys a published
+  GitHub release to WP.org (see "Releasing" in `README.md`);
+  `security-scan.yml` is the nightly Snyk scan. Don't edit unless asked.
 - **`build/`, `vendor/`, `node_modules/`, `languages/`** — generated.
 - **`.wp-env.json` `env.tests` mappings / `phpVersion`** — the PHPUnit
   bootstrap depends on them. Confirm before changing.

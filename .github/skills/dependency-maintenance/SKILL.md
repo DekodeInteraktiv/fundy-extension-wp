@@ -391,8 +391,9 @@ WP.org review would flag. Surface, don't fix.
 
 If `wp-env` can't start, record Plugin Check / `test:php` / `test:e2e`
 as ⚪ skipped with reason. **Don't assume CI will catch it** —
-`.github/workflows/` covers release packaging (`release.yml`) and a
-nightly Snyk dev-dep scan (`security-scan.yml`); there is **no
+`.github/workflows/` covers the WP.org release deploy
+(`wp-org-release.yml`, build and package only) and a nightly Snyk
+dev-dep scan (`security-scan.yml`); there is **no
 PHPUnit / Playwright / Plugin Check / WP-floor matrix job**. If you
 skip, say so in the PR so a reviewer runs it before merging.
 
