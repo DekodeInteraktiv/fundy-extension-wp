@@ -3,7 +3,7 @@ Tags: fundraising, donations, forms
 Requires at least: 6.4
 Requires PHP: 8.1
 Tested up to: 7.1
-Stable tag: 2.6.1
+Stable tag: 2.7.0
 License: GPLv3 or later
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
@@ -54,10 +54,16 @@ Please report security bugs found in the source code of the Dekode Fundraising p
 
 == Changelog ==
 
-= Unreleased =
+= 2.7.0 (2026-10-30) =
 * Enhancement- New "Fundy Live Map" block and `[fundy_live_map]` shortcode embed your organization's live donation map on any page, with today's counters. The map shows anonymous, approximate activity and nothing about individual donors.
 * Enhancement- The settings page shows your organization's Live Map kiosk link for office and event screens.
 * Enhancement- Sites that saved their API key before this version need to save the settings once more for the Live Map block to connect.
+* Enhancement- The Fundy Form block shows a live preview of the selected form in the editor, instead of a placeholder.
+* Enhancement- The Fundy Form block supports an HTML anchor, so you can link straight to a form on the page.
+* Enhancement- Visits and previews by logged-in administrators no longer count in your form statistics and no longer trigger the form's analytics events. Developers can change this with the `fundy/donation_form/disable_events` filter.
+* Enhancement- The API key is hidden on the settings page.
+* Enhancement- Developers who change the form theme or style variations with PHP filters can mirror them in the editor preview with new JavaScript filters. See the plugin README for details.
+* Maintenance- Updated build dependencies.
 
 = 2.6.1 (2026-09-18) =
 * Bugfix- Previous release was missing files.
